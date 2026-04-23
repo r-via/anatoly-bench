@@ -1,0 +1,68 @@
+#!/usr/bin/env node
+import { parseSpec } from "./spec-parser.js";
+
+const USAGE = `anatoly-bench <command> [options]
+
+Commands:
+  parse-spec <path>       Parse a SPEC.md and print the extracted catalog as JSON
+  score --spec <path> --report <dir>
+                          Score an Anatoly report against a SPEC (not implemented)
+  run --fixture <dir>     Run Anatoly on a fixture then score it (not implemented)
+`;
+
+function getOpt(args: readonly string[], name: string): string | undefined {
+  const i = args.indexOf(name);
+  if (i === -1) return undefined;
+  return args[i + 1];
+}
+
+async function main(): Promise<number> {
+  const [, , cmd, ...rest] = process.argv;
+
+  switch (cmd) {
+    case undefined:
+    case "-h":
+    case "--help":
+      process.stdout.write(USAGE);
+      return 0;
+
+    case "parse-spec": {
+      const specPath = rest[0];
+      if (!specPath) {
+        process.stderr.write("parse-spec: missing <path>\n");
+        return 1;
+      }
+      const catalog = await parseSpec(specPath);
+      process.stdout.write(JSON.stringify(catalog, null, 2) + "\n");
+      return 0;
+    }
+
+    case "score": {
+      const specPath = getOpt(rest, "--spec");
+      const reportDir = getOpt(rest, "--report");
+      if (!specPath || !reportDir) {
+        process.stderr.write("score: --spec and --report are required\n");
+        return 1;
+      }
+      process.stderr.write("score: not implemented yet\n");
+      return 2;
+    }
+
+    case "run": {
+      process.stderr.write("run: not implemented yet\n");
+      return 2;
+    }
+
+    default:
+      process.stderr.write(`unknown command: ${cmd}\n${USAGE}`);
+      return 1;
+  }
+}
+
+main().then(
+  (code) => process.exit(code),
+  (err) => {
+    process.stderr.write(String(err?.stack ?? err) + "\n");
+    process.exit(1);
+  },
+);
