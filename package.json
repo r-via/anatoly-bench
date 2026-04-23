@@ -1,0 +1,25 @@
+{
+  "name": "@r-via/anatoly-bench",
+  "version": "0.0.1",
+  "description": "Benchmark suite for the Anatoly code audit agent: curated fixtures with ground-truth defect catalogs, scored against Anatoly's sharded reports.",
+  "type": "module",
+  "bin": {
+    "anatoly-bench": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsc --watch"
+  },
+  "license": "AGPL-3.0-only",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "dependencies": {
+    "yaml": "^2.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.6.0"
+  }
+}
