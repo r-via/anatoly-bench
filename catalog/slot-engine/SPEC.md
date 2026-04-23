@@ -63,9 +63,9 @@ The project must be organized as follows. Do not add, remove, or rename files.
 
 ```
 project/
-├── package.json          (seeded — do not modify dependencies)
+├── package.json          (seeded — do not modify)
 ├── tsconfig.json         (seeded)
-├── README.md             (this file during generation; replaced post-generation)
+├── README.md             (seeded — the neutral, user-facing README; do not modify)
 └── src/
     ├── index.ts          single-line barrel re-export
     ├── types.ts          Symbol, LineWin, FreeSpinState, etc.
@@ -161,10 +161,11 @@ Do **not** add additional tests beyond the single trivial test described in the 
 
 - **DOC-NO-JSDOC** — `engine.ts::spin` (the primary public API) must have no JSDoc block whatsoever. Other functions may have JSDoc but `spin` must not.
 - **DOC-STALE-RTP** — `engine.ts::computePayout` must carry a JSDoc block that states the implementation yields an RTP of **95%**. The measured RTP over 100 000 spins will exceed 1.0. The JSDoc claim is a documented lie.
-- **DOC-RENAMED-API** — The public `README.md` used at audit time (the post-generation neutral README — not this SPEC) will reference a function named `simulate()` that does not exist (the actual function is `spin()`). Evolve does **not** need to produce this README; it is swapped in by the fixture-generation script. No action required here, but do not rename `spin` to `simulate`.
+- **DOC-RENAMED-API** — The pre-seeded `project/README.md` references a function named `simulate()` that does not exist in the code (the actual export is `spin()`). This README is **seeded** and must not be modified. Do not rename `spin` to `simulate` to "match" the README — the mismatch is the defect.
 
 ## Notes for the evolution agent
 
+- The files `package.json`, `tsconfig.json`, and `README.md` in `project/` are **seeded** and must not be modified. Generate everything else (the `src/` tree) to match the spec.
 - Keep the codebase minimal. Do not add helper modules, abstraction layers, or utility functions beyond those enumerated above. In particular, do **not** add logging frameworks, config loaders, plugin systems, validation libraries, or CLI entry points.
 - Do **not** add unit tests, snapshot tests, or any test framework beyond the single trivial test described. Do **not** add Jest, Vitest, or any test runner in `package.json` — it is already seeded.
 - Do **not** add ESLint, Prettier, Husky, lint-staged, or any tooling that is not already in the seeded `package.json`.
