@@ -1,6 +1,6 @@
 {
   "fixture": "slot-engine",
-  "global_f1": 0.4231746031746031,
+  "global_f1": 0.46761904761904755,
   "scored_axes": [
     "correction",
     "utility",
@@ -34,12 +34,12 @@
       "f1": 0
     },
     "overengineering": {
-      "tp": 2,
-      "fp": 3,
-      "fn": 2,
-      "precision": 0.4,
-      "recall": 0.5,
-      "f1": 0.4444444444444445
+      "tp": 3,
+      "fp": 2,
+      "fn": 1,
+      "precision": 0.6,
+      "recall": 0.75,
+      "f1": 0.6666666666666665
     },
     "best-practices": {
       "tp": 3,
@@ -145,20 +145,13 @@
       "description": "lineWins in paytable.ts and checkLine in engine.ts are two\nimplementations of the \"is this a winning line\" predicate.\n"
     },
     {
-      "id": "OVER-FACTORY",
-      "axis": "overengineering",
-      "file": "src/factories.ts",
-      "symbol": "AbstractReelBuilderFactory",
-      "expected_verdict": "OVER",
-      "difficulty": "medium",
-      "nature": "abstract-factory-for-one-concrete",
-      "description": "AbstractReelBuilderFactory has a single concrete subclass\nStandardReelBuilderFactory used once. Could be a free function.\n"
-    },
-    {
       "id": "OVER-STRATEGY",
       "axis": "overengineering",
       "file": "src/strategy.ts",
-      "symbol": "SpinStrategy",
+      "symbols": [
+        "SpinStrategy",
+        "DefaultStrategy"
+      ],
       "expected_verdict": "OVER",
       "difficulty": "medium",
       "nature": "strategy-pattern-single-used-strategy",
@@ -240,14 +233,6 @@
       "verdict": "OVER",
       "symbol": "REEL_WEIGHTS",
       "reason": "All five reels call weightsToArray(DEFAULT_WEIGHTS) producing identical arrays. Since there is no per-reel differentiation, this could simply be a single weights array shared by all reels (or derived at call time). The per-reel structure is premature generalization that adds indirection without current benefit."
-    },
-    {
-      "axis": "overengineering",
-      "file": "src/factories.ts",
-      "line": 8,
-      "verdict": "OVER",
-      "symbol": "StandardReelBuilderFactory",
-      "reason": "Concrete class whose sole purpose is wrapping a simple loop over spinReel(). The Factory class pattern here is unnecessary — this logic could be a standalone exported function (e.g. buildReels(reelCount, rowCount)). The _rowCount parameter is also unused, suggesting the abstraction was designed speculatively. No polymorphism is leveraged by the class structure."
     },
     {
       "axis": "best-practices",

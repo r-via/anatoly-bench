@@ -368,7 +368,10 @@ violations:
   - id: OVER-FACTORY
     axis: overengineering
     file: src/factories.ts
-    symbol: AbstractReelBuilderFactory
+    # Defect can manifest on either the abstract parent or the concrete
+    # subclass — Anatoly may flag whichever it considers "the" source of
+    # the over-abstraction.
+    symbols: [AbstractReelBuilderFactory, StandardReelBuilderFactory]
     expected_verdict: OVER
     difficulty: medium
     nature: abstract-factory-for-one-concrete
@@ -390,7 +393,9 @@ violations:
   - id: OVER-STRATEGY
     axis: overengineering
     file: src/strategy.ts
-    symbol: SpinStrategy
+    # Defect can manifest on the abstract base or the concrete class used
+    # by a single call site.
+    symbols: [SpinStrategy, DefaultStrategy]
     expected_verdict: OVER
     difficulty: medium
     nature: strategy-pattern-single-used-strategy

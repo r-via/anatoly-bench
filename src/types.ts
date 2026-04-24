@@ -36,7 +36,13 @@ export interface Violation {
   difficulty: Difficulty;
   nature: string;
   file?: string;
+  // Accept either a single expected symbol or a list. Use a list when the
+  // defect can manifest on several related symbols (e.g. an abstract
+  // factory + its concrete subclass, or two symbols in a duplication
+  // pair). A finding matches if its symbol is equal to `symbol` or
+  // appears in `symbols`.
   symbol?: string;
+  symbols?: string[];
   scope?: "project-wide";
   line_hint?: number;
   line_tolerance?: number;

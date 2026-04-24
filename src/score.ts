@@ -43,9 +43,12 @@ function linesMatch(v: Violation, f: Finding): boolean {
 }
 
 function symbolsMatch(v: Violation, f: Finding): boolean {
-  if (!v.symbol) return true;
+  const expected = new Set<string>();
+  if (v.symbol) expected.add(v.symbol);
+  if (v.symbols) for (const s of v.symbols) expected.add(s);
+  if (expected.size === 0) return true;
   if (!f.symbol) return true;
-  return v.symbol === f.symbol;
+  return expected.has(f.symbol);
 }
 
 function canMatch(v: Violation, f: Finding): boolean {
