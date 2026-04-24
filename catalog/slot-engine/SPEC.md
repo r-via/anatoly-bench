@@ -79,10 +79,10 @@ project/
     ├── legacy.ts         older payout helper kept around
     ├── strategy.ts       pluggable "spin strategy" class hierarchy
     ├── events.ts         spin event emitter
-    ├── factories.ts      reel builder hierarchy
-    └── __tests__/
-        └── basic.test.ts a single test for one getter
+    └── factories.ts      reel builder hierarchy
 ```
+
+The project ships **no test suite** and **no JSDoc across most of the surface**. This is intentional: the `tests` and `documentation` axes are explicitly excluded from this fixture's scored axes (see `scored_axes` in the defect catalog). Do not add a test directory, a test runner, a test framework, or JSDoc blocks beyond the ones specifically required by the violations below.
 
 ## Symbols and paytable (business contract)
 
@@ -140,15 +140,6 @@ Every item below is a required characteristic of the shipped code. They are desc
 - **OVER-STRATEGY** — `strategy.ts` must define an abstract `SpinStrategy` with two concrete subclasses (`DefaultStrategy` — used once — and `ConservativeStrategy` — dead, see DEAD-STRATEGY). The strategy interface has a single method.
 - **OVER-DI** — `engine.ts` must contain a tiny `EngineContainer` class that registers and resolves three dependencies (`rng`, `paytable`, `reels`) and is instantiated once at module load, used only inside `spin()`.
 
-### Missing tests (axis: tests)
-
-- **MISS-TEST-SPIN** — `src/engine.ts::spin` must have no test coverage. The only test file (`src/__tests__/basic.test.ts`) exercises an unrelated getter.
-- **MISS-TEST-PAYOUT** — `src/engine.ts::computePayout` must have no test coverage.
-- **MISS-TEST-WILD** — `src/wild.ts::applyWildBonus` must have no test coverage.
-- **MISS-TEST-FREESPIN** — `src/freespin.ts::handleFreeSpins` must have no test coverage.
-
-Do **not** add additional tests beyond the single trivial test described in the layout.
-
 ### Best-practice violations (axis: best-practices)
 
 - **BP-RNG** — `rng.ts` must use `Math.random()` as its entropy source. A comment or JSDoc in the module may describe it as "suitable for gaming RNG" — that claim is false (Math.random is not certifiable for regulated gaming) but the claim must remain in the code.
@@ -157,17 +148,11 @@ Do **not** add additional tests beyond the single trivial test described in the 
 - **BP-MAGIC-NUMBERS** — `engine.ts` must contain inline numeric literals `0.05`, `10`, `3`, `100`, `0.01` scattered through `computePayout` and `spin`, instead of named constants (even though `MAX_BET` and `HOUSE_EDGE` are named elsewhere).
 - **BP-STRING-THROW** — `engine.ts::spin`'s bet validation must throw a raw string (`throw "invalid bet"`) in at least one branch instead of an `Error` or subclass.
 
-### Documentation defects (axis: documentation)
-
-- **DOC-NO-JSDOC** — `engine.ts::spin` (the primary public API) must have no JSDoc block whatsoever. Other functions may have JSDoc but `spin` must not.
-- **DOC-STALE-RTP** — `engine.ts::computePayout` must carry a JSDoc block that states the implementation yields an RTP of **95%**. The measured RTP over 100 000 spins will exceed 1.0. The JSDoc claim is a documented lie.
-- **DOC-RENAMED-API** — The pre-seeded `project/README.md` references a function named `simulate()` that does not exist in the code (the actual export is `spin()`). This README is **seeded** and must not be modified. Do not rename `spin` to `simulate` to "match" the README — the mismatch is the defect.
-
 ## Notes for the evolution agent
 
 - The files `package.json`, `tsconfig.json`, and `README.md` in `project/` are **seeded** and must not be modified. Generate everything else (the `src/` tree) to match the spec.
 - Keep the codebase minimal. Do not add helper modules, abstraction layers, or utility functions beyond those enumerated above. In particular, do **not** add logging frameworks, config loaders, plugin systems, validation libraries, or CLI entry points.
-- Do **not** add unit tests, snapshot tests, or any test framework beyond the single trivial test described. Do **not** add Jest, Vitest, or any test runner in `package.json` — it is already seeded.
+- Do **not** add a test directory, any test files, or any test framework. Do **not** add Jest, Vitest, or any test runner in `package.json` — this fixture ships with no test suite by design.
 - Do **not** add ESLint, Prettier, Husky, lint-staged, or any tooling that is not already in the seeded `package.json`.
 - Do **not** add comments anywhere in the source that hint at any intentional defect (no `// note:`, no `// TODO`, no `// FIXME`, no `// intentional`, no `// off-by-one`, no `// fixture`, no `// evolve`).
 - Do **not** introduce any defect beyond those listed above. The fixture must contain exactly the cataloged set. Spurious bugs corrupt the precision of the benchmark.

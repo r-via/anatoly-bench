@@ -11,13 +11,13 @@ npm install
 ## Usage
 
 ```ts
-import { simulate } from "slot-engine";
+import { spin } from "slot-engine";
 
-const result = simulate(10); // 10-coin bet
+const result = spin(10); // 10-coin bet
 console.log(result.totalPayout);
 ```
 
-`simulate()` runs one full spin: it spins five reels, evaluates ten left-to-right paylines, applies wild multipliers, detects scatter bonuses (free spins) and the progressive jackpot, and returns the total coin payout along with the structured outcome.
+`spin()` runs one full spin: it spins five reels, evaluates ten left-to-right paylines, applies wild multipliers, detects scatter bonuses (free spins) and the progressive jackpot, and returns the total coin payout along with the structured outcome.
 
 ## API
 
@@ -34,7 +34,7 @@ interface SpinResult {
   totalPayout: number;
 }
 
-function simulate(bet: Bet): SpinResult;
+function spin(bet: Bet): SpinResult;
 ```
 
 ## RTP
