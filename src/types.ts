@@ -49,6 +49,10 @@ export interface SpecCatalog {
   language: string;
   project_path: string;
   target_rtp_lower_bound?: number;
+  // Axes this fixture is designed to evaluate. Axes outside this list are
+  // still parsed from Anatoly's report (for visibility) but do not
+  // contribute to the global F1 score. If omitted, all axes are scored.
+  scored_axes?: Axis[];
   violations: Violation[];
   clean_files?: string[];
 }
@@ -74,7 +78,10 @@ export interface AxisScore {
 export interface ScoreReport {
   fixture: string;
   global_f1: number;
+  scored_axes: Axis[];
   per_axis: Partial<Record<Axis, AxisScore>>;
   misses: Violation[];
   false_positives: Finding[];
+  // Findings on axes not in scored_axes — kept for visibility, not scored.
+  unscored_findings: Finding[];
 }

@@ -185,6 +185,19 @@ language: typescript
 project_path: ./project
 target_rtp_lower_bound: 1.0
 
+# Axes this fixture is designed to evaluate. The tests and documentation
+# axes are intentionally excluded: the project ships no meaningful test
+# coverage and no JSDoc across most of the surface, so those axes would
+# either fire on every symbol (destroying precision) or nothing at all
+# (making recall meaningless). Findings on unscored axes are still parsed
+# and reported for visibility but do not contribute to global F1.
+scored_axes:
+  - correction
+  - utility
+  - duplication
+  - overengineering
+  - best-practices
+
 violations:
   # --- axis: correction ---------------------------------------------------
   - id: INV-RTP
@@ -411,43 +424,6 @@ violations:
       EngineContainer class registers and resolves three dependencies that
       could be passed as a plain object or imported directly.
 
-  # --- axis: tests --------------------------------------------------------
-  - id: MISS-TEST-SPIN
-    axis: tests
-    file: src/engine.ts
-    symbol: spin
-    expected_verdict: UNCOVERED
-    difficulty: hard
-    nature: missing-tests-for-core-api
-    description: The primary exported spin() function has no test coverage.
-
-  - id: MISS-TEST-PAYOUT
-    axis: tests
-    file: src/engine.ts
-    symbol: computePayout
-    expected_verdict: UNCOVERED
-    difficulty: medium
-    nature: missing-tests-for-payout
-    description: computePayout has no test coverage.
-
-  - id: MISS-TEST-WILD
-    axis: tests
-    file: src/wild.ts
-    symbol: applyWildBonus
-    expected_verdict: UNCOVERED
-    difficulty: medium
-    nature: missing-tests-for-wild
-    description: applyWildBonus has no test coverage.
-
-  - id: MISS-TEST-FREESPIN
-    axis: tests
-    file: src/freespin.ts
-    symbol: handleFreeSpins
-    expected_verdict: UNCOVERED
-    difficulty: medium
-    nature: missing-tests-for-freespin
-    description: handleFreeSpins has no test coverage.
-
   # --- axis: best-practices ----------------------------------------------
   - id: BP-RNG
     axis: best-practices
@@ -502,37 +478,6 @@ violations:
     description: |
       spin() throws a raw string literal instead of an Error subclass when
       validating the bet.
-
-  # --- axis: documentation -----------------------------------------------
-  - id: DOC-NO-JSDOC
-    axis: documentation
-    file: src/engine.ts
-    symbol: spin
-    expected_verdict: UNDOCUMENTED
-    difficulty: trivial
-    nature: missing-jsdoc-on-public-api
-    description: The primary public export spin() carries no JSDoc block.
-
-  - id: DOC-STALE-RTP
-    axis: documentation
-    file: src/engine.ts
-    symbol: computePayout
-    expected_verdict: UNDOCUMENTED
-    difficulty: medium
-    nature: stale-documentation
-    description: |
-      computePayout's JSDoc claims RTP ~95% but the measured RTP exceeds 1.0.
-      Documentation and implementation disagree.
-
-  - id: DOC-RENAMED-API
-    axis: documentation
-    scope: project-wide
-    expected_verdict: UNDOCUMENTED
-    difficulty: trivial
-    nature: readme-references-renamed-symbol
-    description: |
-      The public README references a simulate() function that does not exist
-      in the code (the actual export is spin()).
 
 clean_files:
   - src/index.ts
