@@ -190,6 +190,7 @@ violations:
   - id: INV-RTP
     axis: correction
     file: src/engine.ts
+    symbol: computePayout
     expected_verdict: NEEDS_FIX
     difficulty: medium
     nature: wrong-sign-on-house-edge
@@ -212,6 +213,7 @@ violations:
   - id: INV-WILD
     axis: correction
     file: src/wild.ts
+    symbol: applyWildBonus
     expected_verdict: NEEDS_FIX
     difficulty: hard
     nature: wild-multiplier-stacking
@@ -223,6 +225,7 @@ violations:
   - id: INV-FREESPIN
     axis: correction
     file: src/freespin.ts
+    symbol: handleFreeSpins
     expected_verdict: NEEDS_FIX
     difficulty: medium
     nature: freespin-retrigger-no-decrement
@@ -235,6 +238,7 @@ violations:
   - id: INV-JACKPOT
     axis: correction
     file: src/jackpot.ts
+    symbol: isJackpotHit
     expected_verdict: NEEDS_FIX
     difficulty: medium
     nature: jackpot-threshold-too-low
@@ -246,6 +250,7 @@ violations:
   - id: INV-ROUND
     axis: correction
     file: src/engine.ts
+    symbol: computePayout
     expected_verdict: NEEDS_FIX
     difficulty: trivial
     nature: ceil-instead-of-floor
@@ -257,6 +262,7 @@ violations:
   - id: INV-BETCAP
     axis: correction
     file: src/engine.ts
+    symbol: spin
     expected_verdict: NEEDS_FIX
     difficulty: trivial
     nature: missing-upper-bet-guard
@@ -269,6 +275,7 @@ violations:
   - id: DEAD-LEGACY
     axis: utility
     file: src/legacy.ts
+    symbol: computeLegacyPayout
     expected_verdict: DEAD
     difficulty: trivial
     nature: dead-module
@@ -277,6 +284,7 @@ violations:
   - id: DEAD-ANCIENT-RTP
     axis: utility
     file: src/paytable.ts
+    symbol: ANCIENT_RTP
     expected_verdict: DEAD
     difficulty: trivial
     nature: dead-export
@@ -285,6 +293,7 @@ violations:
   - id: DEAD-STRATEGY
     axis: utility
     file: src/strategy.ts
+    symbol: ConservativeStrategy
     expected_verdict: DEAD
     difficulty: medium
     nature: dead-class
@@ -295,6 +304,7 @@ violations:
   - id: DEAD-DEBUG-BRANCH
     axis: utility
     file: src/engine.ts
+    symbol: DEBUG_MODE
     expected_verdict: DEAD
     difficulty: medium
     nature: unreachable-branch
@@ -305,6 +315,7 @@ violations:
   - id: DEAD-TYPE
     axis: utility
     file: src/types.ts
+    symbol: LegacySpinResult
     expected_verdict: DEAD
     difficulty: trivial
     nature: dead-type-export
@@ -314,6 +325,7 @@ violations:
   - id: DUP-RNG
     axis: duplication
     file: src/rng.ts
+    symbol: weightedPick
     expected_verdict: DUPLICATE
     difficulty: medium
     nature: semantic-duplicate-function
@@ -324,6 +336,7 @@ violations:
   - id: DUP-PAYOUT
     axis: duplication
     file: src/legacy.ts
+    symbol: computeLegacyPayout
     expected_verdict: DUPLICATE
     difficulty: medium
     nature: semantic-duplicate-function
@@ -334,6 +347,7 @@ violations:
   - id: DUP-WILD
     axis: duplication
     file: src/engine.ts
+    symbol: evaluateLine
     expected_verdict: DUPLICATE
     difficulty: hard
     nature: inline-duplicate-of-helper
@@ -344,6 +358,7 @@ violations:
   - id: DUP-LINE-WIN
     axis: duplication
     file: src/paytable.ts
+    symbol: lineWins
     expected_verdict: DUPLICATE
     difficulty: medium
     nature: semantic-duplicate-predicate
@@ -355,6 +370,7 @@ violations:
   - id: OVER-FACTORY
     axis: overengineering
     file: src/factories.ts
+    symbol: AbstractReelBuilderFactory
     expected_verdict: OVER
     difficulty: medium
     nature: abstract-factory-for-one-concrete
@@ -365,6 +381,7 @@ violations:
   - id: OVER-EVENTS
     axis: overengineering
     file: src/events.ts
+    symbol: SpinEventEmitter
     expected_verdict: OVER
     difficulty: medium
     nature: pubsub-for-one-synchronous-call
@@ -375,6 +392,7 @@ violations:
   - id: OVER-STRATEGY
     axis: overengineering
     file: src/strategy.ts
+    symbol: SpinStrategy
     expected_verdict: OVER
     difficulty: medium
     nature: strategy-pattern-single-used-strategy
@@ -385,6 +403,7 @@ violations:
   - id: OVER-DI
     axis: overengineering
     file: src/engine.ts
+    symbol: EngineContainer
     expected_verdict: OVER
     difficulty: trivial
     nature: di-container-for-three-deps
@@ -444,6 +463,7 @@ violations:
   - id: BP-ANY
     axis: best-practices
     file: src/engine.ts
+    symbol: spin
     expected_verdict: NEEDS_FIX
     difficulty: medium
     nature: any-type-on-financial-api
@@ -454,6 +474,7 @@ violations:
   - id: BP-MUTATION
     axis: best-practices
     file: src/freespin.ts
+    symbol: handleFreeSpins
     expected_verdict: NEEDS_FIX
     difficulty: medium
     nature: in-place-mutation-of-argument
@@ -474,6 +495,7 @@ violations:
   - id: BP-STRING-THROW
     axis: best-practices
     file: src/engine.ts
+    symbol: spin
     expected_verdict: NEEDS_FIX
     difficulty: trivial
     nature: string-thrown-not-error

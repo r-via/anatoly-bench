@@ -1,47 +1,51 @@
 # Anatoly Bench Score — slot-engine
 
-**Global F1:** 32.4%
+**Global F1:** 27.7%
 
 ## Per-axis scores
 
 | Axis | F1 | Recall | Precision | TP | FP | FN |
 |------|---:|------:|----------:|---:|---:|---:|
-| correction | 66.7% | 71.4% | 62.5% | 5 | 3 | 2 |
-| utility | 80.0% | 80.0% | 80.0% | 4 | 1 | 1 |
+| correction | 53.3% | 57.1% | 50.0% | 4 | 4 | 3 |
+| utility | 60.0% | 60.0% | 60.0% | 3 | 2 | 2 |
 | duplication | 0.0% | 0.0% | 100.0% | 0 | 0 | 4 |
 | overengineering | 0.0% | 0.0% | 100.0% | 0 | 0 | 4 |
 | tests | 18.2% | 75.0% | 10.3% | 3 | 26 | 1 |
 | best-practices | 40.0% | 40.0% | 40.0% | 2 | 3 | 3 |
 | documentation | 22.2% | 66.7% | 13.3% | 2 | 13 | 1 |
 
-## Misses (16)
+## Misses (18)
 
 Cataloged violations that Anatoly did not flag.
 
-- **[correction · hard] INV-WILD** — src/wild.ts — expected verdict `NEEDS_FIX` (wild-multiplier-stacking)
-- **[correction · medium] INV-JACKPOT** — src/jackpot.ts — expected verdict `NEEDS_FIX` (jackpot-threshold-too-low)
-- **[utility · trivial] DEAD-TYPE** — src/types.ts — expected verdict `DEAD` (dead-type-export)
-- **[duplication · medium] DUP-RNG** — src/rng.ts — expected verdict `DUPLICATE` (semantic-duplicate-function)
-- **[duplication · medium] DUP-PAYOUT** — src/legacy.ts — expected verdict `DUPLICATE` (semantic-duplicate-function)
-- **[duplication · hard] DUP-WILD** — src/engine.ts — expected verdict `DUPLICATE` (inline-duplicate-of-helper)
-- **[duplication · medium] DUP-LINE-WIN** — src/paytable.ts — expected verdict `DUPLICATE` (semantic-duplicate-predicate)
-- **[overengineering · medium] OVER-FACTORY** — src/factories.ts — expected verdict `OVER` (abstract-factory-for-one-concrete)
-- **[overengineering · medium] OVER-EVENTS** — src/events.ts — expected verdict `OVER` (pubsub-for-one-synchronous-call)
-- **[overengineering · medium] OVER-STRATEGY** — src/strategy.ts — expected verdict `OVER` (strategy-pattern-single-used-strategy)
-- **[overengineering · trivial] OVER-DI** — src/engine.ts — expected verdict `OVER` (di-container-for-three-deps)
+- **[correction · hard] INV-WILD** — src/wild.ts (applyWildBonus) — expected verdict `NEEDS_FIX` (wild-multiplier-stacking)
+- **[correction · medium] INV-JACKPOT** — src/jackpot.ts (isJackpotHit) — expected verdict `NEEDS_FIX` (jackpot-threshold-too-low)
+- **[correction · trivial] INV-ROUND** — src/engine.ts (computePayout) — expected verdict `NEEDS_FIX` (ceil-instead-of-floor)
+- **[utility · medium] DEAD-DEBUG-BRANCH** — src/engine.ts (DEBUG_MODE) — expected verdict `DEAD` (unreachable-branch)
+- **[utility · trivial] DEAD-TYPE** — src/types.ts (LegacySpinResult) — expected verdict `DEAD` (dead-type-export)
+- **[duplication · medium] DUP-RNG** — src/rng.ts (weightedPick) — expected verdict `DUPLICATE` (semantic-duplicate-function)
+- **[duplication · medium] DUP-PAYOUT** — src/legacy.ts (computeLegacyPayout) — expected verdict `DUPLICATE` (semantic-duplicate-function)
+- **[duplication · hard] DUP-WILD** — src/engine.ts (evaluateLine) — expected verdict `DUPLICATE` (inline-duplicate-of-helper)
+- **[duplication · medium] DUP-LINE-WIN** — src/paytable.ts (lineWins) — expected verdict `DUPLICATE` (semantic-duplicate-predicate)
+- **[overengineering · medium] OVER-FACTORY** — src/factories.ts (AbstractReelBuilderFactory) — expected verdict `OVER` (abstract-factory-for-one-concrete)
+- **[overengineering · medium] OVER-EVENTS** — src/events.ts (SpinEventEmitter) — expected verdict `OVER` (pubsub-for-one-synchronous-call)
+- **[overengineering · medium] OVER-STRATEGY** — src/strategy.ts (SpinStrategy) — expected verdict `OVER` (strategy-pattern-single-used-strategy)
+- **[overengineering · trivial] OVER-DI** — src/engine.ts (EngineContainer) — expected verdict `OVER` (di-container-for-three-deps)
 - **[tests · medium] MISS-TEST-WILD** — src/wild.ts (applyWildBonus) — expected verdict `UNCOVERED` (missing-tests-for-wild)
 - **[best-practices · medium] BP-RNG** — src/rng.ts — expected verdict `NEEDS_FIX` (insecure-rng-for-gaming)
-- **[best-practices · medium] BP-MUTATION** — src/freespin.ts — expected verdict `NEEDS_FIX` (in-place-mutation-of-argument)
-- **[best-practices · trivial] BP-STRING-THROW** — src/engine.ts — expected verdict `NEEDS_FIX` (string-thrown-not-error)
+- **[best-practices · medium] BP-MUTATION** — src/freespin.ts (handleFreeSpins) — expected verdict `NEEDS_FIX` (in-place-mutation-of-argument)
+- **[best-practices · trivial] BP-STRING-THROW** — src/engine.ts (spin) — expected verdict `NEEDS_FIX` (string-thrown-not-error)
 - **[documentation · trivial] DOC-NO-JSDOC** — src/engine.ts (spin) — expected verdict `UNDOCUMENTED` (missing-jsdoc-on-public-api)
 
-## False positives (46)
+## False positives (48)
 
 Findings Anatoly emitted without a matching cataloged violation.
 
+- **[correction] `NEEDS_FIX`** — src/engine.ts:17 (EngineContainer) — _resolve<T> calls this.registry.get(key) and casts the result to T without checking for undefined. If a key was never registered, callers silently receive undefined typed as T, producing downstream run…_
 - **[correction] `NEEDS_FIX`** — src/reels.ts:56 (getReelWeights) — _No bounds check on reelIndex. REEL_WEIGHTS[reelIndex] returns undefined for any index outside 0–4, but the declared return type is number[]. Callers relying on the type contract will receive undefined…_
 - **[correction] `NEEDS_FIX`** — src/factories.ts:8 (StandardReelBuilderFactory) — _The `_rowCount` parameter is accepted but intentionally ignored (prefixed with underscore). `spinReel(i)` is called with only the reel index, meaning row count is never passed through. If `spinReel` s…_
 - **[correction] `NEEDS_FIX`** — src/rng.ts:5 (weightedPick) — _Auto-resolved: no RAG candidate above 0.68 threshold_
+- **[utility] `DEAD`** — src/engine.ts:12 (Bet) — _Exported type 'Bet' has 0 importers._
 - **[utility] `DEAD`** — src/paytable.ts:23 (lineWins) — _Auto-resolved: no RAG candidate above 0.68 threshold_
 - **[tests] `UNCOVERED`** — src/engine.ts:14 (HOUSE_EDGE) — _No test file exists for this source file. HOUSE_EDGE affects computePayout output but is never tested._
 - **[tests] `UNCOVERED`** — src/engine.ts:15 (DEBUG_MODE) — _No test file exists. DEBUG_MODE branch in spin() is never exercised by any test._

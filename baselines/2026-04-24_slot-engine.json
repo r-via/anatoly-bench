@@ -1,22 +1,22 @@
 {
   "fixture": "slot-engine",
-  "global_f1": 0.32438672438672445,
+  "global_f1": 0.27676767676767683,
   "per_axis": {
     "correction": {
-      "tp": 5,
-      "fp": 3,
-      "fn": 2,
-      "precision": 0.625,
-      "recall": 0.7142857142857143,
-      "f1": 0.6666666666666666
+      "tp": 4,
+      "fp": 4,
+      "fn": 3,
+      "precision": 0.5,
+      "recall": 0.5714285714285714,
+      "f1": 0.5333333333333333
     },
     "utility": {
-      "tp": 4,
-      "fp": 1,
-      "fn": 1,
-      "precision": 0.8,
-      "recall": 0.8,
-      "f1": 0.8000000000000002
+      "tp": 3,
+      "fp": 2,
+      "fn": 2,
+      "precision": 0.6,
+      "recall": 0.6,
+      "f1": 0.6
     },
     "duplication": {
       "tp": 0,
@@ -64,6 +64,7 @@
       "id": "INV-WILD",
       "axis": "correction",
       "file": "src/wild.ts",
+      "symbol": "applyWildBonus",
       "expected_verdict": "NEEDS_FIX",
       "difficulty": "hard",
       "nature": "wild-multiplier-stacking",
@@ -74,6 +75,7 @@
       "id": "INV-JACKPOT",
       "axis": "correction",
       "file": "src/jackpot.ts",
+      "symbol": "isJackpotHit",
       "expected_verdict": "NEEDS_FIX",
       "difficulty": "medium",
       "nature": "jackpot-threshold-too-low",
@@ -81,9 +83,31 @@
       "description": "isJackpotHit returns true on 4-of-a-kind DIAMOND anywhere in the reel\nwindow. Intended behavior is 5 DIAMOND on the middle row only.\n"
     },
     {
+      "id": "INV-ROUND",
+      "axis": "correction",
+      "file": "src/engine.ts",
+      "symbol": "computePayout",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "trivial",
+      "nature": "ceil-instead-of-floor",
+      "invariant": "fractional coin payouts round DOWN (house keeps remainder)",
+      "description": "computePayout uses Math.ceil to convert fractional coin amounts to\ninteger coins. Player gains up to ~1 coin per spin on rounding alone.\n"
+    },
+    {
+      "id": "DEAD-DEBUG-BRANCH",
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "symbol": "DEBUG_MODE",
+      "expected_verdict": "DEAD",
+      "difficulty": "medium",
+      "nature": "unreachable-branch",
+      "description": "An `if (DEBUG_MODE) { ... }` branch inside spin() is statically\nunreachable because DEBUG_MODE is a const false never reassigned.\n"
+    },
+    {
       "id": "DEAD-TYPE",
       "axis": "utility",
       "file": "src/types.ts",
+      "symbol": "LegacySpinResult",
       "expected_verdict": "DEAD",
       "difficulty": "trivial",
       "nature": "dead-type-export",
@@ -93,6 +117,7 @@
       "id": "DUP-RNG",
       "axis": "duplication",
       "file": "src/rng.ts",
+      "symbol": "weightedPick",
       "expected_verdict": "DUPLICATE",
       "difficulty": "medium",
       "nature": "semantic-duplicate-function",
@@ -102,6 +127,7 @@
       "id": "DUP-PAYOUT",
       "axis": "duplication",
       "file": "src/legacy.ts",
+      "symbol": "computeLegacyPayout",
       "expected_verdict": "DUPLICATE",
       "difficulty": "medium",
       "nature": "semantic-duplicate-function",
@@ -111,6 +137,7 @@
       "id": "DUP-WILD",
       "axis": "duplication",
       "file": "src/engine.ts",
+      "symbol": "evaluateLine",
       "expected_verdict": "DUPLICATE",
       "difficulty": "hard",
       "nature": "inline-duplicate-of-helper",
@@ -120,6 +147,7 @@
       "id": "DUP-LINE-WIN",
       "axis": "duplication",
       "file": "src/paytable.ts",
+      "symbol": "lineWins",
       "expected_verdict": "DUPLICATE",
       "difficulty": "medium",
       "nature": "semantic-duplicate-predicate",
@@ -129,6 +157,7 @@
       "id": "OVER-FACTORY",
       "axis": "overengineering",
       "file": "src/factories.ts",
+      "symbol": "AbstractReelBuilderFactory",
       "expected_verdict": "OVER",
       "difficulty": "medium",
       "nature": "abstract-factory-for-one-concrete",
@@ -138,6 +167,7 @@
       "id": "OVER-EVENTS",
       "axis": "overengineering",
       "file": "src/events.ts",
+      "symbol": "SpinEventEmitter",
       "expected_verdict": "OVER",
       "difficulty": "medium",
       "nature": "pubsub-for-one-synchronous-call",
@@ -147,6 +177,7 @@
       "id": "OVER-STRATEGY",
       "axis": "overengineering",
       "file": "src/strategy.ts",
+      "symbol": "SpinStrategy",
       "expected_verdict": "OVER",
       "difficulty": "medium",
       "nature": "strategy-pattern-single-used-strategy",
@@ -156,6 +187,7 @@
       "id": "OVER-DI",
       "axis": "overengineering",
       "file": "src/engine.ts",
+      "symbol": "EngineContainer",
       "expected_verdict": "OVER",
       "difficulty": "trivial",
       "nature": "di-container-for-three-deps",
@@ -184,6 +216,7 @@
       "id": "BP-MUTATION",
       "axis": "best-practices",
       "file": "src/freespin.ts",
+      "symbol": "handleFreeSpins",
       "expected_verdict": "NEEDS_FIX",
       "difficulty": "medium",
       "nature": "in-place-mutation-of-argument",
@@ -193,6 +226,7 @@
       "id": "BP-STRING-THROW",
       "axis": "best-practices",
       "file": "src/engine.ts",
+      "symbol": "spin",
       "expected_verdict": "NEEDS_FIX",
       "difficulty": "trivial",
       "nature": "string-thrown-not-error",
@@ -210,6 +244,14 @@
     }
   ],
   "false_positives": [
+    {
+      "axis": "correction",
+      "file": "src/engine.ts",
+      "line": 17,
+      "verdict": "NEEDS_FIX",
+      "symbol": "EngineContainer",
+      "reason": "resolve<T> calls this.registry.get(key) and casts the result to T without checking for undefined. If a key was never registered, callers silently receive undefined typed as T, producing downstream runtime errors with no indication of the root cause."
+    },
     {
       "axis": "correction",
       "file": "src/reels.ts",
@@ -233,6 +275,14 @@
       "verdict": "NEEDS_FIX",
       "symbol": "weightedPick",
       "reason": "Auto-resolved: no RAG candidate above 0.68 threshold"
+    },
+    {
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "line": 12,
+      "verdict": "DEAD",
+      "symbol": "Bet",
+      "reason": "Exported type 'Bet' has 0 importers."
     },
     {
       "axis": "utility",
