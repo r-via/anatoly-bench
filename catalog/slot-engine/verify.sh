@@ -113,7 +113,7 @@ ok "detection signatures"
 
 # --- 5. Monte-Carlo RTP check ----------------------------------------------
 echo "==> running Monte-Carlo RTP check (100 000 spins)"
-( cd "${FIXTURE_ROOT}" && npx --no-install tsx verify-runtime.mts ) \
+( cd "${PROJECT_DIR}" && npx --no-install tsx ../verify-runtime.mts ) \
   || fail "Monte-Carlo RTP check failed (RTP <= 1.0 — defects partially absent?)"
 ok "Monte-Carlo RTP > 1.0"
 
