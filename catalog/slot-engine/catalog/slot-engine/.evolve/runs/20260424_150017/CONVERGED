@@ -1,0 +1,63 @@
+# CONVERGED
+
+The slot-engine fixture fully implements the SPEC.md specification.
+
+## Verification summary
+
+### Module layout
+All 14 source files present in project/src/:
+- index.ts, types.ts, engine.ts, rng.ts, reels.ts, paytable.ts
+- wild.ts, freespin.ts, jackpot.ts, legacy.ts, strategy.ts
+- events.ts, factories.ts, __tests__/basic.test.ts
+
+### Public API
+- src/index.ts re-exports spin, Bet, SpinResult from engine.ts
+
+### Business-invariant violations (7/7)
+- INV-RTP: computePayout uses (1 + HOUSE_EDGE) — wrong sign
+- INV-WEIGHTS: DIAMOND weight = 30 on all reels (should be ~3)
+- INV-WILD: applyWildBonus and inline both use basePayout * (1 + wildCount) * 2^wildCount
+- INV-FREESPIN: retrigger adds 10 without decrementing current spin
+- INV-JACKPOT: threshold is >= 4 anywhere, not >= 5 on middle row
+- INV-ROUND: Math.ceil instead of Math.floor
+- INV-BETCAP: console.warn without throw on bet > MAX_BET
+
+### Dead code (5/5)
+- DEAD-LEGACY: legacy.ts never imported
+- DEAD-ANCIENT-RTP: ANCIENT_RTP exported, never read
+- DEAD-STRATEGY: ConservativeStrategy exported, never instantiated
+- DEAD-DEBUG-BRANCH: if (DEBUG_MODE) with const false
+- DEAD-TYPE: LegacySpinResult exported, never referenced
+
+### Semantic duplicates (4/4)
+- DUP-RNG: pickFromWeighted in reels.ts duplicates weightedPick in rng.ts
+- DUP-PAYOUT: computeLegacyPayout duplicates computePayout logic
+- DUP-WILD: inline wild formula in evaluateLine duplicates applyWildBonus
+- DUP-LINE-WIN: checkLine in engine.ts duplicates lineWins in paytable.ts
+
+### Over-engineering (4/4)
+- OVER-FACTORY: AbstractReelBuilderFactory with one concrete subclass
+- OVER-EVENTS: SpinEventEmitter for one synchronous event
+- OVER-STRATEGY: SpinStrategy abstraction with one used strategy
+- OVER-DI: EngineContainer class for three direct imports
+
+### Missing tests (4/4)
+- Only one trivial test (basic.test.ts) — spin, computePayout, applyWildBonus, handleFreeSpins uncovered
+
+### Best-practice violations (5/5)
+- BP-RNG: Math.random() with false JSDoc claim
+- BP-ANY: bet: any parameter
+- BP-MUTATION: handleFreeSpins mutates state in place
+- BP-MAGIC-NUMBERS: inline literals 0.05, 10, 3, 100, 0.01
+- BP-STRING-THROW: throw "invalid bet"
+
+### Documentation defects (3/3)
+- DOC-NO-JSDOC: spin() has no JSDoc
+- DOC-STALE-RTP: computePayout JSDoc claims 95% RTP
+- DOC-RENAMED-API: README references simulate(), code exports spin()
+
+### Runtime verification
+- tsc --noEmit: PASS
+- verify.sh: ALL CHECKS PASSED
+- Monte-Carlo RTP: 1833.22% (> 100%, confirming defects are active)
+- No prohibited comments found in source

@@ -13,3 +13,6 @@ than 20 rounds under a `## Archive` section rather than deleting them.
 ## Patterns
 
 ## Insights
+
+### Fixture already complete — round 1
+All 33 SPEC defects implemented by prior attempt. verify.sh passes including Monte-Carlo RTP=1833.22%. Converged on round 1.
