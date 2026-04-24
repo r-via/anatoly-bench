@@ -51,3 +51,7 @@ npx tsc --noEmit
 ## License
 
 AGPL-3.0-only.
+
+<!-- checked-by-anatoly -->
+[![Checked by Anatoly](https://img.shields.io/badge/checked%20by-Anatoly-blue)](https://github.com/r-via/anatoly)
+<!-- /checked-by-anatoly -->

@@ -36,6 +36,7 @@ export interface Violation {
   difficulty: Difficulty;
   nature: string;
   file?: string;
+  symbol?: string;
   scope?: "project-wide";
   line_hint?: number;
   line_tolerance?: number;
