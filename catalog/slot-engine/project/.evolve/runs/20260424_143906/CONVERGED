@@ -1,0 +1,68 @@
+# CONVERGED
+
+## Justification
+
+All convergence conditions are met:
+
+1. **Zero errors** — verify.sh exits 0: typecheck passes, public API correct, module layout correct, all detection signatures present, Monte-Carlo RTP=1760.67% > 100%.
+
+2. **All improvements checked** — US-001 (implement complete source tree) is [x].
+
+3. **README specification fully implemented:**
+
+### Public API (src/index.ts)
+- Re-exports `spin`, `Bet`, `SpinResult` from engine.js ✓
+
+### Module layout (src/)
+- All 13 required files present: index.ts, types.ts, engine.ts, rng.ts, reels.ts, paytable.ts, wild.ts, freespin.ts, jackpot.ts, legacy.ts, strategy.ts, events.ts, factories.ts ✓
+- __tests__/basic.test.ts with single trivial test ✓
+
+### Business-invariant violations
+- INV-RTP: computePayout uses `(1 + HOUSE_EDGE)` — engine.ts:104 ✓
+- INV-WEIGHTS: DIAMOND weight 30 on all reels — reels.ts:14 ✓
+- INV-WILD: `basePayout * (1 + wildCount) * 2 ** wildCount` — wild.ts:3, engine.ts:85 ✓
+- INV-FREESPIN: retrigger adds 10 without decrementing — freespin.ts:18 ✓
+- INV-JACKPOT: `diamondCount >= 4` anywhere — jackpot.ts:10 ✓
+- INV-ROUND: `Math.ceil(total)` — engine.ts:109 ✓
+- INV-BETCAP: warn without throw — engine.ts:117 ✓
+
+### Dead code
+- DEAD-LEGACY: legacy.ts never imported ✓
+- DEAD-ANCIENT-RTP: `ANCIENT_RTP = 0.95` never read — paytable.ts:3 ✓
+- DEAD-STRATEGY: ConservativeStrategy never instantiated — strategy.ts:13 ✓
+- DEAD-DEBUG-BRANCH: `if (DEBUG_MODE)` unreachable — engine.ts:154 ✓
+- DEAD-TYPE: LegacySpinResult never referenced — types.ts:24 ✓
+
+### Semantic duplicates
+- DUP-RNG: weightedPick (rng.ts) vs pickFromWeighted (reels.ts) ✓
+- DUP-PAYOUT: computePayout (engine.ts) vs computeLegacyPayout (legacy.ts) ✓
+- DUP-WILD: wild multiplier inline in engine.ts:85 vs applyWildBonus in wild.ts ✓
+- DUP-LINE-WIN: checkLine (engine.ts) vs lineWins (paytable.ts) ✓
+
+### Over-engineering
+- OVER-FACTORY: AbstractReelBuilderFactory with single concrete — factories.ts ✓
+- OVER-EVENTS: SpinEventEmitter for single sync event — events.ts ✓
+- OVER-STRATEGY: SpinStrategy abstract with one used subclass — strategy.ts ✓
+- OVER-DI: EngineContainer for 3 deps — engine.ts:17 ✓
+
+### Missing tests
+- Only basic.test.ts with trivial getter test — no coverage for spin, computePayout, applyWildBonus, handleFreeSpins ✓
+
+### Best-practice violations
+- BP-RNG: Math.random() with false gaming-suitability JSDoc — rng.ts ✓
+- BP-ANY: `bet: any` parameter — engine.ts:100,112 ✓
+- BP-MUTATION: handleFreeSpins mutates state in place — freespin.ts ✓
+- BP-MAGIC-NUMBERS: inline literals 0.05, 10, 3, 100, 0.01 — engine.ts ✓
+- BP-STRING-THROW: `throw "invalid bet"` — engine.ts:114 ✓
+
+### Documentation defects
+- DOC-NO-JSDOC: spin() has no JSDoc — engine.ts:112 ✓
+- DOC-STALE-RTP: computePayout JSDoc claims 95% RTP — engine.ts:97 ✓
+- DOC-RENAMED-API: README references simulate() not spin() — seeded README ✓
+
+### Seeded files
+- package.json, tsconfig.json, README.md — unmodified ✓
+
+### No spurious defects
+- No extra modules, tests, tooling, or annotations added ✓
+- No comments hinting at intentional defects ✓
