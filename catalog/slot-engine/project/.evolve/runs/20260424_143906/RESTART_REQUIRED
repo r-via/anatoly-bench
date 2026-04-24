@@ -1,0 +1,6 @@
+# RESTART_REQUIRED
+reason: Created entire src/ tree from scratch — all 13 modules are new files
+verify: cd project && npx --no-install tsc --noEmit && cd .. && ./verify.sh
+resume: python -m evolve start project --resume
+round: 1
+timestamp: 2026-04-24T14:40:00Z

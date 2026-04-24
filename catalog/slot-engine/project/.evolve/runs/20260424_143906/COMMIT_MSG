@@ -1,0 +1,5 @@
+STRUCTURAL: feat(src): implement complete slot-engine source tree
+
+Create all 13 source files per README specification with all cataloged
+intentional defects in place. Typecheck passes, Monte-Carlo RTP >1.0,
+all detection signatures present.
