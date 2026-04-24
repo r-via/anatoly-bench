@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "session": "20260424_143906",
+  "project": "project",
+  "round": 1,
+  "max_rounds": 100,
+  "phase": "improvement",
+  "status": "running",
+  "improvements": {
+    "done": 0,
+    "remaining": 0,
+    "blocked": 0
+  },
+  "backlog": {
+    "pending": 0,
+    "done": 0,
+    "blocked": 0,
+    "added_this_round": 0,
+    "growth_rate_last_5_rounds": 0.0
+  },
+  "last_check": {
+    "passed": true
+  },
+  "started_at": "2026-04-24T12:39:07Z",
+  "updated_at": "2026-04-24T12:45:43Z",
+  "usage": {
+    "total_input_tokens": 0,
+    "total_output_tokens": 0,
+    "total_cache_creation_tokens": 0,
+    "total_cache_read_tokens": 0,
+    "estimated_cost_usd": 0.0,
+    "rounds_tracked": 1
+  }
+}
