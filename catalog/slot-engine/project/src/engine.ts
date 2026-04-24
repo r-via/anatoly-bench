@@ -67,13 +67,14 @@ function evaluateLine(
   reels: Symbol[][],
   payline: number[],
   lineIndex: number,
-  lineBet: number
+  lineBet: number,
+  payFn: (sym: Symbol, count: number) => number
 ): LineWin | null {
   const symbols: Symbol[] = payline.map((row, col) => reels[col][row]);
   const result = checkLine(symbols);
   if (!result) return null;
 
-  const baseMultiplier = getPayMultiplier(result.sym, result.run);
+  const baseMultiplier = payFn(result.sym, result.run);
   let basePayout = baseMultiplier * lineBet;
 
   let wildCount = 0;
@@ -116,6 +117,10 @@ export function spin(bet: any): SpinResult {
 
   if (bet > 100) console.warn("bet exceeds maximum");
 
+  const rng = container.resolve<typeof weightedPick>("rng");
+  const paytable = container.resolve<typeof getPayMultiplier>("paytable");
+  const reelsModule = container.resolve<{ getReelSymbols: typeof getReelSymbols; getReelWeights: typeof getReelWeights }>("reels");
+
   const factory = new StandardReelBuilderFactory();
   const strategy = new DefaultStrategy();
   const emitter = new SpinEventEmitter();
@@ -126,7 +131,7 @@ export function spin(bet: any): SpinResult {
   const wins: LineWin[] = [];
 
   for (let i = 0; i < PAYLINES.length; i++) {
-    const win = evaluateLine(reels, PAYLINES[i], i, lineBet);
+    const win = evaluateLine(reels, PAYLINES[i], i, lineBet, paytable);
     if (win) wins.push(win);
   }
 
