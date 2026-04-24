@@ -51,14 +51,26 @@ function symbolsMatch(v: Violation, f: Finding): boolean {
   return expected.has(f.symbol);
 }
 
-function canMatch(v: Violation, f: Finding): boolean {
-  return (
-    v.axis === f.axis &&
-    verdictsMatch(v.expected_verdict, f.verdict) &&
-    filesMatch(v, f) &&
-    linesMatch(v, f) &&
-    symbolsMatch(v, f)
+// Check whether a finding sits on one of a violation's declared member
+// (file, symbol) pairs — used for multi-location defects like a
+// duplication pair. An empty members list is treated as "not applicable".
+function matchesMember(v: Violation, f: Finding): boolean {
+  if (!v.members || v.members.length === 0) return false;
+  return v.members.some(
+    (m) => m.file === f.file && (!f.symbol || m.symbol === f.symbol),
   );
+}
+
+function canMatch(v: Violation, f: Finding): boolean {
+  if (v.axis !== f.axis) return false;
+  if (!verdictsMatch(v.expected_verdict, f.verdict)) return false;
+  // If members are declared, matching is ANY-of-members; the single-file
+  // path is ignored. Otherwise we fall back to the classic
+  // file + symbol + line criteria.
+  if (v.members && v.members.length > 0) {
+    return matchesMember(v, f);
+  }
+  return filesMatch(v, f) && linesMatch(v, f) && symbolsMatch(v, f);
 }
 
 function difficultyRank(d: string | undefined): number {
@@ -132,14 +144,33 @@ export function score(spec: SpecCatalog, findings: Finding[]): ScoreReport {
       }
     }
 
+    // Attribute redundant findings: a finding on an already-matched
+    // violation's alternate member (e.g. the other side of a duplication
+    // pair) is not a real FP — it's the same bug reported from the other
+    // symbol. Absorb those into the match without inflating TP.
+    const attributedFindings = new Set<Finding>();
+    for (const f of axisFindings) {
+      if (matchedFindings.has(f)) continue;
+      for (const v of matchedViolations) {
+        if (matchesMember(v, f)) {
+          attributedFindings.add(f);
+          break;
+        }
+      }
+    }
+
     const tp = matchedViolations.size;
     const fn = axisViolations.length - tp;
-    const fp = axisFindings.length - matchedFindings.size;
+    const fp =
+      axisFindings.length - matchedFindings.size - attributedFindings.size;
     const { precision, recall, f1: f1Val } = f1(tp, fp, fn);
     byAxis[axis] = { tp, fp, fn, precision, recall, f1: f1Val };
 
     for (const v of axisViolations) if (!matchedViolations.has(v)) misses.push(v);
-    for (const f of axisFindings) if (!matchedFindings.has(f)) falsePositives.push(f);
+    for (const f of axisFindings) {
+      if (matchedFindings.has(f) || attributedFindings.has(f)) continue;
+      falsePositives.push(f);
+    }
   }
 
   const axisScores = Object.values(byAxis) as AxisScore[];

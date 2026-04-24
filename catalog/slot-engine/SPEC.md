@@ -322,8 +322,12 @@ violations:
   # --- axis: duplication --------------------------------------------------
   - id: DUP-RNG
     axis: duplication
-    file: src/rng.ts
-    symbol: weightedPick
+    # Duplication pairs span two (file, symbol) tuples. Anatoly may flag
+    # either or both sides; a hit on any one member counts as the single
+    # TP for this violation.
+    members:
+      - { file: src/rng.ts, symbol: weightedPick }
+      - { file: src/reels.ts, symbol: pickFromWeighted }
     expected_verdict: DUPLICATE
     difficulty: medium
     nature: semantic-duplicate-function
@@ -333,19 +337,22 @@ violations:
 
   - id: DUP-PAYOUT
     axis: duplication
-    file: src/legacy.ts
-    symbol: computeLegacyPayout
+    members:
+      - { file: src/legacy.ts, symbol: computeLegacyPayout }
+      - { file: src/engine.ts, symbol: computePayout }
+      - { file: src/engine.ts, symbol: evaluateLine }
     expected_verdict: DUPLICATE
     difficulty: medium
     nature: semantic-duplicate-function
     description: |
       computeLegacyPayout in legacy.ts duplicates the per-line payout
-      computation of computePayout in engine.ts.
+      computation of computePayout / evaluateLine in engine.ts.
 
   - id: DUP-WILD
     axis: duplication
-    file: src/engine.ts
-    symbol: evaluateLine
+    members:
+      - { file: src/engine.ts, symbol: evaluateLine }
+      - { file: src/wild.ts, symbol: applyWildBonus }
     expected_verdict: DUPLICATE
     difficulty: hard
     nature: inline-duplicate-of-helper
@@ -355,8 +362,9 @@ violations:
 
   - id: DUP-LINE-WIN
     axis: duplication
-    file: src/paytable.ts
-    symbol: lineWins
+    members:
+      - { file: src/paytable.ts, symbol: lineWins }
+      - { file: src/engine.ts, symbol: checkLine }
     expected_verdict: DUPLICATE
     difficulty: medium
     nature: semantic-duplicate-predicate

@@ -38,11 +38,17 @@ export interface Violation {
   file?: string;
   // Accept either a single expected symbol or a list. Use a list when the
   // defect can manifest on several related symbols (e.g. an abstract
-  // factory + its concrete subclass, or two symbols in a duplication
-  // pair). A finding matches if its symbol is equal to `symbol` or
-  // appears in `symbols`.
+  // factory + its concrete subclass within the same file). A finding
+  // matches if its symbol is equal to `symbol` or appears in `symbols`.
   symbol?: string;
   symbols?: string[];
+  // Multi-location defects: a defect whose surface spans several
+  // (file, symbol) pairs — typically a duplication pair where Anatoly
+  // may flag either or both sides. A finding on ANY listed member
+  // counts as the single TP for this violation; additional findings
+  // that match other members are attributed to the same violation
+  // (neither double-counted as TP nor charged as FP).
+  members?: Array<{ file: string; symbol: string }>;
   scope?: "project-wide";
   line_hint?: number;
   line_tolerance?: number;
