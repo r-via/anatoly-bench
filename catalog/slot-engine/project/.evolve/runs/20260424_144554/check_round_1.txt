@@ -9,8 +9,8 @@ VERIFY PASS: public API
 VERIFY PASS: module layout
 VERIFY PASS: detection signatures
 ==> running Monte-Carlo RTP check (100 000 spins)
-spins=100000 bet=10 totalIn=1000000 totalOut=18354433 RTP=1835.44%
-PASS: RTP=1835.44% > 100%
+spins=100000 bet=10 totalIn=1000000 totalOut=17748314 RTP=1774.83%
+PASS: RTP=1774.83% > 100%
 VERIFY PASS: Monte-Carlo RTP > 1.0
 ==> all checks passed
 
