@@ -1,7 +1,0 @@
-feat(engine): wire EngineContainer resolve calls inside spin()
-
-OVER-DI spec requires the container to both register AND resolve its
-three dependencies (rng, paytable, reels) and be used only inside
-spin(). Previously the container only registered — resolve was never
-called. Added resolve calls at the top of spin() and injected the
-resolved paytable function into evaluateLine via a payFn parameter.
