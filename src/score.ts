@@ -222,10 +222,14 @@ export function renderMarkdown(report: ScoreReport): string {
     lines.push("Cataloged violations that Anatoly did not flag.");
     lines.push("");
     for (const v of report.misses) {
-      const where =
-        v.scope === "project-wide"
-          ? "project-wide"
-          : `${v.file ?? "?"}${v.line_hint ? `:${v.line_hint}` : ""}${v.symbol ? ` (${v.symbol})` : ""}`;
+      let where: string;
+      if (v.scope === "project-wide") {
+        where = "project-wide";
+      } else if (v.members && v.members.length > 0) {
+        where = v.members.map((m) => `${m.file} (${m.symbol})`).join(" / ");
+      } else {
+        where = `${v.file ?? "?"}${v.line_hint ? `:${v.line_hint}` : ""}${v.symbol ? ` (${v.symbol})` : ""}`;
+      }
       lines.push(
         `- **[${v.axis} · ${v.difficulty}] ${v.id}** — ${where} — expected verdict \`${v.expected_verdict}\` (${v.nature})`,
       );
