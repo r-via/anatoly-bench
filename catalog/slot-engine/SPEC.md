@@ -319,6 +319,33 @@ violations:
     nature: dead-type-export
     description: Type alias LegacySpinResult is exported but never referenced.
 
+  - id: DEAD-WILD-HELPER
+    axis: utility
+    file: src/wild.ts
+    symbol: applyWildBonus
+    expected_verdict: DEAD
+    difficulty: trivial
+    nature: dead-helper-superseded-by-inline
+    description: |
+      applyWildBonus is exported from wild.ts but never imported. The wild
+      multiplier formula is inlined in engine.ts::evaluateLine instead of
+      calling the helper, so wild.ts is effectively dead code. This is the
+      utility-axis manifestation of the same defect as DUP-WILD; Anatoly
+      may flag either or both.
+
+  - id: DEAD-LINE-WIN-HELPER
+    axis: utility
+    file: src/paytable.ts
+    symbol: lineWins
+    expected_verdict: DEAD
+    difficulty: trivial
+    nature: dead-helper-superseded-by-inline
+    description: |
+      lineWins is exported from paytable.ts but never imported. The
+      "is-winning-line" predicate is reimplemented as checkLine inline in
+      engine.ts, leaving lineWins orphaned. Utility-axis manifestation of
+      the same defect as DUP-LINE-WIN.
+
   # --- axis: duplication --------------------------------------------------
   - id: DUP-RNG
     axis: duplication

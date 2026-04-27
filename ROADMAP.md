@@ -8,15 +8,24 @@
 
 ## Quick wins (<1 day each)
 
-### 1. Track type-only imports in the usage graph
+### ~~1. Track type-only imports in the usage graph~~ ✅ Shipped — actual fix was per-axis triage policy
 
-**Symptom:** `DEAD-TYPE` is missed — `type LegacySpinResult` is exported from `src/types.ts` and imported by zero files (runtime or type), but `utility` does not flag it as `DEAD`.
+**Status:** ✅ landed at [r-via/anatoly@b784caf](https://github.com/r-via/anatoly/commit/b784caf) (v8 of the bench).
 
-**Likely cause:** the usage graph indexes runtime imports (`import { x } from`) but not type-only imports (`import type { x } from`, bare type references in annotations). `getTypeOnlySymbolUsage` exists in `src/core/usage-graph.ts` but is only consulted as a fallback in `tier1.ts`, after the `utility` axis has already returned `DEAD` based on runtime imports alone — and only to upgrade `DEAD → USED`. There is no path for an unused type export to reach the `utility` axis as a candidate.
+**Investigation surfaced a different root cause than the original title.** Type-only import tracking was already implemented correctly (`getTypeOnlySymbolUsage` in `usage-graph.ts`). The actual blocker was triage's `skip` tier: any file matching `type-only` / `trivial` / `barrel-export` / `constants-only` short-circuited every axis with blanket safe defaults, including `utility: 'USED'`. `src/types.ts` was triage-skipped → `LegacySpinResult` got blanket `USED` regardless of its actual zero-importer status.
 
-**Proposed fix:** ensure the AST scanner produces type-only import edges, and that `utility` considers the union of runtime and type-only importers when classifying. A type-only export with zero importers of either kind should resolve to `DEAD`.
+**Fix shipped:**
+- Extracted the `autoResolveSymbol` core into `usage-graph.ts::resolveExportedSymbolUtility` so triage can reuse it.
+- `generateSkipReview` now consults the usage graph and writes per-symbol `DEAD`/`USED` instead of blanket `USED`.
+- New `evaluatorAxesForSkip(reason)` returns the axes that should still run on skip-tier files: `trivial → {correction, duplication, utility}`, others → empty (utility recovered via the skip path).
+- `commands/run.ts` filters evaluators per file based on this policy.
 
-**Estimated bench gain:** +1 TP utility (DEAD-TYPE) → utility 60% → 80%, global +1 pt.
+**Side effect — fixed a second miss too:** `src/wild.ts` (4 lines) was previously triage-skipped, hiding the helper from the LLM entirely. It now goes through `correction`/`duplication`/`utility` evaluators. INV-WILD itself remains a miss for a different reason (domain-knowledge gap, item 5), but DEAD-WILD-HELPER and DEAD-LINE-WIN are now caught.
+
+**Bench impact (v7 → v8 apples-to-apples on the v8 catalog):**
+- utility: 66.7% → **85.7%** F1 (+19pp)
+- 3 cataloged defects newly detected: DEAD-TYPE, DEAD-WILD-HELPER, DEAD-LINE-WIN
+- (Global F1 movement is masked by independent LLM variance on correction and best-practices.)
 
 ### 2. Allow multiple findings per symbol
 

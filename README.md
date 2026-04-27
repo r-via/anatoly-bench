@@ -80,7 +80,7 @@ A perfect audit scores `1.0`. In practice, the target is movement over time — 
 
 ## Current results — `slot-engine` fixture
 
-25 cataloged defects across 5 scored axes (correction:7, utility:5, duplication:4, overengineering:4, best-practices:5). Tests and documentation are intentionally excluded from this fixture's scored axes (the project ships no test suite or JSDoc by design).
+27 cataloged defects across 5 scored axes (correction:7, utility:7, duplication:4, overengineering:4, best-practices:5). Tests and documentation are intentionally excluded from this fixture's scored axes (the project ships no test suite or JSDoc by design).
 
 ### Progression across runs
 
@@ -92,17 +92,24 @@ A perfect audit scores `1.0`. In practice, the target is movement over time — 
 | v4  | 2026-04-24 | 46.8%     | 57.1%      | 60.0%   | 0.0%        | 66.7%           | 50.0%          |
 | v5  | 2026-04-24 | 43.5%     | 54.5%      | 60.0%   | 0.0%        | 66.7%           | 36.4%          |
 | v6  | 2026-04-24 | 56.8%     | 54.5%      | 60.0%   | **66.7%**   | 66.7%           | 36.4%          |
-| **v7**  | 2026-04-26 | **65.5%** | **61.5%**  | 60.0%   | 66.7%       | 66.7%           | **72.7%**      |
+| v7  | 2026-04-26 | 65.5%     | 61.5%      | 60.0%   | 66.7%       | 66.7%           | **72.7%**      |
+| v7† | 2026-04-26 | 66.9%     | 61.5%      | 66.7%   | 66.7%       | 66.7%           | 72.7%          |
+| **v8**  | 2026-04-27 | 62.7%  | 36.4%‡     | **85.7%** | 66.7%     | 75.0%           | 50.0%‡         |
 
 \* v1 used a different scoring scope (7 axes vs 5). Comparisons are meaningful from v2 onwards.
+† v7 re-scored against the v8 catalog (DEAD-WILD-HELPER + DEAD-LINE-WIN added) for an apples-to-apples delta against v8.
+‡ v8 lost three findings vs v7 to LLM variance (INV-WEIGHTS, INV-BETCAP on correction; BP-STRING-THROW on best-practices). The structural improvement is the **+19pp on utility** (DEAD-TYPE, DEAD-WILD-HELPER, DEAD-LINE-WIN all caught after the triage fix).
 
-The duplication jump at v6 is the result of an Anatoly fix ([r-via/anatoly@44f0617](https://github.com/r-via/anatoly/commit/44f0617)) — tier-1 refinement was overriding the LLM's `DUPLICATE` verdict whenever the underlying RAG embedding score stayed below 0.68, even when the LLM had committed to a concrete `duplicate_target`. The bench surfaced the bug; the fix landed; the next run measured the gain.
+Two Anatoly fixes have landed during the lifetime of this benchmark:
+
+- **v6 — duplication tier-1 invariant** ([r-via/anatoly@44f0617](https://github.com/r-via/anatoly/commit/44f0617)). Tier-1 refinement was overriding the LLM's `DUPLICATE` verdict whenever the underlying RAG embedding score stayed below 0.68, even when the LLM had committed to a concrete `duplicate_target`. The bench surfaced the bug; the fix landed; v6 measured the gain (duplication 0% → 66.7%).
+- **v8 — per-axis triage policy** ([r-via/anatoly@b784caf](https://github.com/r-via/anatoly/commit/b784caf)). Triage's `skip` tier was binary: type-only / trivial / barrel-export files bypassed every axis with blanket safe defaults, including utility. Files like `src/types.ts` (an exported type alias never imported) silently classified as `USED`, and a 4-line `src/wild.ts` never saw the LLM at all. The fix splits triage decisions per-axis, consults the usage graph for utility on skipped files, and routes trivial files through `correction`/`duplication`/`utility` evaluators. utility 66.7% → 85.7%.
 
 Per-run JSON + Markdown baselines are in [`baselines/`](./baselines/).
 
-### Remaining misses on v7
+### Remaining misses on v8
 
-Nine defects from the catalog that Anatoly does not yet detect on this fixture:
+Eight defects from the catalog that Anatoly does not yet detect on this fixture:
 
 | Axis | ID | Difficulty | Defect |
 |------|----|----|--------|
@@ -110,17 +117,15 @@ Nine defects from the catalog that Anatoly does not yet detect on this fixture:
 | correction | INV-JACKPOT | medium | jackpot triggers on 4 diamonds anywhere instead of 5 on middle row |
 | correction | INV-ROUND | trivial | `Math.ceil` rounds payouts up (mentioned in passing on the INV-RTP finding but not split as its own finding) |
 | utility | DEAD-DEBUG-BRANCH | medium | `if (DEBUG_MODE)` branch with `DEBUG_MODE = false` const — statically unreachable |
-| utility | DEAD-TYPE | trivial | `type LegacySpinResult` exported, never imported (type-only graph not consulted) |
 | duplication | DUP-PAYOUT | medium | `legacy.ts::computeLegacyPayout` duplicates `engine.ts::computePayout` — duplication axis appears suppressed on dead code |
 | duplication | DUP-WILD | hard | wild multiplier formula duplicated inline in `engine.ts::evaluateLine` vs the helper in `wild.ts::applyWildBonus` (sub-symbol granularity) |
 | overengineering | OVER-STRATEGY | medium | `SpinStrategy` abstraction for a single used implementation (needs class-hierarchy + use-site cross-reference) |
 | best-practices | BP-RNG | medium | `Math.random()` used as gaming RNG (requires domain-aware rule) |
 
-These nine cluster around five themes:
+These eight cluster around four themes:
 
 - **Domain knowledge** (INV-WILD, INV-JACKPOT, BP-RNG) — defects that look fine in isolation but violate domain conventions (gambling math, regulated gaming RNG)
 - **Sub-symbol granularity** (INV-ROUND collapsed into another finding, DUP-WILD inline, DEAD-DEBUG-BRANCH branch-level) — defects that sit below the symbol level
-- **Type-only universe** (DEAD-TYPE) — type exports tracked separately from value exports
 - **Inter-axis suppression** (DUP-PAYOUT) — DEAD code shouldn't suppress duplication detection
 - **Hierarchy + usage cross-reference** (OVER-STRATEGY) — overengineering needs to count concrete subclasses + their use sites
 
