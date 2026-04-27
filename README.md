@@ -124,7 +124,7 @@ These nine cluster around five themes:
 - **Inter-axis suppression** (DUP-PAYOUT) — DEAD code shouldn't suppress duplication detection
 - **Hierarchy + usage cross-reference** (OVER-STRATEGY) — overengineering needs to count concrete subclasses + their use sites
 
-A full breakdown with proposed fixes and effort estimates lives in [docs/01-feedback-anatoly.md](./docs/01-feedback-anatoly.md).
+A prioritized roadmap of the Anatoly evolutions needed to close these gaps lives in [ROADMAP.md](./ROADMAP.md). The original 3-run feedback report (more historical context) is in [docs/01-feedback-anatoly.md](./docs/01-feedback-anatoly.md).
 
 ## License
 
