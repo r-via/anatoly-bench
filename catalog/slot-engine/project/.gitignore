@@ -1,6 +1,8 @@
 node_modules/
 dist/
-.anatoly/
+!.anatoly/
+.anatoly/*
+!.anatoly/runs/
 .anatoly-cache/
 .venv/
 __pycache__/
