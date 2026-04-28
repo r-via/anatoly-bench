@@ -1,0 +1,89 @@
+{
+  "runId": "2026-04-28_111200",
+  "timestamp": "2026-04-28T09:12:00.327Z",
+  "projectRoot": "/home/rviau/projects/anatoly-bench/catalog/slot-engine/project",
+  "concurrency": 8,
+  "ragMode": "auto",
+  "enableRag": true,
+  "noCache": true,
+  "deliberation": true,
+  "dryRun": false,
+  "axesFilter": null,
+  "fileFilter": null,
+  "badge": {
+    "enabled": true,
+    "verdict": false,
+    "link": "https://github.com/r-via/anatoly"
+  },
+  "config": {
+    "providers": {
+      "anthropic": {
+        "mode": "subscription",
+        "concurrency": 24
+      },
+      "google": {
+        "mode": "api",
+        "concurrency": 24
+      }
+    },
+    "models": {
+      "quality": "anthropic/claude-sonnet-4-6",
+      "fast": "anthropic/claude-haiku-4-5",
+      "deliberation": "anthropic/claude-opus-4-6",
+      "code_summary": "anthropic/claude-haiku-4-5"
+    },
+    "agents": {
+      "enabled": true,
+      "max_turns": 30
+    },
+    "runtime": {
+      "timeout_per_file": 600,
+      "max_retries": 3,
+      "concurrency": 8,
+      "min_confidence": 70,
+      "max_stop_iterations": 3
+    },
+    "axes": {
+      "utility": {
+        "enabled": true
+      },
+      "duplication": {
+        "enabled": true
+      },
+      "correction": {
+        "enabled": true
+      },
+      "overengineering": {
+        "enabled": true
+      },
+      "tests": {
+        "enabled": false
+      },
+      "best_practices": {
+        "enabled": true
+      },
+      "documentation": {
+        "enabled": false
+      }
+    },
+    "rag": {
+      "enabled": true,
+      "code_model": "auto",
+      "nlp_model": "auto",
+      "code_weight": 0.6
+    },
+    "scan": {
+      "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx"
+      ],
+      "exclude": [
+        "node_modules/**",
+        "dist/**",
+        "**/*.test.ts",
+        "**/*.spec.ts"
+      ],
+      "auto_detect": true
+    }
+  }
+}

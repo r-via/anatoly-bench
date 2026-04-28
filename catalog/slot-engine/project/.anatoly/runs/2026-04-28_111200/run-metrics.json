@@ -1,0 +1,341 @@
+{
+  "runId": "2026-04-28_111200",
+  "durationMs": 633020,
+  "filesReviewed": 15,
+  "evaluated": 13,
+  "cached": 0,
+  "findings": 23,
+  "errors": 0,
+  "errorsByCode": {},
+  "degradedReviews": 0,
+  "costUsd": 4.52157055,
+  "providers": {
+    "anthropic": {
+      "calls": 67,
+      "costUsd": 4.52
+    },
+    "gemini": {
+      "calls": 0,
+      "costUsd": 0
+    }
+  },
+  "claude_quota_saved_pct": 0,
+  "phaseDurations": {
+    "scan": 80,
+    "estimate": 125,
+    "triage": 2,
+    "rag-index": 31242,
+    "review": 248250,
+    "refinement": 171011,
+    "internal-docs": 4,
+    "report": 30
+  },
+  "axisStats": {
+    "utility": {
+      "calls": 13,
+      "totalDurationMs": 44704,
+      "totalCostUsd": 0.040022999999999996,
+      "totalInputTokens": 40,
+      "totalOutputTokens": 6472,
+      "totalCacheReadTokens": 76230,
+      "totalCacheCreationTokens": 0
+    },
+    "duplication": {
+      "calls": 13,
+      "totalDurationMs": 74255,
+      "totalCostUsd": 0.0611823,
+      "totalInputTokens": 40,
+      "totalOutputTokens": 10672,
+      "totalCacheReadTokens": 77823,
+      "totalCacheCreationTokens": 0
+    },
+    "correction": {
+      "calls": 13,
+      "totalDurationMs": 432800,
+      "totalCostUsd": 1.09878425,
+      "totalInputTokens": 35,
+      "totalOutputTokens": 29886,
+      "totalCacheReadTokens": 225606,
+      "totalCacheCreationTokens": 38185
+    },
+    "overengineering": {
+      "calls": 12,
+      "totalDurationMs": 226692,
+      "totalCostUsd": 0.6114992499999999,
+      "totalInputTokens": 36,
+      "totalOutputTokens": 12369,
+      "totalCacheReadTokens": 202651,
+      "totalCacheCreationTokens": 32123
+    },
+    "best_practices": {
+      "calls": 12,
+      "totalDurationMs": 1212444,
+      "totalCostUsd": 2.3246237499999998,
+      "totalInputTokens": 36,
+      "totalOutputTokens": 79474,
+      "totalCacheReadTokens": 213450,
+      "totalCacheCreationTokens": 36939
+    }
+  },
+  "timeline": [
+    {
+      "t": 897,
+      "event": "phase_start",
+      "phase": "scan"
+    },
+    {
+      "t": 977,
+      "event": "phase_end",
+      "phase": "scan",
+      "durationMs": 80
+    },
+    {
+      "t": 980,
+      "event": "phase_start",
+      "phase": "estimate"
+    },
+    {
+      "t": 1105,
+      "event": "phase_end",
+      "phase": "estimate",
+      "durationMs": 125
+    },
+    {
+      "t": 1105,
+      "event": "phase_start",
+      "phase": "triage"
+    },
+    {
+      "t": 1107,
+      "event": "phase_end",
+      "phase": "triage",
+      "durationMs": 2,
+      "skip": 3,
+      "evaluate": 12
+    },
+    {
+      "t": 182477,
+      "event": "phase_start",
+      "phase": "rag-index"
+    },
+    {
+      "t": 213719,
+      "event": "phase_end",
+      "phase": "rag-index",
+      "durationMs": 31242
+    },
+    {
+      "t": 213720,
+      "event": "phase_start",
+      "phase": "review"
+    },
+    {
+      "t": 213735,
+      "event": "file_review_start",
+      "file": "package.json"
+    },
+    {
+      "t": 213736,
+      "event": "file_review_start",
+      "file": "src/engine.ts"
+    },
+    {
+      "t": 213736,
+      "event": "file_review_start",
+      "file": "src/events.ts"
+    },
+    {
+      "t": 213737,
+      "event": "file_review_start",
+      "file": "src/factories.ts"
+    },
+    {
+      "t": 213737,
+      "event": "file_review_start",
+      "file": "src/freespin.ts"
+    },
+    {
+      "t": 213739,
+      "event": "file_review_start",
+      "file": "src/jackpot.ts"
+    },
+    {
+      "t": 213739,
+      "event": "file_review_start",
+      "file": "src/legacy.ts"
+    },
+    {
+      "t": 213741,
+      "event": "file_review_start",
+      "file": "src/paytable.ts"
+    },
+    {
+      "t": 270828,
+      "event": "file_review_end",
+      "file": "package.json",
+      "verdict": "CLEAN",
+      "durationMs": 20819
+    },
+    {
+      "t": 270828,
+      "event": "file_review_start",
+      "file": "src/reels.ts"
+    },
+    {
+      "t": 294816,
+      "event": "file_review_end",
+      "file": "src/jackpot.ts",
+      "verdict": "CLEAN",
+      "durationMs": 77109
+    },
+    {
+      "t": 294816,
+      "event": "file_review_start",
+      "file": "src/rng.ts"
+    },
+    {
+      "t": 323680,
+      "event": "file_review_end",
+      "file": "src/paytable.ts",
+      "verdict": "NEEDS_REFACTOR",
+      "durationMs": 105728
+    },
+    {
+      "t": 323680,
+      "event": "file_review_start",
+      "file": "src/strategy.ts"
+    },
+    {
+      "t": 325288,
+      "event": "file_review_end",
+      "file": "src/factories.ts",
+      "verdict": "CLEAN",
+      "durationMs": 75200
+    },
+    {
+      "t": 325289,
+      "event": "file_review_start",
+      "file": "src/wild.ts"
+    },
+    {
+      "t": 328567,
+      "event": "file_review_end",
+      "file": "src/freespin.ts",
+      "verdict": "NEEDS_REFACTOR",
+      "durationMs": 110686
+    },
+    {
+      "t": 328568,
+      "event": "file_review_start",
+      "file": "tsconfig.json"
+    },
+    {
+      "t": 330463,
+      "event": "file_review_end",
+      "file": "src/wild.ts",
+      "verdict": "NEEDS_REFACTOR",
+      "durationMs": 5128
+    },
+    {
+      "t": 337996,
+      "event": "file_review_end",
+      "file": "src/events.ts",
+      "verdict": "CLEAN",
+      "durationMs": 87849
+    },
+    {
+      "t": 350422,
+      "event": "file_review_end",
+      "file": "tsconfig.json",
+      "verdict": "CLEAN",
+      "durationMs": 21532
+    },
+    {
+      "t": 393400,
+      "event": "file_review_end",
+      "file": "src/reels.ts",
+      "verdict": "NEEDS_REFACTOR",
+      "durationMs": 122454
+    },
+    {
+      "t": 401444,
+      "event": "file_review_end",
+      "file": "src/legacy.ts",
+      "verdict": "NEEDS_REFACTOR",
+      "durationMs": 183675
+    },
+    {
+      "t": 404057,
+      "event": "file_review_end",
+      "file": "src/rng.ts",
+      "verdict": "NEEDS_REFACTOR",
+      "durationMs": 109199
+    },
+    {
+      "t": 415653,
+      "event": "file_review_end",
+      "file": "src/strategy.ts",
+      "verdict": "NEEDS_REFACTOR",
+      "durationMs": 91730
+    },
+    {
+      "t": 461970,
+      "event": "file_review_end",
+      "file": "src/engine.ts",
+      "verdict": "CRITICAL",
+      "durationMs": 243790
+    },
+    {
+      "t": 461970,
+      "event": "phase_end",
+      "phase": "review",
+      "durationMs": 248250
+    },
+    {
+      "t": 461970,
+      "event": "phase_start",
+      "phase": "refinement"
+    },
+    {
+      "t": 632981,
+      "event": "phase_end",
+      "phase": "refinement",
+      "durationMs": 171011
+    },
+    {
+      "t": 632981,
+      "event": "phase_start",
+      "phase": "internal-docs"
+    },
+    {
+      "t": 632985,
+      "event": "phase_end",
+      "phase": "internal-docs",
+      "durationMs": 4
+    },
+    {
+      "t": 632989,
+      "event": "phase_start",
+      "phase": "report"
+    },
+    {
+      "t": 633019,
+      "event": "phase_end",
+      "phase": "report",
+      "durationMs": 30
+    }
+  ],
+  "conversations": {
+    "total": 63,
+    "byPhase": {
+      "review": 63
+    },
+    "byModel": {
+      "anthropic/claude-haiku-4-5": 26,
+      "anthropic/claude-sonnet-4-6": 37
+    },
+    "totalInputTokens": 187,
+    "totalOutputTokens": 138873,
+    "totalCostUsd": 4.13611255
+  }
+}

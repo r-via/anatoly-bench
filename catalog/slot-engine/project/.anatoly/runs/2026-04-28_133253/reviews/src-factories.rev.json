@@ -1,0 +1,224 @@
+{
+  "version": 2,
+  "file": "src/factories.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "AbstractReelBuilderFactory",
+      "kind": "class",
+      "exported": true,
+      "line_start": 4,
+      "line_end": 6,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 85,
+      "detail": "Auto-resolved: function ≤ 5 lines",
+      "findings": []
+    },
+    {
+      "name": "StandardReelBuilderFactory",
+      "kind": "class",
+      "exported": true,
+      "line_start": 8,
+      "line_end": 16,
+      "correction": "OK",
+      "overengineering": "OVER",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 80,
+      "detail": "[USED] Runtime-imported by 1 file: src/engine.ts | [UNIQUE] No RAG data available | [OK] Implementation correctly satisfies the abstract contract: iterates 0..reelCount-1 and delegates each reel to spinReel(i). The ignored _rowCount is an explicitly documented and accepted design consequence (ADR-002). No logic errors or type mismatches visible. Any RNG-correctness concerns live in spinReel (src/reels.ts), not here. | [OVER] A four-line for-loop wrapped in a class that extends an abstract base with 0 importers. With only 1 runtime importer and no consumer ever referencing the abstract type, the class hierarchy delivers no polymorphism in practice. ADR-002 justifies the factory pattern for future test-double scenarios, but since AbstractReelBuilderFactory itself has 0 importers those scenarios have not been acted upon. A standalone function `buildReels(reelCount: number): Symbol[][]` would be equally extensible and easier to swap in tests via module mocking, without the class indirection ADR-002 itself flags as a negative consequence.",
+      "findings": []
+    }
+  ],
+  "actions": [
+    {
+      "id": 2,
+      "description": "Simplify: `StandardReelBuilderFactory` is over-engineered",
+      "severity": "medium",
+      "effort": "small",
+      "category": "hygiene",
+      "source": "overengineering",
+      "target_symbol": "StandardReelBuilderFactory",
+      "target_lines": "L8-L16"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 9/10 (1 FAIL, 1 WARN, 15 PASS)"
+  },
+  "best_practices": {
+    "score": 9,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "tsconfig is not included in the provided context, but all parameters and return types are explicitly annotated throughout the file, which is consistent with strict mode being enabled. No implicit-any patterns are visible."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No `any`",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No explicit or implicit `any` types present. All types are fully annotated (`number`, `Symbol[][]`)."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No type assertions or union types exist in this file. The abstract class pattern cleanly models the variant hierarchy without any unsafe narrowing."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No utility types are needed in this file. The types expressed (`Symbol[][]`) are straightforwardly composed and do not benefit from Pick/Omit/Record etc."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "The return type of `buildReels` is `Symbol[][]` (mutable). Callers could accidentally mutate the reel grid. Prefer `readonly Symbol[][]` or `ReadonlyArray<ReadonlyArray<Symbol>>` to enforce immutability at the boundary, which is especially important given the gambling domain where grid integrity after construction is a correctness invariant.",
+        "lines": "L4-L16"
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "The file uses abstract classes, which are appropriate here for expressing a constructable factory contract. The `import type` syntax is correctly used for the `Symbol` type import."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "File is 16 lines, well within the 300-line limit."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "The unused `rowCount` parameter is correctly prefixed with `_` (`_rowCount`), satisfying the `no-unused-vars` rule. No other lint issues are visible."
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "FAIL",
+        "severity": "MEDIUM",
+        "detail": "Both exported classes (`AbstractReelBuilderFactory` and `StandardReelBuilderFactory`) lack JSDoc documentation. The abstract class in particular defines the public contract used by the engine and test doubles, and should document the semantics of `reelCount` and `rowCount` (especially since `rowCount` is intentionally ignored per ADR-002, which is non-obvious to consumers).",
+        "lines": "L4-L16"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Uses `.js` ESM-compatible extensions for imports, `import type` for type-only imports, and abstract class syntax. No deprecated APIs used."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Imports are cleanly grouped: type import first, then value import. Both resolve to peer modules within `src/` as expected by the project structure. No side-effect imports or circular dependency risk apparent."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No asynchronous code in this file. `buildReels` is synchronous and delegates to `spinReel`, which is also synchronous. No error handling surface exists here."
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "Slot-machine domain inferred from project vocabulary (reels, jackpot, freespin, wild, paytable). Per instruction 11, RNG safety concerns belong to `src/reels.ts` and `src/rng.ts` (where the actual RNG is defined), not to this factory which merely delegates to `spinReel(i)`. No hardcoded secrets, eval, or injection vectors exist in this file."
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Simple O(reelCount) loop with no nested iterations, no redundant allocations, and no synchronous I/O. No performance concerns."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Per ADR-002 (`.anatoly/docs/02-Architecture/04-Design-Decisions.md`), testability is achieved by substituting the entire factory with a test double rather than by injecting `spinReel`. This is the documented and intentional design decision. The abstract class contract makes test doubles trivially easy to author."
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No clear opportunities for `satisfies`, const type parameters, or `using` declarations in this file. The class hierarchy already provides the type safety that `satisfies` would offer. The simplicity of the file makes adoption of newer features a non-issue."
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "This is a game-engine utility file. The factory pattern is the correct architectural choice for a reel-construction abstraction. The `_rowCount` unused parameter is acknowledged and documented in ADR-002 as an accepted trade-off. No React, API, or other context-specific anti-patterns apply."
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Add JSDoc to both exported classes to document the contract, especially the semantics of the unused `rowCount` parameter which is non-obvious to consumers.",
+        "before": "export abstract class AbstractReelBuilderFactory {\n  abstract buildReels(reelCount: number, rowCount: number): Symbol[][];\n}",
+        "after": "/**\n * Abstract factory for constructing the reel grid prior to payline evaluation.\n * Implement this class to provide alternative generation strategies (e.g. seeded/deterministic grids for replay or certification).\n */\nexport abstract class AbstractReelBuilderFactory {\n  /**\n   * Build the reel grid.\n   * @param reelCount - Number of reels (columns) to generate.\n   * @param rowCount - Number of visible rows per reel. Implementations may ignore this if reel height is fixed internally.\n   * @returns A 2-D array of symbols indexed by [reelIndex][rowIndex].\n   */\n  abstract buildReels(reelCount: number, rowCount: number): Symbol[][];\n}"
+      },
+      {
+        "description": "Return a readonly type from `buildReels` to prevent callers from accidentally mutating the generated reel grid, which is important for grid integrity in the gambling engine.",
+        "before": "abstract buildReels(reelCount: number, rowCount: number): Symbol[][];\n// ...\nbuildReels(reelCount: number, _rowCount: number): Symbol[][] {",
+        "after": "abstract buildReels(reelCount: number, rowCount: number): ReadonlyArray<ReadonlyArray<Symbol>>;\n// ...\nbuildReels(reelCount: number, _rowCount: number): ReadonlyArray<ReadonlyArray<Symbol>> {"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "duplication": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.0447935,
+      "duration_ms": 16722
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.07003274999999999,
+      "duration_ms": 34143
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.14815874999999998,
+      "duration_ms": 86085
+    }
+  }
+}

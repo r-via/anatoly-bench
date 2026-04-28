@@ -1,0 +1,90 @@
+{
+  "version": 2,
+  "file": "package.json",
+  "is_generated": false,
+  "language": "json",
+  "parse_method": "ast",
+  "verdict": "CLEAN",
+  "symbols": [],
+  "actions": [],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 10/10 (0 FAIL, 0 WARN, 6 PASS)"
+  },
+  "best_practices": {
+    "score": 10,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Valid JSON",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "File is well-formed JSON. No trailing commas, no comments, all keys and string values are properly double-quoted."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No hardcoded secrets",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No API keys, passwords, tokens, or any sensitive credentials are present. The package contains only standard npm metadata fields."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Consistent key naming convention",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Excluded per project instructions — package.json always receives PASS for naming convention, as all keys follow the npm-mandated camelCase standard (devDependencies, private, etc.)."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Reasonable nesting depth",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Maximum nesting depth is 2 levels (top-level fields → scripts and devDependencies values), well within the 5-level readability limit."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Descriptive key names",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "All keys are fully descriptive standard npm fields: name, version, private, type, description, main, scripts, license, devDependencies. No single-letter keys or cryptic abbreviations."
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Proper formatting",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "File uses consistent 2-space indentation throughout. Not minified. Each key-value pair is on its own line with no irregularities."
+      }
+    ],
+    "suggestions": []
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "duplication": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.021422249999999997,
+      "duration_ms": 6465
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.0201265,
+      "duration_ms": 5105
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.041818499999999995,
+      "duration_ms": 18619
+    }
+  }
+}

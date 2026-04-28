@@ -1,0 +1,504 @@
+{
+  "version": 2,
+  "file": "src/engine.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "CRITICAL",
+  "symbols": [
+    {
+      "name": "Bet",
+      "kind": "type",
+      "exported": true,
+      "line_start": 12,
+      "line_end": 12,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "DEAD",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 90,
+      "detail": "Auto-resolved: type cannot be over-engineered",
+      "findings": []
+    },
+    {
+      "name": "HOUSE_EDGE",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 14,
+      "line_end": 14,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 95,
+      "detail": "[USED] Referenced in computePayout function (line 107) to adjust total payout calculation. | [UNIQUE] Numeric constant. No similar constants found in RAG results. | [OK] Value 0.05 correctly represents a 5% rate; the defect is in how it is applied inside computePayout, not in the constant itself. | [LEAN] Simple named constant replacing a magic number. Appropriate and minimal.",
+      "findings": []
+    },
+    {
+      "name": "DEBUG_MODE",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 15,
+      "line_end": 15,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 72,
+      "detail": "Auto-resolved: function ≤ 5 lines",
+      "findings": []
+    },
+    {
+      "name": "EngineContainer",
+      "kind": "class",
+      "exported": false,
+      "line_start": 17,
+      "line_end": 27,
+      "correction": "OK",
+      "overengineering": "OVER",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 85,
+      "detail": "[USED] Class instantiated at line 29 to create the dependency injection container. | [UNIQUE] Service locator container class. No similar classes found in RAG results. | [OK] resolve() silently returns undefined for unregistered keys via an unsafe cast, but all keys resolved in this file are pre-registered; no runtime bug in current usage. | [OVER] A hand-rolled IoC/DI container (register + resolve with an untyped Map<string, unknown>) whose sole purpose is to hold three values (`rng`, `paytable`, `reels`) that are already available as direct module-level imports. All three are retrieved once in `spin` and could be called directly. The pattern imposes type-unsafe casts (`as T`) and indirection with no testability or extensibility benefit visible anywhere in the file.",
+      "findings": []
+    },
+    {
+      "name": "container",
+      "kind": "variable",
+      "exported": false,
+      "line_start": 29,
+      "line_end": 29,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 93,
+      "detail": "Auto-resolved: function ≤ 5 lines",
+      "findings": []
+    },
+    {
+      "name": "PAYLINES",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 34,
+      "line_end": 45,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 95,
+      "detail": "[USED] Referenced in spin function (lines 127-128) to iterate and evaluate paylines, and at line 153 to extract line symbols. | [UNIQUE] Payline configuration array. No similar payline definitions found in RAG results. | [OK] Ten paylines with valid row indices 0-2 for a 3-row grid; structure is correct. | [LEAN] Plain data constant enumerating the ten payline row-index patterns. Minimal and appropriate.",
+      "findings": []
+    },
+    {
+      "name": "checkLine",
+      "kind": "function",
+      "exported": false,
+      "line_start": 47,
+      "line_end": 64,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "DUPLICATE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 92,
+      "detail": "[USED] Called from evaluateLine function (line 75) to validate symbol matches on a payline. | [DUPLICATE] Identical semantic logic to lineWins from paytable.ts (similarity 0.841). Both functions detect consecutive symbol runs from array start, treat WILD as wildcard, return matched symbol and count if >= 3. | [OK] Excluded per project instructions — previously investigated and confirmed correct. | [LEAN] Focused helper that finds the leading symbol and measures the consecutive run length. Single responsibility, no unnecessary abstraction.",
+      "duplicate_target": {
+        "file": "src/paytable.ts",
+        "symbol": "lineWins",
+        "similarity": "92% identical implementation — both detect consecutive symbol runs accounting for WILD wildcards, only cosmetic differences in variable naming (lead vs first, run vs count, sym vs symbol in return object)"
+      },
+      "findings": []
+    },
+    {
+      "name": "evaluateLine",
+      "kind": "function",
+      "exported": false,
+      "line_start": 66,
+      "line_end": 95,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 90,
+      "detail": "[USED] Called from spin function (line 128) to evaluate each payline and compute line wins. | [UNIQUE] Evaluates payline with symbol extraction and wild multiplier calculation. No similar functions found in RAG results. | [OK] Wild-multiplier formula `basePayout * (1 + wildCount) * 2^wildCount` matches the documented formula in .anatoly/docs/04-API-Reference/02-Configuration-Schema.md exactly. | [LEAN] Implements exactly the documented wild-multiplier formula (`basePayout × (1 + wildCount) × 2^wildCount`) from `.anatoly/docs/04-API-Reference/02-Configuration-Schema.md`. Length is justified by the formula's steps; no unnecessary indirection.",
+      "findings": []
+    },
+    {
+      "name": "computePayout",
+      "kind": "function",
+      "exported": true,
+      "line_start": 101,
+      "line_end": 111,
+      "correction": "ERROR",
+      "overengineering": "ACCEPTABLE",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 95,
+      "detail": "[USED] Exported and called within spin function (line 131) to calculate total payout from line wins. | [UNIQUE] Calculates total payout with house edge adjustment. No similar functions found in RAG results. | [ERROR] Three independent defects: house edge applied in the wrong direction (increases payout instead of deducting), unconditional phantom payout on every spin, and Math.ceil rounds in the player's favour. | [LEAN] Simple reduce + two arithmetic adjustments. From an overengineering standpoint the function is appropriately small and direct, even though the logic has correctness issues (HOUSE_EDGE inflates rather than reduces payout). (deliberated: confirmed — Confirmed ERROR. At src/engine.ts:105, `total = total * (1 + HOUSE_EDGE)` with HOUSE_EDGE=0.05 (line 14) yields `total * 1.05`, which INCREASES the payout by 5%. The docstring at lines 98-100 explicitly states the intent is 'a target RTP of approximately 95%', meaning the correct formula is `total * (1 - HOUSE_EDGE)`. This inverts the house edge: the player gets a 5% bonus instead of a 5% deduction. Additionally, line 108 (`total += bet * 0.01`) unconditionally adds 1% of the bet on every spin, including zero-win spins, creating a phantom payout leak. Parameter `bet: any` at line 101 weakens type safety. This is a financial correctness bug affecting game economics.)",
+      "findings": [
+        {
+          "axis": "correction",
+          "line_start": 105,
+          "line_end": 105,
+          "detail": "House edge applied in wrong direction: `total * (1 + HOUSE_EDGE)` multiplies by 1.05, INCREASING player payout by 5%. The documented target is RTP ≈ 95% (a 5% deduction), requiring `total * (1 - HOUSE_EDGE)` = `total * 0.95`. Violates the RTP=95% target stated in the function's own JSDoc and in .anatoly/docs/02-Architecture/02-Core-Concepts.md."
+        },
+        {
+          "axis": "correction",
+          "line_start": 108,
+          "line_end": 108,
+          "detail": "`total += bet * 0.01` executes unconditionally — including when total == 0 (losing spin) — silently awarding Math.ceil(bet * 0.01) coins on every loss. This undocumented phantom payout is present in no specification and distorts the RTP on every non-winning spin."
+        },
+        {
+          "axis": "correction",
+          "line_start": 110,
+          "line_end": 110,
+          "detail": "`Math.ceil` rounds payouts UP, transferring fractional coin remainders to the player. Casino/slot-machine domain convention requires `Math.floor` so the house retains remainders and the target RTP is preserved (inferred slot-machine domain from reel/payline/jackpot/WILD/SCATTER vocabulary throughout the file)."
+        }
+      ]
+    },
+    {
+      "name": "spin",
+      "kind": "function",
+      "exported": true,
+      "line_start": 113,
+      "line_end": 179,
+      "correction": "NEEDS_FIX",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 80,
+      "detail": "[USED] Exported and runtime-imported by src/index.ts; primary API function for executing slot machine spins. | [UNIQUE] Main spin orchestration function managing reels, paylines, bonuses, and event emission. No similar functions found in RAG results. | [NEEDS_FIX] Throws a bare string instead of an Error object; resolved `rng` and `reelsModule` are never used, bypassing the configured RNG. | [LEAN] Per rule 9, `spin` is evaluated only on its own code. Its own logic — validating bet, iterating paylines, accumulating wins, computing scatter/jackpot/wildMultiplier, assembling SpinResult — is straightforward. The factory, strategy, and emitter it instantiates are defined in other files and will be evaluated there; at the call site `spin` simply instantiates and calls them, which is the minimal thing to do. (deliberated: confirmed — Confirmed NEEDS_FIX with raised confidence. (1) src/engine.ts:115 throws a string literal `throw \"invalid bet\"` instead of `new Error(...)`, losing stack traces and breaking `instanceof Error` checks. (2) Lines 120 and 122: `rng` (weightedPick) and `reelsModule` are resolved from the DI container but never called — grep confirms no downstream usage of either variable. The actual RNG work is done via `pickFromWeighted` in reels.ts:30-41, invoked through the factory chain (factories.ts:12 calls spinReel). (3) Line 113: `bet: any` should be `number`. (4) Lines 124-126: factory, strategy, and emitter are instantiated per call; DefaultStrategy.adjustPayout is a no-op (strategy.ts:8-10); the emitter registers an empty handler at line 175 and immediately emits. These are verifiable defects, not style preferences.)",
+      "findings": [
+        {
+          "axis": "correction",
+          "line_start": 115,
+          "line_end": 115,
+          "detail": "`throw \"invalid bet\"` throws a primitive string, not an Error instance. Any catch handler checking `err instanceof Error` or reading `err.stack` / `err.message` will fail or behave incorrectly."
+        },
+        {
+          "axis": "correction",
+          "line_start": 120,
+          "line_end": 122,
+          "detail": "`rng` (L120) and `reelsModule` (L122) are resolved from the DI container but are never passed to `factory.buildReels()` or used anywhere in the function. The factory builds reels with its own internal RNG, completely bypassing the injected and presumably certified `weightedPick`. In a regulated gaming context this means the certified RNG path is silently dead code."
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Fix house edge direction in computePayout: change `total * (1 + HOUSE_EDGE)` to `total * (1 - HOUSE_EDGE)` so 5% is deducted from wins, maintaining the documented RTP ≈ 95%.",
+      "severity": "high",
+      "effort": "large",
+      "category": "refactor",
+      "source": "correction",
+      "target_symbol": null,
+      "target_lines": "L105"
+    },
+    {
+      "id": 2,
+      "description": "Remove or explicitly document `total += bet * 0.01`; as written it awards coins on every losing spin without any specification backing, corrupting RTP calculations.",
+      "severity": "medium",
+      "effort": "small",
+      "category": "quickwin",
+      "source": "correction",
+      "target_symbol": null,
+      "target_lines": "L108"
+    },
+    {
+      "id": 3,
+      "description": "Replace `Math.ceil` with `Math.floor` so fractional coin remainders stay with the house, consistent with slot-machine domain convention and the stated RTP target.",
+      "severity": "medium",
+      "effort": "small",
+      "category": "quickwin",
+      "source": "correction",
+      "target_symbol": null,
+      "target_lines": "L110"
+    },
+    {
+      "id": 4,
+      "description": "Replace `throw \"invalid bet\"` with `throw new Error(\"invalid bet\")` to produce a proper Error instance carrying a stack trace.",
+      "severity": "low",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "correction",
+      "target_symbol": null,
+      "target_lines": "L115"
+    },
+    {
+      "id": 5,
+      "description": "Pass the resolved `rng` to `factory.buildReels()` (or remove the unused resolve calls for `rng` and `reelsModule`) so the configured certified RNG is not bypassed.",
+      "severity": "medium",
+      "effort": "small",
+      "category": "quickwin",
+      "source": "correction",
+      "target_symbol": null,
+      "target_lines": "L120"
+    },
+    {
+      "id": 6,
+      "description": "Remove dead code: `Bet` is exported but unused",
+      "severity": "high",
+      "effort": "trivial",
+      "category": "quickwin",
+      "source": "utility",
+      "target_symbol": "Bet",
+      "target_lines": "L12-L12"
+    },
+    {
+      "id": 7,
+      "description": "Simplify: `Bet` is over-engineered `Bet`, `DEBUG_MODE`, `EngineContainer`, `container`",
+      "severity": "medium",
+      "effort": "small",
+      "category": "hygiene",
+      "source": "overengineering",
+      "target_symbol": "Bet, DEBUG_MODE, EngineContainer, container",
+      "target_lines": "L12-L12, L15-L15, L17-L27, L29-L29"
+    },
+    {
+      "id": 8,
+      "description": "Add JSDoc documentation for exported symbol: `Bet`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "Bet",
+      "target_lines": "L12-L12"
+    },
+    {
+      "id": 9,
+      "description": "Deduplicate: `checkLine` duplicates `lineWins` in `src/paytable.ts`",
+      "severity": "high",
+      "effort": "small",
+      "category": "refactor",
+      "source": "duplication",
+      "target_symbol": "checkLine",
+      "target_lines": "L47-L64"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 3.5/10 (3 FAIL, 7 WARN, 7 PASS)"
+  },
+  "best_practices": {
+    "score": 3.5,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "WARN",
+        "severity": "HIGH",
+        "detail": "tsconfig.json was not provided for review. Cannot confirm `strict: true` is set. The presence of explicit `any` on public API signatures (L101, L113) is consistent with a project that either lacks strict mode or routinely bypasses it.",
+        "lines": "L101, L113"
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No `any`",
+        "status": "FAIL",
+        "severity": "CRITICAL",
+        "detail": "Explicit `any` on the `bet` parameter in both public exports: `computePayout(lineWins: LineWin[], bet: any)` and `spin(bet: any)`. The module already declares `export type Bet = number` on L12 — that alias must be used here. Using `any` erases type safety for the primary public API surface.",
+        "lines": "L101, L113"
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No unsafe type assertions against union types. String comparisons against Symbol literal union members (`=== \"WILD\"`, `=== \"SCATTER\"`) are correct and idiomatic."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No missed opportunities for Pick, Omit, Partial, Required, or Record. Existing imported types are used directly and appropriately throughout the file."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`PAYLINES` (L34–L45) is module-level game configuration that never changes, but is typed as mutable `number[][]`. Both the outer array and each inner row array should be readonly to prevent accidental mutation by any code receiving a payline reference.",
+        "lines": "L34-L45"
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "The file uses `export type Bet = number` consistently with the project's type-alias conventions. Imported constructs (`LineWin`, `SpinResult`, etc.) are brought in via `import type`. No inconsistency visible within this file."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "179 lines — well within the 300-line preferred ceiling."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "FAIL",
+        "severity": "HIGH",
+        "detail": "Three clear lint violations: (1) `throw \"invalid bet\"` at L115 — a string literal throw violates `no-throw-literal` / `@typescript-eslint/only-throw-error`; (2) `rng` (L120) is resolved from the container but never referenced anywhere in `spin()`; (3) `reelsModule` (L122) is resolved but never used. Both (2) and (3) trigger `no-unused-vars` / `@typescript-eslint/no-unused-vars`.",
+        "lines": "L115, L120, L122"
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`spin` is the primary public export but carries no JSDoc — its parameters, return value, and thrown errors are undocumented. `computePayout` has a JSDoc block (L97–L100). `export type Bet` also lacks a doc comment. At minimum `spin` must be documented.",
+        "lines": "L113"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No deprecated APIs found. `2 ** wildCount` (exponentiation operator), `Map`, `Array.prototype.reduce`, and `Array.prototype.find` are all idiomatic modern JavaScript/TypeScript. `import type` is used correctly."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Imports are well-structured: the single `import type` block precedes all value imports, all sources are local `./` modules consistent with the project structure in `.anatoly/docs/02-Architecture/02-Core-Concepts.md`. No side-effect imports or observable circular dependency risk from this file."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "WARN",
+        "severity": "HIGH",
+        "detail": "The file is fully synchronous — no unhandled Promises or missing try-catch. However, `throw \"invalid bet\"` (L115) throws a primitive string instead of an `Error` object. This discards stack trace information and breaks `instanceof Error` checks in callers. The issue is low-severity for the async axis but still a clear error-handling deficiency.",
+        "lines": "L115"
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No hardcoded secrets, API keys, eval, or command injection found. `EngineContainer.resolve<T>` uses an `as T` cast from `unknown` (L25), but it is module-internal and not reachable from external input. The RNG implementation lives in `rng.ts` (not this file) and must be audited there; per rule 11 the violation is owned by the defining file, not this consumer."
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "The wildMultiplier loop (L148–L157) re-fetches `lineSymbols` and re-scans the run for each winning line, duplicating symbol-access work already performed inside `evaluateLine`. The per-line wild count could be surfaced as part of the `LineWin` object to avoid the second O(n×m) pass.",
+        "lines": "L148-L157"
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "The module-level `container` (L29–L32) is a service-locator: dependencies are hidden inside `spin()` via `container.resolve(...)` rather than injected through parameters. Unit-testing requires mutating module-level registry state between runs. Accepting an optional `deps` argument would eliminate this coupling.",
+        "lines": "L29-L32, L120-L122"
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "No use of `satisfies`, `as const`, or other TS 5.x improvements. `PAYLINES` is a prime candidate: `const PAYLINES = [...] satisfies ReadonlyArray<readonly [number, number, number, number, number]>` would enforce payline shape at declaration and provide deep immutability without a separate type annotation.",
+        "lines": "L34-L45"
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "FAIL",
+        "severity": "MEDIUM",
+        "detail": "Slot-machine / regulated-gambling domain confirmed by reel/payline/wild/scatter/free-spin/jackpot vocabulary throughout. `computePayout` JSDoc (L97–L100) states it 'maintains a target RTP of approximately 95%', but the implementation at L104–L106 multiplies all positive wins by `(1 + HOUSE_EDGE)` = ×1.05, which INCREASES payouts above baseline. Additionally, `total += bet * 0.01` (L108) guarantees a 1 % return on every spin including zero-win spins. Both effects together push effective RTP above 100 %, inverting the intended house edge and making the game financially insolvent for the operator. The formula should be `total * (1 - HOUSE_EDGE)` to achieve the documented ~95 % RTP. Cross-reference: `.anatoly/docs/04-API-Reference/03-Types-and-Interfaces.md` (payout formula) and `.anatoly/docs/04-API-Reference/02-Configuration-Schema.md` (wild multiplier table).",
+        "lines": "L104-L108"
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Replace `any` with the already-declared `Bet` type alias on both public export signatures",
+        "before": "export function computePayout(lineWins: LineWin[], bet: any): number\nexport function spin(bet: any): SpinResult",
+        "after": "export function computePayout(lineWins: LineWin[], bet: Bet): number\nexport function spin(bet: Bet): SpinResult"
+      },
+      {
+        "description": "Fix the house edge calculation to reduce payouts toward a ~95 % RTP instead of boosting them above 100 %",
+        "before": "if (total > 0) {\n  total = total * (1 + HOUSE_EDGE);\n}\ntotal += bet * 0.01;",
+        "after": "if (total > 0) {\n  total = total * (1 - HOUSE_EDGE);\n}"
+      },
+      {
+        "description": "Throw a proper Error object to preserve stack traces and allow instanceof checks in callers",
+        "before": "throw \"invalid bet\";",
+        "after": "throw new Error(\"invalid bet\");"
+      },
+      {
+        "description": "Remove the two unused container resolutions (`rng`, `reelsModule`) to eliminate no-unused-vars violations",
+        "before": "const rng = container.resolve<typeof weightedPick>(\"rng\");\nconst paytable = container.resolve<typeof getPayMultiplier>(\"paytable\");\nconst reelsModule = container.resolve<{ getReelSymbols: typeof getReelSymbols; getReelWeights: typeof getReelWeights }>(\"reels\");",
+        "after": "const paytable = container.resolve<typeof getPayMultiplier>(\"paytable\");"
+      },
+      {
+        "description": "Mark PAYLINES deeply readonly and use satisfies to enforce payline shape at declaration",
+        "before": "const PAYLINES: number[][] = [",
+        "after": "const PAYLINES = [\n  // ... rows ...\n] satisfies ReadonlyArray<readonly [number, number, number, number, number]>;"
+      },
+      {
+        "description": "Add JSDoc to `spin` documenting its parameter, return type, and thrown error",
+        "before": "export function spin(bet: any): SpinResult {",
+        "after": "/**\n * Executes a single slot spin for the given bet amount.\n * @param bet - Integer coin bet in [1, 100]\n * @returns SpinResult with reels, line wins, scatter count, free spins awarded, and total payout\n * @throws {Error} When bet is not a positive integer\n */\nexport function spin(bet: Bet): SpinResult {"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "claude-haiku-4-5",
+      "cost_usd": 0.012744899999999998,
+      "duration_ms": 14104
+    },
+    "duplication": {
+      "model": "claude-haiku-4-5",
+      "cost_usd": 0.0190795,
+      "duration_ms": 25877
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.35960274999999997,
+      "duration_ms": 159432
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.12792024999999999,
+      "duration_ms": 56975
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.47025775,
+      "duration_ms": 240077
+    }
+  },
+  "deliberation": {
+    "verdict_before": "CRITICAL",
+    "verdict_after": "CRITICAL",
+    "reclassified": 0,
+    "actions_removed": 0,
+    "reasoning": "All four findings confirmed with empirical evidence. The most critical issue is computePayout (src/engine.ts:105) where the house edge formula `total * (1 + HOUSE_EDGE)` gives players a 5% bonus instead of taking a 5% cut — a mathematical inversion of the intended game economics. The spin function has multiple verified defects: unused DI-resolved values (rng, reelsModule), string-throw, and per-call no-op ceremony. handleFreeSpins is internally correct but its integration creates a transient state that makes 2 of 3 branches dead code, rendering the free-spin feature non-functional beyond initial triggering. weightedPick in rng.ts is an exact algorithmic duplicate of pickFromWeighted in reels.ts, and the former is never actually invoked at runtime. Verdict is CRITICAL due to the house edge inversion in computePayout, which is a financial correctness bug."
+  }
+}
