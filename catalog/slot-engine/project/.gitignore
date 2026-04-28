@@ -3,6 +3,9 @@ dist/
 !.anatoly/
 .anatoly/*
 !.anatoly/runs/
+.anatoly/runs/*/conversations/
+.anatoly/runs/*/logs/
+.anatoly/runs/**/*.json
 .anatoly-cache/
 .venv/
 __pycache__/
