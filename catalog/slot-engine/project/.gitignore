@@ -3,6 +3,8 @@ dist/
 !.anatoly/
 .anatoly/*
 !.anatoly/runs/
+!.anatoly/docs/
+.anatoly/docs/.cache.json
 .anatoly/runs/*/conversations/
 .anatoly/runs/*/logs/
 .anatoly/runs/**/*.json
