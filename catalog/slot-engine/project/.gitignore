@@ -1,0 +1,17 @@
+node_modules/
+dist/
+!.anatoly/
+.anatoly/*
+!.anatoly/runs/
+.anatoly-cache/
+.venv/
+__pycache__/
+*.log
+.DS_Store
+
+# Local reports and scratch runs
+/reports/
+/tmp/
+.evolve/
+.env
+.anatoly.yml

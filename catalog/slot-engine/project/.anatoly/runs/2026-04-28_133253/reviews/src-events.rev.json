@@ -1,0 +1,252 @@
+{
+  "version": 2,
+  "file": "src/events.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "EventHandler",
+      "kind": "type",
+      "exported": false,
+      "line_start": 1,
+      "line_end": 1,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 90,
+      "detail": "[USED] Type alias used locally in SpinEventEmitter for parameter and Map value type annotations | [UNIQUE] No RAG data available | [OK] Simple type alias with no logic; no correctness issues. | [LEAN] Minimal type alias for a variadic event handler callback. Centralising this type prevents scattered inline repetition and adds no structural overhead.",
+      "findings": []
+    },
+    {
+      "name": "SpinEventEmitter",
+      "kind": "class",
+      "exported": true,
+      "line_start": 3,
+      "line_end": 25,
+      "correction": "OK",
+      "overengineering": "OVER",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 80,
+      "detail": "Auto-promoted: exported class imported by 1 file — abstraction built for a single client",
+      "findings": []
+    },
+    {
+      "name": "SPIN_DONE",
+      "kind": "constant",
+      "exported": true,
+      "line_start": 27,
+      "line_end": 27,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 90,
+      "detail": "[USED] Exported constant with 1 runtime importer (src/engine.ts) | [UNIQUE] No RAG data available | [OK] String constant export; no logic, no correctness issues. | [LEAN] One-line named constant that eliminates magic string literals in consumer code. ADR-004 explicitly calls this out as intentional. No abstraction overhead whatsoever.",
+      "findings": []
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Simplify: `SpinEventEmitter` is over-engineered",
+      "severity": "medium",
+      "effort": "small",
+      "category": "hygiene",
+      "source": "overengineering",
+      "target_symbol": "SpinEventEmitter",
+      "target_lines": "L3-L25"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 8.5/10 (0 FAIL, 4 WARN, 13 PASS)"
+  },
+  "best_practices": {
+    "score": 8.5,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No evidence of implicit-any or other strict-mode violations within this file. tsconfig is not provided here but the code itself is consistent with strict mode enabled."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No `any`",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "All variadic parameters correctly typed as `unknown[]` rather than `any[]`. No explicit or implicit `any` found."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No type assertions or union types present. Not applicable to this utility module."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No obvious opportunity for Pick/Omit/Partial/Record here. The data shape is intentionally minimal."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "The `listeners` field is never reassigned after construction; it should be declared `readonly`. The Map reference itself is stable — only its contents change, so `readonly` is both accurate and self-documenting.",
+        "lines": "L4"
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "`EventHandler` is defined as a `type` alias, which is idiomatic for function signatures. Consistent with a type-first convention; no interfaces mixed in."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "27 lines — well under the 300-line threshold."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No obvious lint violations: consistent semicolons, arrow functions, no unused variables, no dangling commas in bad positions. Code is clean."
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "Neither `SpinEventEmitter` (the class) nor its public methods (`on`, `off`, `emit`) have JSDoc comments. `SPIN_DONE` also lacks a brief description. Consumers must infer semantics from the ADR rather than inline docs.",
+        "lines": "L3-L25"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Uses `Map`, nullish coalescing (`??`), rest/spread, and `for...of` — all idiomatic modern TypeScript. No deprecated APIs."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No imports in this file. File placement (`src/events.ts`) is consistent with the documented project structure."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "WARN",
+        "severity": "HIGH",
+        "detail": "The `emit` loop invokes handlers bare, with no try-catch isolation. If any handler throws synchronously, subsequent registered handlers are silently skipped. Per ADR-004, SPIN_DONE consumers include logging, analytics, and free-spin chaining — all of which are safety-critical in a regulated gaming context. A single bad handler can silently break the entire observation chain.",
+        "lines": "L19-L23"
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No hardcoded secrets, no `eval`, no command injection. This file does not contain RNG logic (that is in `rng.ts`), so regulated-gaming RNG rules do not apply here."
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "`off()` allocates a new filtered array on each removal — acceptable for a low-frequency lifecycle emitter. No N+1, no synchronous I/O, no unnecessary re-renders."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "`SpinEventEmitter` is a plain class with no external dependencies — fully instantiable and testable in isolation. `on`/`off`/`emit` are straightforward to exercise."
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No forced opportunities for `satisfies`, `const` type parameters, or `using` in this file. The simplicity is appropriate; adding newer syntax would be over-engineering for a 27-line utility."
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "The event map is structurally untyped: `on(event: string, handler: (...args: unknown[]) => void)`. Consumers of `SPIN_DONE` must unsafely cast `args[0]` to `SpinResult` without any compiler guarantee. A typed event-map pattern (`EventMap extends Record<string, unknown[]>`) would propagate the correct payload type to each listener at compile time, eliminating the runtime assumption.",
+        "lines": "L1-L7"
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Mark `listeners` as `readonly` — the Map reference is never reassigned, only mutated in place.",
+        "before": "private listeners: Map<string, EventHandler[]> = new Map();",
+        "after": "private readonly listeners: Map<string, EventHandler[]> = new Map();"
+      },
+      {
+        "description": "Isolate handler errors inside `emit` so one throwing listener cannot silently drop all subsequent ones (critical for analytics/free-spin chaining per ADR-004).",
+        "before": "for (const handler of handlers) {\n  handler(...args);\n}",
+        "after": "for (const handler of handlers) {\n  try {\n    handler(...args);\n  } catch (err) {\n    console.error(`[SpinEventEmitter] Handler for \"${event}\" threw:`, err);\n  }\n}"
+      },
+      {
+        "description": "Introduce a typed event-map so consumers receive the correct payload type without casting `unknown`.",
+        "before": "type EventHandler = (...args: unknown[]) => void;\n\nexport class SpinEventEmitter {\n  private readonly listeners: Map<string, EventHandler[]> = new Map();\n\n  on(event: string, handler: EventHandler): void { ... }\n  emit(event: string, ...args: unknown[]): void { ... }\n}",
+        "after": "type EventMap = {\n  [SPIN_DONE]: [result: SpinResult];\n};\n\nexport class SpinEventEmitter<TMap extends Record<string, unknown[]> = EventMap> {\n  private readonly listeners = new Map<keyof TMap, Array<(...args: unknown[]) => void>>();\n\n  on<K extends keyof TMap>(event: K, handler: (...args: TMap[K]) => void): void { ... }\n  emit<K extends keyof TMap>(event: K, ...args: TMap[K]): void { ... }\n}"
+      },
+      {
+        "description": "Add JSDoc to public exports so API consumers do not need to consult the ADR.",
+        "before": "export class SpinEventEmitter {",
+        "after": "/**\n * Lightweight pub-sub emitter for spin lifecycle events.\n * Attach observers with `on(SPIN_DONE, handler)` before calling `spin()`.\n * @see ADR-004\n */\nexport class SpinEventEmitter {"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "claude-haiku-4-5",
+      "cost_usd": 0.00707975,
+      "duration_ms": 5276
+    },
+    "duplication": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.061376,
+      "duration_ms": 22092
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.04215775,
+      "duration_ms": 14931
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.17609625,
+      "duration_ms": 102959
+    }
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "fixture": "slot-engine",
+  "global_f1": 0.6503174603174603,
+  "scored_axes": [
+    "correction",
+    "utility",
+    "duplication",
+    "overengineering",
+    "best-practices"
+  ],
+  "per_axis": {
+    "correction": {
+      "tp": 4,
+      "fp": 4,
+      "fn": 3,
+      "precision": 0.5,
+      "recall": 0.5714285714285714,
+      "f1": 0.5333333333333333
+    },
+    "utility": {
+      "tp": 6,
+      "fp": 1,
+      "fn": 1,
+      "precision": 0.8571428571428571,
+      "recall": 0.8571428571428571,
+      "f1": 0.8571428571428571
+    },
+    "duplication": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1,
+      "recall": 0.5,
+      "f1": 0.6666666666666666
+    },
+    "overengineering": {
+      "tp": 3,
+      "fp": 1,
+      "fn": 1,
+      "precision": 0.75,
+      "recall": 0.75,
+      "f1": 0.75
+    },
+    "best-practices": {
+      "tp": 2,
+      "fp": 2,
+      "fn": 3,
+      "precision": 0.5,
+      "recall": 0.4,
+      "f1": 0.4444444444444445
+    }
+  },
+  "misses": [
+    {
+      "id": "INV-WEIGHTS",
+      "axis": "correction",
+      "file": "src/reels.ts",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "wrong-reel-weight",
+      "invariant": "top-symbol weight in low single digits",
+      "description": "DIAMOND symbol weight is 30 on every reel (should be ~3). A decimal-place\ntypo makes the top-paying symbol about 10x too frequent.\n"
+    },
+    {
+      "id": "INV-WILD",
+      "axis": "correction",
+      "file": "src/wild.ts",
+      "symbol": "applyWildBonus",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "hard",
+      "nature": "wild-multiplier-stacking",
+      "invariant": "wild multiplier replaces, does not accumulate",
+      "description": "applyWildBonus multiplies payout by both (1 + wildCount) and 2**wildCount\nso wilds compound. Intended behavior is payout * 2**wildCount.\n"
+    },
+    {
+      "id": "INV-JACKPOT",
+      "axis": "correction",
+      "file": "src/jackpot.ts",
+      "symbol": "isJackpotHit",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "jackpot-threshold-too-low",
+      "invariant": "jackpot = 5 DIAMOND on middle row",
+      "description": "isJackpotHit returns true on 4-of-a-kind DIAMOND anywhere in the reel\nwindow. Intended behavior is 5 DIAMOND on the middle row only.\n"
+    },
+    {
+      "id": "DEAD-DEBUG-BRANCH",
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "symbol": "DEBUG_MODE",
+      "expected_verdict": "DEAD",
+      "difficulty": "medium",
+      "nature": "unreachable-branch",
+      "description": "An `if (DEBUG_MODE) { ... }` branch inside spin() is statically\nunreachable because DEBUG_MODE is a const false never reassigned.\n"
+    },
+    {
+      "id": "DUP-PAYOUT",
+      "axis": "duplication",
+      "members": [
+        {
+          "file": "src/legacy.ts",
+          "symbol": "computeLegacyPayout"
+        },
+        {
+          "file": "src/engine.ts",
+          "symbol": "computePayout"
+        },
+        {
+          "file": "src/engine.ts",
+          "symbol": "evaluateLine"
+        }
+      ],
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "medium",
+      "nature": "semantic-duplicate-function",
+      "description": "computeLegacyPayout in legacy.ts duplicates the per-line payout\ncomputation of computePayout / evaluateLine in engine.ts.\n"
+    },
+    {
+      "id": "DUP-WILD",
+      "axis": "duplication",
+      "members": [
+        {
+          "file": "src/engine.ts",
+          "symbol": "evaluateLine"
+        },
+        {
+          "file": "src/wild.ts",
+          "symbol": "applyWildBonus"
+        }
+      ],
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "hard",
+      "nature": "inline-duplicate-of-helper",
+      "description": "evaluateLine in engine.ts reimplements inline the wild multiplier\nformula that applyWildBonus in wild.ts already provides.\n"
+    },
+    {
+      "id": "OVER-STRATEGY",
+      "axis": "overengineering",
+      "file": "src/strategy.ts",
+      "symbols": [
+        "SpinStrategy",
+        "DefaultStrategy"
+      ],
+      "expected_verdict": "OVER",
+      "difficulty": "medium",
+      "nature": "strategy-pattern-single-used-strategy",
+      "description": "SpinStrategy abstraction exists for a single used strategy\n(DefaultStrategy); ConservativeStrategy is never instantiated.\n"
+    },
+    {
+      "id": "BP-RNG",
+      "axis": "best-practices",
+      "file": "src/rng.ts",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "insecure-rng-for-gaming",
+      "description": "Math.random() is used as entropy source for financial/gaming RNG.\nNot suitable for regulated gaming. A JSDoc claim to the contrary\nmakes the violation worse.\n"
+    },
+    {
+      "id": "BP-MUTATION",
+      "axis": "best-practices",
+      "file": "src/freespin.ts",
+      "symbol": "handleFreeSpins",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "in-place-mutation-of-argument",
+      "description": "handleFreeSpins mutates its state argument in place and returns void\ninstead of returning a new state.\n"
+    },
+    {
+      "id": "BP-STRING-THROW",
+      "axis": "best-practices",
+      "file": "src/engine.ts",
+      "symbol": "spin",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "trivial",
+      "nature": "string-thrown-not-error",
+      "description": "spin() throws a raw string literal instead of an Error subclass when\nvalidating the bet.\n"
+    }
+  ],
+  "false_positives": [
+    {
+      "axis": "correction",
+      "file": "src/engine.ts",
+      "line": 111,
+      "verdict": "NEEDS_FIX",
+      "symbol": "computePayout",
+      "reason": "Math.ceil rounds the final payout UP, further compounding the already-inverted house edge; Math.floor is the correct operation when the house retains a margin."
+    },
+    {
+      "axis": "correction",
+      "file": "src/engine.ts",
+      "line": 118,
+      "verdict": "NEEDS_FIX",
+      "symbol": "spin",
+      "reason": "throw \"invalid bet\" throws a plain string rather than new Error(\"invalid bet\"). Callers that catch with instanceof Error checks or access .message / .stack will receive undefined, causing silent mis-handling of the validation error."
+    },
+    {
+      "axis": "correction",
+      "file": "src/events.ts",
+      "line": 19,
+      "verdict": "NEEDS_FIX",
+      "symbol": "SpinEventEmitter",
+      "reason": "emit holds a direct reference to the stored handlers array and iterates it with for…of. Array iterators re-check length on every step, so push() calls from within a handler (via on()) extend the live array and those new entries are visited in the same emit call. off(), by contrast, uses filter() and writes a brand-new array, so it is safe during iteration. The inconsistency means on()-during-emit is silently dangerous while off()-during-emit is safe — the correct fix is to iterate a snapshot: `for (const handler of handlers.slice())` or `[...handlers]`."
+    },
+    {
+      "axis": "correction",
+      "file": "src/freespin.ts",
+      "line": 18,
+      "verdict": "NEEDS_FIX",
+      "symbol": "handleFreeSpins",
+      "reason": "On retrigger (state.active && scatters >= 3): remaining += 10 is applied but the current spin is not decremented, so the retrigger effectively grants 11 free spins (10 added + the current spin not consumed), inflating the count by 1 per retrigger."
+    },
+    {
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "line": 12,
+      "verdict": "DEAD",
+      "symbol": "Bet",
+      "reason": "Auto-resolved: type cannot be over-engineered"
+    },
+    {
+      "axis": "overengineering",
+      "file": "src/engine.ts",
+      "line": 113,
+      "verdict": "OVER",
+      "symbol": "spin",
+      "reason": "Accumulates four distinct overengineering concerns in one function: (1) resolves `paytable` from the IoC container despite it being a direct import; resolves `rng` and `reelsModule` which are then never used in the function body. (2) Instantiates `StandardReelBuilderFactory` — a factory class for a single call `buildReels(5,3)` with no alternate implementations visible. (3) Instantiates `SpinEventEmitter`, registers a no-op listener `() => {}`, and immediately emits — the event is consumed by nothing, making the entire emitter setup dead infrastructure. (4) `wildMultiplier` is re-derived from scratch by re-iterating all wins and re-reading payline rows, duplicating work already done inside `evaluateLine`. These patterns in combination are premature generalizations for a self-contained spin computation."
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/paytable.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/jackpot.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    }
+  ],
+  "unscored_findings": [
+    {
+      "axis": "tests",
+      "file": "src/engine.ts",
+      "line": 101,
+      "verdict": "UNCOVERED",
+      "symbol": "computePayout",
+      "reason": "Auto-resolved: JSDoc block found before symbol (deliberated: confirmed — Confirmed critical financial bug. JSDoc at src/engine.ts:97-100 states 'Applies the house edge to maintain a target RTP of approximately 95%', corroborated by ANCIENT_RTP=0.95 at src/paytable.ts:3. However, src/engine.ts:105 computes `total * (1 + HOUSE_EDGE)` = `total * 1.05`, which INCREASES payouts by 5% instead of decreasing them. Correct formula should be `total * (1 - HOUSE_EDGE)`. Additionally, src/engine.ts:108 adds `bet * 0.01` unconditionally, further inflating payouts. DefaultStrategy.adjustPayout() at src/strategy.ts:8-10 is a no-op pass-through, so nothing corrects this downstream. No tests exist. The auto-resolver note 'JSDoc block found before symbol' actually strengthens the finding — the JSDoc documents the intended behavior, proving the implementation is inverted.)"
+    }
+  ]
+}

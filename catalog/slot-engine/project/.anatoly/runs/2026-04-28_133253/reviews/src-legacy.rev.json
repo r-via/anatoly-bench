@@ -1,0 +1,254 @@
+{
+  "version": 2,
+  "file": "src/legacy.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "computeLegacyPayout",
+      "kind": "function",
+      "exported": true,
+      "line_start": 4,
+      "line_end": 24,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "DEAD",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 88,
+      "detail": "Moot — symbol is DEAD | [DEAD] Exported but imported by 0 files | [UNIQUE] No similar functions found in codebase | [NEEDS_FIX] All-WILD line incorrectly returns 0; a full line of WILDs falls through the early-exit guard instead of being awarded the highest-symbol payout. | [LEAN] Single-responsibility function that handles exactly the required slot-machine logic: WILD anchor resolution, consecutive match counting, 3-of-a-kind minimum guard, and a multiplier lookup via `getPayMultiplier`. No unnecessary abstractions, generics, or indirection. The small amount of branching is inherent to the domain rules documented in `.anatoly/docs/02-Architecture/02-Core-Concepts.md` (WILD substitution, SCATTER exclusion, match-count thresholds).",
+      "findings": [
+        {
+          "axis": "correction",
+          "line_start": 4,
+          "line_end": 8,
+          "detail": "When every element of `lineSymbols` is \"WILD\", `lineSymbols.find(s => s !== \"WILD\")` returns `undefined`, so `first` is assigned `\"WILD\"` via the `?? \"WILD\"` fallback, and the guard `if (first === \"WILD\") return 0` fires. Standard slot-machine convention (industry rule): WILDs substitute for the highest-paying symbol; a five-of-a-kind all-WILD line is the top jackpot, not a zero-payout. The fix is to resolve an all-WILD `first` to the highest symbol in the paytable (e.g. \"DIAMOND\") before reaching the early-return check."
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "When `lineSymbols.find(s => s !== \"WILD\")` returns undefined (all-WILD line), substitute the highest-paying symbol (e.g. \"DIAMOND\") instead of falling back to \"WILD\" and returning 0. An all-WILD combination should award the maximum payout per industry convention for certified slot-machine logic.",
+      "severity": "medium",
+      "effort": "small",
+      "category": "quickwin",
+      "source": "correction",
+      "target_symbol": null,
+      "target_lines": "L5"
+    },
+    {
+      "id": 2,
+      "description": "Remove dead code: `computeLegacyPayout` is exported but unused",
+      "severity": "high",
+      "effort": "trivial",
+      "category": "quickwin",
+      "source": "utility",
+      "target_symbol": "computeLegacyPayout",
+      "target_lines": "L4-L24"
+    },
+    {
+      "id": 3,
+      "description": "Add JSDoc documentation for exported symbol: `computeLegacyPayout`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "computeLegacyPayout",
+      "target_lines": "L4-L24"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 4/10 (1 FAIL, 4 WARN, 12 PASS)"
+  },
+  "best_practices": {
+    "score": 4,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "File is 24 lines and contains no patterns that would be rejected by strict mode — all parameters and return types are explicitly annotated, and no implicit any is introduced. Strict compliance assumed from tsconfig."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No `any`",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No explicit or implicit `any` present. All types are anchored to the imported `Symbol` union and primitive `number`."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No type assertions (`as`) used. Symbol string-literal comparisons use natural equality checks, not unsafe casting."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Function signature is simple (array + primitive → primitive); no complex object manipulation where Pick/Omit/Record would apply."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "The `lineSymbols` parameter is only read, never mutated, but is typed as `Symbol[]` instead of `readonly Symbol[]`. Marking it readonly makes the non-mutation contract explicit and prevents accidental modification.",
+        "lines": "L4"
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No new interfaces or type aliases are defined in this file; only the imported `Symbol` type is consumed."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "24 lines — well within the 300-line budget."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No obvious lint violations. Nullish coalescing, early returns, and imperative for-loop with break are all idiomatic. No unused variables or shadowed bindings."
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`computeLegacyPayout` is the sole exported symbol and has no JSDoc comment. A doc block explaining the WILD substitution logic, the `bet / 10` payline assumption, and the minimum 3-match threshold would significantly aid maintainers.",
+        "lines": "L4"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Uses nullish coalescing (`??`), `Array.prototype.find`, and no deprecated APIs. Syntax is idiomatic modern TypeScript."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Type-only import (`import type`) is grouped before value import. Both resolve to sibling files in `src/`, consistent with the project structure documented in `.anatoly/docs/04-API-Reference/02-Configuration-Schema.md`. No circular imports apparent, no side-effect imports.",
+        "lines": "L1-L2"
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "Entirely synchronous pure computation. No promises, no async/await, no I/O. Not applicable."
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "FAIL",
+        "severity": "HIGH",
+        "detail": "Gambling/casino domain inferred from paytable vocabulary (WILD, SCATTER, CHERRY, SEVEN, DIAMOND, jackpot, reels, freespin) across this file and Internal Reference Documentation in `.anatoly/docs/02-Architecture/02-Core-Concepts.md` and `.anatoly/docs/04-API-Reference/02-Configuration-Schema.md`. Industry rule: in regulated gambling software, all monetary payout arithmetic must use integer or fixed-point arithmetic — floating-point division and multiplication are not certifiable for audited RTP calculations. `bet / 10` produces an IEEE 754 double (e.g., bet=1 → lineBet=0.1, which is not exactly representable), and the subsequent `multiplier * lineBet` compounds the error. `Math.ceil` in `engine.ts` partially mitigates this downstream, but the intermediate floating-point value returned by this function is already imprecise. Replace with integer-safe arithmetic (e.g., scale bet to integer cents and divide last).",
+        "lines": "L22-L23"
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "O(n) scan with early break over a fixed-width reel line (typically 3–5 symbols). No N+1, no sync I/O, no redundant iteration."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`getPayMultiplier` is imported as a hard dependency. There is no injection point to substitute a test double or alternative paytable. Introducing an optional callback parameter (e.g., `multiplierFn = getPayMultiplier`) would allow unit tests to assert payout logic independently of the real paytable lookup.",
+        "lines": "L2"
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "For a 24-line pure utility function, the absence of `satisfies`, `using`, or const type parameters is not a violation — none of them have natural application here."
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "Slot-machine domain (per Internal Reference Documentation). The literal `10` on line 22 (`bet / 10`) encodes the number of paylines as a magic number. If the payline count changes (e.g., 20-line machines), this silent constant will produce wrong RTP without any compile-time or runtime signal. It should be a named constant (e.g., `const PAYLINE_COUNT = 10`) or derived from a config object.",
+        "lines": "L22"
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Mark the input array as readonly to express the non-mutation contract at the type level.",
+        "before": "export function computeLegacyPayout(lineSymbols: Symbol[], bet: number): number {",
+        "after": "export function computeLegacyPayout(lineSymbols: readonly Symbol[], bet: number): number {"
+      },
+      {
+        "description": "Add JSDoc to the sole public export describing WILD substitution, payline divisor assumption, and 3-match minimum.",
+        "before": "export function computeLegacyPayout(lineSymbols: Symbol[], bet: number): number {",
+        "after": "/**\n * Computes the payout for a single payline using legacy matching rules.\n *\n * WILDs substitute for any non-SCATTER symbol when leading. SCATTER never pays.\n * Requires at least 3 consecutive matching symbols from the left.\n * The line bet is derived by dividing `bet` across {@link PAYLINE_COUNT} lines.\n *\n * @param lineSymbols - Ordered symbols on the evaluated payline (left to right).\n * @param bet - Total bet staked across all paylines.\n * @returns Payout amount for this line, or 0 if no qualifying match.\n */\nexport function computeLegacyPayout(lineSymbols: readonly Symbol[], bet: number): number {"
+      },
+      {
+        "description": "Replace the magic number 10 with a named constant to make payline count explicit and refactor-safe.",
+        "before": "const lineBet = bet / 10;",
+        "after": "const PAYLINE_COUNT = 10 as const;\nconst lineBet = bet / PAYLINE_COUNT;"
+      },
+      {
+        "description": "Use integer arithmetic to avoid IEEE 754 precision loss on monetary payout values (regulated gambling compliance).",
+        "before": "const lineBet = bet / 10;\nreturn multiplier * lineBet;",
+        "after": "// Work in integer cents: bet is assumed to be in cents\nconst lineBetCents = Math.trunc(bet / 10);\nreturn multiplier * lineBetCents; // return in cents; caller converts to display units"
+      },
+      {
+        "description": "Accept the multiplier lookup as an optional parameter to decouple the function from the live paytable and improve testability.",
+        "before": "export function computeLegacyPayout(lineSymbols: Symbol[], bet: number): number {",
+        "after": "export function computeLegacyPayout(\n  lineSymbols: readonly Symbol[],\n  bet: number,\n  multiplierFn: (symbol: Symbol, count: number) => number = getPayMultiplier,\n): number {"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "duplication": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.23604624999999999,
+      "duration_ms": 70554
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.13182750000000001,
+      "duration_ms": 10991
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.32938375,
+      "duration_ms": 120182
+    }
+  }
+}

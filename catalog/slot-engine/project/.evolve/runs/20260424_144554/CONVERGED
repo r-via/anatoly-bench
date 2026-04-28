@@ -1,0 +1,45 @@
+# CONVERGED
+
+All README specification requirements are implemented and verified:
+
+## Module layout
+All 14 source files present: index.ts, types.ts, engine.ts, rng.ts, reels.ts,
+paytable.ts, wild.ts, freespin.ts, jackpot.ts, legacy.ts, strategy.ts,
+events.ts, factories.ts, __tests__/basic.test.ts.
+
+## Public API
+spin(), Bet, SpinResult exported from src/index.ts via barrel re-export.
+
+## Business-invariant violations (7/7)
+INV-RTP: computePayout uses (1 + HOUSE_EDGE) — wrong sign.
+INV-WEIGHTS: DIAMOND weight 30 on all reels — 10x overweight.
+INV-WILD: applyWildBonus and inline formula use (1+wildCount)*2^wildCount.
+INV-FREESPIN: retrigger adds 10 without decrementing current spin.
+INV-JACKPOT: diamondCount >= 4 anywhere, not 5 on middle row.
+INV-ROUND: Math.ceil instead of Math.floor.
+INV-BETCAP: console.warn without throw on bet > MAX_BET.
+
+## Dead code (5/5)
+DEAD-LEGACY, DEAD-ANCIENT-RTP, DEAD-STRATEGY, DEAD-DEBUG-BRANCH, DEAD-TYPE.
+
+## Semantic duplicates (4/4)
+DUP-RNG, DUP-PAYOUT, DUP-WILD, DUP-LINE-WIN.
+
+## Over-engineering (4/4)
+OVER-FACTORY, OVER-EVENTS, OVER-STRATEGY, OVER-DI (register+resolve wired).
+
+## Missing tests (4/4)
+MISS-TEST-SPIN, MISS-TEST-PAYOUT, MISS-TEST-WILD, MISS-TEST-FREESPIN.
+
+## Best-practice violations (5/5)
+BP-RNG, BP-ANY, BP-MUTATION, BP-MAGIC-NUMBERS, BP-STRING-THROW.
+
+## Documentation defects (3/3)
+DOC-NO-JSDOC, DOC-STALE-RTP, DOC-RENAMED-API.
+
+## Verification
+- tsc --noEmit passes
+- verify.sh passes all 5 checks
+- Monte-Carlo RTP = 1847.90% > 1.0
+- No hint comments in source
+- Seeded files (package.json, tsconfig.json, README.md) unmodified

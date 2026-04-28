@@ -1,0 +1,249 @@
+{
+  "version": 2,
+  "file": "src/strategy.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "SpinStrategy",
+      "kind": "class",
+      "exported": true,
+      "line_start": 3,
+      "line_end": 5,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 90,
+      "detail": "[USED] Transitively used by DefaultStrategy | [UNIQUE] No RAG data available | [OK] Abstract base class is correctly defined; no logic to evaluate. | [LEAN] ADR-003 (.anatoly/docs/02-Architecture/04-Design-Decisions.md) explicitly documents this abstract class as the intended extension point for payout adjustment, with the rationale that new rules are added by subclassing rather than branching inside engine.ts. The pattern is also surfaced in user-facing docs as a public API. Despite 0 external importers, it serves as the documented contract for both bundled strategies and user-defined ones — the abstraction is architecturally justified.",
+      "findings": []
+    },
+    {
+      "name": "DefaultStrategy",
+      "kind": "class",
+      "exported": true,
+      "line_start": 7,
+      "line_end": 11,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 90,
+      "detail": "[USED] Runtime-imported by 1 file: src/engine.ts | [UNIQUE] No RAG data available | [OK] Pass-through implementation matches documented behaviour exactly (ADR-003, Configuration.md). | [LEAN] Pass-through implementation with 1 importer. ADR-003 explicitly justifies its existence: making the no-adjustment case an explicit named strategy rather than a missing-strategy null-check. The implementation is minimal — a single return statement.",
+      "findings": []
+    },
+    {
+      "name": "ConservativeStrategy",
+      "kind": "class",
+      "exported": true,
+      "line_start": 13,
+      "line_end": 20,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "DEAD",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 88,
+      "detail": "[DEAD] Exported but imported by 0 files | [UNIQUE] No RAG data available | [OK] Math.floor(totalPayout * 0.8) matches the documented 80% floor-rounded reduction in ADR-003 and both guide pages; rounding down is also correct for slot-domain house-edge convention. | [LEAN] 0 external importers, but ADR-003 (.anatoly/docs/02-Architecture/04-Design-Decisions.md) documents it as one of the two concrete strategies that ship with the library, with its exact behavior (Math.floor * 0.8) specified in both the ADR and the Configuration guide. The implementation is a minimal two-line spread. Its current lack of callers is noted as a runtime concern in the ADR's Consequences section, not a design defect.",
+      "findings": []
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Remove dead code: `ConservativeStrategy` is exported but unused",
+      "severity": "high",
+      "effort": "trivial",
+      "category": "quickwin",
+      "source": "utility",
+      "target_symbol": "ConservativeStrategy",
+      "target_lines": "L13-L20"
+    },
+    {
+      "id": 2,
+      "description": "Add JSDoc documentation for exported symbol: `ConservativeStrategy`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "ConservativeStrategy",
+      "target_lines": "L13-L20"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 9.5/10 (1 FAIL, 0 WARN, 16 PASS)"
+  },
+  "best_practices": {
+    "score": 9.5,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "Cannot read tsconfig.json directly, but all code patterns in this file are consistent with strict mode being enabled: no implicit `any`, explicit return types, proper `import type` usage. No evidence of loose-mode patterns."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No `any`",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No explicit or implicit `any` found. All types flow through the `SpinResult` type imported from `./types.js`."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No type assertions or unsafe casts. The strategy pattern via abstract class is idiomatic and does not require discriminated unions here."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "The spread `{ ...result, totalPayout: ... }` is idiomatic for shallow immutable overrides of a known type. No missed utility-type opportunity at this scale."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Both concrete strategies return new objects rather than mutating the input `SpinResult`. Neither class carries mutable instance state, so no `readonly` fields are missing. The hardcoded `0.8` factor is explicitly documented as intentional in `.anatoly/docs/02-Architecture/04-Design-Decisions.md` (ADR-003)."
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Uses abstract class for the extension point, which is the documented project convention (ADR-003). `import type` is used correctly for the data type `SpinResult`. Consistent with the rest of the project."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "20 lines — well within the 300-line limit."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No obvious lint violations. Consistent spacing, no unused variables, no unreachable code, proper use of abstract class members."
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "FAIL",
+        "severity": "MEDIUM",
+        "detail": "All three exported symbols — `SpinStrategy`, `DefaultStrategy`, `ConservativeStrategy` — lack JSDoc comments. This is a library extension point (documented in `.anatoly/docs/01-Getting-Started/03-Configuration.md` and `.anatoly/docs/03-Guides/02-Advanced-Configuration.md`) and is explicitly referenced as a user-facing API. At minimum the abstract base class and its `adjustPayout` abstract method should carry JSDoc explaining the contract and the extension pattern.",
+        "lines": "L3-L19"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Uses `import type`, abstract class syntax, object spread for immutable updates, and `.js` ESM extensions. No deprecated APIs."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Single type-only import from a sibling module (`./types.js`). No side-effect imports, no circular dependency risk, correct ESM `.js` extension. Placement in `src/` is consistent with the documented project structure."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "All methods are synchronous pure functions. No promises, no async code, no I/O. No error-handling surface area exists here."
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "Gambling/slot-machine domain inferred from vocabulary (SpinResult, totalPayout, RTP) and package metadata. No `Math.random()` usage — this file only transforms an already-computed payout, so regulated-RNG concerns do not apply here. No hardcoded secrets, no `eval`, no injection vectors. The floating-point multiplication `result.totalPayout * 0.8` is immediately guarded by `Math.floor()`, producing a discrete integer result appropriate for credit-based wagering."
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Both strategies are O(1) pure transformations with a single object spread. No loops, no I/O, no redundant work."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Both concrete strategies are pure functions: given the same `SpinResult` input they always return the same output. Zero side effects, zero shared state, no hidden dependencies. Trivially unit-testable in isolation."
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No clear missed opportunity for `satisfies`, const type parameters, or `using`. The abstract-class inheritance pattern is idiomatic and does not benefit from these features in this context."
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Utility/library file for a slot-machine engine. The strategy pattern is correctly implemented as documented in ADR-003. The `0.8` RTP reduction in `ConservativeStrategy` is explicitly documented as a known consequence. No React, no HTTP, no event-loop concerns. Domain-specific payout arithmetic is safe (integer credits, Math.floor applied)."
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Add JSDoc to the abstract base class and its contract method so library consumers understand the extension point without consulting external docs.",
+        "before": "export abstract class SpinStrategy {\n  abstract adjustPayout(result: SpinResult): SpinResult;\n}",
+        "after": "/**\n * Extension point for post-calculation payout adjustment.\n * Subclass this to implement custom payout policies (e.g. capped maximums,\n * bonus-round multipliers). The active strategy is applied by `engine.ts`\n * as the final step of `spin()`.\n */\nexport abstract class SpinStrategy {\n  /**\n   * Returns a (possibly modified) copy of `result`.\n   * Implementations MUST NOT mutate the input object.\n   */\n  abstract adjustPayout(result: SpinResult): SpinResult;\n}"
+      },
+      {
+        "description": "Add JSDoc to the two concrete strategy classes so generated API docs and IDE hover text describe their behaviour without requiring callers to read the ADR.",
+        "before": "export class DefaultStrategy extends SpinStrategy {\nexport class ConservativeStrategy extends SpinStrategy {",
+        "after": "/** Pass-through strategy — returns the result unchanged. */\nexport class DefaultStrategy extends SpinStrategy {\n\n/** Reduces {@link SpinResult.totalPayout} to 80 % of the computed value\n * using `Math.floor`, lowering effective RTP below the 95 % baseline.\n * See ADR-003 for rationale.\n */\nexport class ConservativeStrategy extends SpinStrategy {"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "duplication": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.03964725,
+      "duration_ms": 13805
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.0598265,
+      "duration_ms": 24645
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.15924,
+      "duration_ms": 87768
+    }
+  }
+}

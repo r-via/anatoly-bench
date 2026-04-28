@@ -1,0 +1,246 @@
+{
+  "version": 2,
+  "file": "src/rng.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "weightedPick",
+      "kind": "function",
+      "exported": true,
+      "line_start": 5,
+      "line_end": 16,
+      "correction": "NEEDS_FIX",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "DUPLICATE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 90,
+      "detail": "[USED] Runtime-imported by 1 file: src/engine.ts | [DUPLICATE] Identical weighted random selection algorithm: both use cumulative weight approach with uniform random draw, same loop structure, same fallback return. Differences are cosmetic (generic vs specific typing, variable naming). RAG score 0.852 confirms high semantic similarity. | [NEEDS_FIX] Math.random() is used as the RNG source in a function explicitly labeled 'suitable for gaming RNG applications' in a slot-machine project — not certifiable for regulated gaming. | [LEAN] Textbook cumulative-weight O(n) algorithm with no unnecessary abstractions. The single generic type parameter <T> is justified — the project uses it for typed slot symbols per the documented reel configuration in src/reels.ts, and generic reuse adds no complexity. No factory, no configuration object, no inheritance; the fallback return on L15 is a correct edge-case guard, not padding. (deliberated: confirmed — Duplication confirmed. rng.ts:5-16 (weightedPick) and reels.ts:30-41 (pickFromWeighted) implement identical cumulative-weight random selection: both reduce weights to total, draw Math.random()*total, iterate accumulating weights with `< cumulative` check, and fall back to the last item. Only differences are variable names and generic vs. concrete typing. Furthermore, weightedPick is imported in engine.ts:2, registered in the DI container at engine.ts:30, and resolved at engine.ts:120 — but the resolved `rng` variable is never invoked anywhere in the spin function. The runtime uses pickFromWeighted via spinReel (reels.ts:47) called from StandardReelBuilderFactory.buildReels (factories.ts:12). This represents both dead duplication and a broken DI integration. Raising confidence from 85 to 90.)",
+      "duplicate_target": {
+        "file": "src/reels.ts",
+        "symbol": "pickFromWeighted",
+        "similarity": "99% identical logic — both implement weighted random selection via cumulative weight with Math.random(), only differences are generics and variable names"
+      },
+      "findings": [
+        {
+          "axis": "correction",
+          "line_start": 7,
+          "line_end": 7,
+          "detail": "Inferred slot-machine domain from JSDoc ('suitable for gaming RNG applications'), reel/payline/RTP vocabulary in .anatoly/docs/, and symbol tables (WILD, SCATTER, DIAMOND, SEVEN). V8's Math.random() is backed by xorshift128+, which is neither cryptographically secure nor independently certifiable. Regulated gaming RNG must be auditable and unpredictable (industry convention); a CSPRNG (e.g., crypto.getRandomValues()) is required."
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Replace Math.random() with a CSPRNG source (e.g., crypto.getRandomValues() scaled to [0, totalWeight)) so the RNG is certifiable for regulated gaming use, as required by industry convention for slot-machine applications.",
+      "severity": "medium",
+      "effort": "small",
+      "category": "quickwin",
+      "source": "correction",
+      "target_symbol": null,
+      "target_lines": "L7"
+    },
+    {
+      "id": 2,
+      "description": "Deduplicate: `weightedPick` duplicates `pickFromWeighted` in `src/reels.ts`",
+      "severity": "high",
+      "effort": "small",
+      "category": "refactor",
+      "source": "duplication",
+      "target_symbol": "weightedPick",
+      "target_lines": "L5-L16"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 4.5/10 (1 FAIL, 5 WARN, 11 PASS)"
+  },
+  "best_practices": {
+    "score": 4.5,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "Cannot verify tsconfig.json contents from this file, but the code itself exhibits no implicit-any or other strict-mode-sensitive violations. No evidence of loose typing."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No any",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No explicit or implicit any present. Generic <T> is used correctly and propagated through the return type."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No union types are defined or needed in this utility function. Not applicable."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No complex type compositions are defined. Utility types (Pick, Omit, etc.) are not applicable here."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "Parameters `items` and `weights` are not marked readonly. The function never mutates either array; marking them readonly would better express intent and prevent accidental mutation by future editors.",
+        "lines": "L5"
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No interfaces or type aliases are defined in this file; nothing to evaluate for consistency."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "16 lines — well below the 300-line threshold."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No obvious lint violations. Code style is consistent: explicit type annotations, proper scoping, no dead code."
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "A JSDoc block is present but lacks @param and @returns tags, reducing discoverability for consumers. The contract (lengths must match, weights must sum to > 0) is also undocumented.",
+        "lines": "L1-L4"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No deprecated APIs used. reduce() and the imperative for loop are both idiomatic and appropriate for this use case."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No imports in this file. File placement (src/rng.ts) is consistent with the documented project structure in .anatoly/docs/."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "WARN",
+        "severity": "HIGH",
+        "detail": "No async code, so no unhandled rejection risk. However, there are no guards against invalid inputs: (1) if items is empty, the fallback `items[items.length - 1]` returns undefined at runtime while the declared return type is T, silently violating type safety; (2) if weights and items have mismatched lengths or totalWeight is 0, behavior is silently incorrect.",
+        "lines": "L5-L14"
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "FAIL",
+        "severity": "CRITICAL",
+        "detail": "Slot-machine domain inferred from symbol vocabulary (CHERRY, LEMON, BELL, BAR, SEVEN, DIAMOND, WILD, SCATTER), RTP targets, freespin/jackpot/paytable modules documented across .anatoly/docs/01-Getting-Started/03-Configuration.md, .anatoly/docs/04-API-Reference/02-Configuration-Schema.md, and .anatoly/docs/03-Guides/02-Advanced-Configuration.md. Math.random() is not a cryptographically secure PRNG (CSPRNG) and is not certifiable for regulated gaming under any major testing laboratory standard (GLI-11, eCOGRA, BMM, iTech Labs). Its internal state is observable and its distribution is not auditable to regulatory standards. A CSPRNG such as crypto.getRandomValues() must be used instead, or outcomes must be generated server-side using a certified RNG.",
+        "lines": "L7"
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "O(n) linear scan over a fixed 8-symbol set is perfectly appropriate. No N+1 or unnecessary allocation detected."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "Math.random() is called directly inside the function body with no injection point, making deterministic unit tests impossible without monkey-patching the global. Accepting an optional `random: () => number` parameter (defaulting to the CSPRNG wrapper) would decouple the function from the global RNG and make distribution tests trivial.",
+        "lines": "L5-L7"
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No missed opportunities for satisfies, const type parameters, or using declarations. Generic <T> is applied correctly for this utility."
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "For a gaming-domain RNG utility, input contracts must be enforced explicitly: mismatched items/weights lengths and a zero or negative totalWeight are silent failures that can corrupt game outcome distributions. A well-defined gaming RNG helper should throw descriptive errors on invalid inputs rather than silently returning the last element.",
+        "lines": "L5-L6"
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Replace Math.random() with an injectable CSPRNG for both regulatory compliance and testability",
+        "before": "export function weightedPick<T>(items: T[], weights: number[]): T {\n  const totalWeight = weights.reduce((sum, w) => sum + w, 0);\n  const roll = Math.random() * totalWeight;",
+        "after": "function defaultCsprng(): number {\n  const buf = new Uint32Array(1);\n  crypto.getRandomValues(buf);\n  return buf[0] / 0x1_0000_0000;\n}\n\nexport function weightedPick<T>(\n  items: readonly T[],\n  weights: readonly number[],\n  random: () => number = defaultCsprng,\n): T {\n  if (items.length === 0) throw new Error('weightedPick: items must not be empty');\n  if (items.length !== weights.length) throw new Error('weightedPick: items and weights length mismatch');\n  const totalWeight = weights.reduce((sum, w) => sum + w, 0);\n  if (totalWeight <= 0) throw new Error('weightedPick: total weight must be positive');\n  const roll = random() * totalWeight;"
+      },
+      {
+        "description": "Add @param, @returns, and @throws JSDoc tags to fully document the exported function contract",
+        "before": "/**\n * Weighted random pick utility, suitable for gaming RNG applications.\n * Uses a cumulative-weight approach with a uniform random draw.\n */",
+        "after": "/**\n * Picks one item from `items` proportionally to its corresponding weight.\n * Uses a cumulative-weight approach with a single uniform random draw.\n *\n * @param items - Candidate items to pick from (non-empty).\n * @param weights - Relative non-negative weights; must parallel `items` and sum to > 0.\n * @param random - RNG function returning a value in [0, 1). Defaults to a CSPRNG wrapper.\n * @returns The randomly selected item.\n * @throws {Error} If `items` is empty, lengths differ, or the total weight is ≤ 0.\n */"
+      },
+      {
+        "description": "Mark array parameters as readonly to communicate non-mutation intent at the type level",
+        "before": "export function weightedPick<T>(items: T[], weights: number[]): T {",
+        "after": "export function weightedPick<T>(items: readonly T[], weights: readonly number[]): T {"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "duplication": {
+      "model": "claude-haiku-4-5",
+      "cost_usd": 0.00929725,
+      "duration_ms": 10910
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.0727385,
+      "duration_ms": 31132
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.035245250000000006,
+      "duration_ms": 11034
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.20615249999999996,
+      "duration_ms": 110618
+    }
+  },
+  "deliberation": {
+    "verdict_before": "NEEDS_REFACTOR",
+    "verdict_after": "NEEDS_REFACTOR",
+    "reclassified": 0,
+    "actions_removed": 0,
+    "reasoning": "Both findings are confirmed as genuine issues. The spin function contains an inverted house edge calculation (multiplies by 1.05 instead of 0.95) and a guaranteed minimum payout on every spin, both of which are behavioral bugs in a slot engine's financial logic. The weightedPick duplication with pickFromWeighted in reels.ts is exact, and the DI integration is broken — weightedPick is imported and registered but never actually called at runtime. Overall verdict is NEEDS_REFACTOR because the bugs are real correctness issues (not merely style preferences) but do not constitute crash-level or security-level CRITICAL failures."
+  }
+}

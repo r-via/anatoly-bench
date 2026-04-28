@@ -1,0 +1,70 @@
+{
+  "version": 2,
+  "file": "src/wild.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "applyWildBonus",
+      "kind": "function",
+      "exported": true,
+      "line_start": 1,
+      "line_end": 4,
+      "correction": "OK",
+      "overengineering": "-",
+      "utility": "DEAD",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 90,
+      "detail": "[DEAD] Exported but imported by 0 files | [UNIQUE] No similar functions found in codebase | [OK] Implementation exactly matches the documented formula: basePayout × (1 + wildCount) × 2^wildCount. Guard clause for wildCount <= 0 is correct. No bugs found.",
+      "findings": []
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Remove dead code: `applyWildBonus` is exported but unused",
+      "severity": "high",
+      "effort": "trivial",
+      "category": "quickwin",
+      "source": "utility",
+      "target_symbol": "applyWildBonus",
+      "target_lines": "L1-L4"
+    },
+    {
+      "id": 2,
+      "description": "Add JSDoc documentation for exported symbol: `applyWildBonus`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "applyWildBonus",
+      "target_lines": "L1-L4"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": ""
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "duplication": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.019941,
+      "duration_ms": 2875
+    }
+  }
+}

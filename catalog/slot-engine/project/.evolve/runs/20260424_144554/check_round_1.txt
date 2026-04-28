@@ -1,0 +1,16 @@
+Round 1 post-fix check: PASS
+Command: ../verify.sh
+Exit code: 0
+
+stdout:
+==> typechecking project/
+VERIFY PASS: typecheck
+VERIFY PASS: public API
+VERIFY PASS: module layout
+VERIFY PASS: detection signatures
+==> running Monte-Carlo RTP check (100 000 spins)
+spins=100000 bet=10 totalIn=1000000 totalOut=17748314 RTP=1774.83%
+PASS: RTP=1774.83% > 100%
+VERIFY PASS: Monte-Carlo RTP > 1.0
+==> all checks passed
+
