@@ -18,6 +18,28 @@ Tier-1 refinement was overriding the LLM's `DUPLICATE` verdict whenever the unde
 
 **Bench impact:** duplication F1 0% → 66.7% (recall 2/4 on slot-engine; precision 100% via the `members` matching mechanism).
 
+### Multi-defect findings per symbol (v9)
+
+**Commit:** [r-via/anatoly@75cdf08](https://github.com/r-via/anatoly/commit/75cdf08)
+
+The correction axis used to return one record per symbol (one verdict, one detail prose). When a symbol carried several distinct defects (a function with both a wrong-sign multiplier and a Math.ceil rounding bug), they collapsed into a single paragraph; only one could match a cataloged violation downstream.
+
+**Fix shipped:** added an optional `findings` array on `CorrectionSymbolSchema` — one entry per defect, each with its own `line_start` / `line_end` / `detail`. The shard renderer emits one markdown row per finding for symbols that ship the array. New prompt rule #9 instructs the LLM to enumerate distinct defects rather than collapsing.
+
+**Bench impact (v9):** validated structurally — the LLM produced multi-row entries for `spin` (2 findings) and `handleFreeSpins` (2 findings) on a real run. INV-ROUND itself still missed at v9 because the LLM didn't flag `Math.ceil` as a separate defect on `computePayout`; that materialized one run later, paired with the internal-docs injection (see below).
+
+### Internal-docs injection into business-logic axes (v10)
+
+**Commit:** TBD (Epic 48 reverted; final implementation injects existing `.anatoly/docs/` content into the `correction`, `best_practices`, and `overengineering` user messages via a new `renderInternalDocsContext` helper, plus prompt rule #10 in `correction.system.md` instructing the model to treat documented invariants as authoritative ground truth and cite the source page in finding details.)
+
+The bench surfaced three correction misses systematically tied to domain knowledge — facts the LLM had no reason to flag because nothing in the local code contradicted them. An initial proposal ([previously at `docs/02-domain-digest-spec.md`, now removed](https://github.com/r-via/anatoly-bench/commit/HEAD)) suggested building a parallel "domain digest" extraction pipeline that would distill README and `/docs/` into a small spec injected into every axis. Implementation revealed a simpler path: Anatoly's existing **internal-docs scaffolder** (Epic 29) already produces high-quality, agent-curated business context as `.anatoly/docs/` — the same content the digest would have synthesized. The fix collapses to "inject what's already generated, into the axes that need it."
+
+No new extraction phase, no new cache, no new artifact format. The internal docs already invalidate on source-hash changes; the axes simply consume them.
+
+**Bench impact (v9 → v10):** correction 46.2% → 53.3% (+7pp, INV-ROUND now detected); best-practices 40.0% → 44.4% (+4.4pp); overengineering 66.7% → 75.0% (+8.3pp). Global F1 61.0% → 65.0%.
+
+The persistent misses (INV-WILD, INV-JACKPOT, BP-RNG, BP-MUTATION variance) belong to either pretrained-knowledge prompting (item 5a, separate evolution) or user-provided private conventions (item 5c, deferred).
+
 ### Per-axis triage policy (v8)
 
 **Commit:** [r-via/anatoly@b784caf](https://github.com/r-via/anatoly/commit/b784caf)
@@ -37,15 +59,9 @@ Triage's `skip` tier used to be binary: type-only / trivial / barrel-export / co
 
 ## Quick wins (<1 day each)
 
-### 2. Allow multiple findings per symbol
+### 5a. Industry-knowledge prompting
 
-**Symptom:** `INV-ROUND` is missed — `engine.ts::computePayout` uses `Math.ceil` (player-favoring rounding) and also has the wrong sign on the house-edge multiplier (`INV-RTP`). Anatoly catches the latter and *mentions* the ceil in the same finding's `detail` text, but never produces a separate finding pinning down `Math.ceil` specifically.
-
-**Likely cause:** the response schema for the `correction` axis returns one record per symbol, with a single `verdict` and a single `detail`. Multiple coexisting defects on the same symbol get collapsed.
-
-**Proposed fix:** change the `correction` schema to return a list of findings instead, each with its own `defect_id`/`line_range`/`detail`. Same symbol can appear N times. Update prompt to encourage one finding per defect rather than collapsing.
-
-**Estimated bench gain:** +1 TP correction (INV-ROUND). On the v8 baseline (correction 36.4% — limited by LLM variance on this run): correction → ~50%, global +2.7 pp.
+See [§5 — Domain awareness — remaining sub-items](#5-domain-awareness--remaining-sub-items) below for the detailed rationale and proposed prompt addition. Listed here as a quick-win because it is a one-hour prompt change with an immediately measurable bench delta on BP-RNG.
 
 ---
 
@@ -80,35 +96,31 @@ Heuristic: if `count(used concrete subclasses) ≤ 1`, the abstraction is a stro
 
 ## Hard (architectural — weeks, not days)
 
-### 5. Domain context injection
+### 5. Domain awareness — remaining sub-items
 
-**Symptom:** three defects systematically missed across all 8 runs:
+The doc-derived half of the original "domain context injection" item is shipped (see Shipped section, internal-docs injection). What remains:
 
-- `INV-WILD` (correction, hard) — wild multiplier stacks (`(1+wc) · 2^wc`) instead of replacing (`2^wc`)
-- `INV-JACKPOT` (correction, medium) — jackpot triggers on 4 diamonds anywhere instead of 5 on the middle row
-- `BP-RNG` (best-practices, medium) — `Math.random()` used as gaming RNG (not certifiable for regulated gaming)
+#### 5a. Industry-knowledge prompting (no config)
 
-These three look correct in isolation. They violate **domain conventions** (gambling math, regulated-gaming RNG) that are not part of the LLM's general code-review knowledge. The v8 triage fix put `wild.ts` back in front of the LLM — the LLM still returned `correction: OK` on `applyWildBonus`, confirming the gap is upstream of triage: the model has no reason to think `(1+wc) · 2^wc` is wrong without being told what wild multipliers are *supposed* to do.
+**Symptom:** `BP-RNG` is consistently missed. `Math.random()` used as a gaming RNG is a well-known industry rule (regulated gaming requires certifiable RNG sources). The LLM has this knowledge from pretraining but does not volunteer it.
 
-**Likely cause:** Anatoly currently ships a single, universal prompt set per axis. There is no mechanism to inject project-level domain knowledge that would tell the LLM "this is a slot-machine engine, here are the invariants of slot-machine math, here are the regulatory constraints on RNG sources."
+**Proposed fix:** add to the `best_practices` and `correction` system prompts an instruction along the lines of:
 
-**Proposed fix:** introduce a domain-context mechanism. Several reasonable designs:
+> Before clearing a symbol, identify the project's domain from filenames, imports, types, and the internal-docs context if present. Then apply industry-specific correctness rules you know for that domain — even if not contradicted by the local code (e.g. `Math.random()` for gaming/security RNG, monetary rounding conventions for finance code, IND-CCA properties for crypto).
 
-- **YAML preset:** `.anatoly.yml` adds `domain: gaming` (or `finance`, `healthcare`, `web-payments`); each preset ships a curated set of invariants and best-practice rules. Anatoly injects them into the relevant axis prompts.
-- **Free-form domain file:** `.anatoly/domain.md` (project-specific) is read by every axis and injected as context. Lower overhead, no preset library to maintain.
-- **Declarative business invariants:** `.anatoly/invariants.yml` lists named invariants the `correction` axis must validate against, in plain-language form.
+**Estimated bench gain:** +1 TP best-practices (BP-RNG). Global +1 pp. Cost: ~1h of prompt iteration plus a bench run to validate.
 
-The first two are complementary: presets for common verticals, free-form file for project-specific specifics.
+**Risk:** false positives. The model may speculate about domains that don't apply. The internal-docs injection partially mitigates this by anchoring the inferred domain in the project's own description.
 
-**Estimated bench gain on slot-engine:** +2 TPs on correction (INV-WILD, INV-JACKPOT), +1 TP on best-practices (BP-RNG). On the v8 baseline:
+#### 5c. User-provided invariants override (config-explicit)
 
-- correction 36.4% → ~62% (+25pp)
-- best-practices 50.0% → ~62% (+12pp)
-- global +7–8 pp
+**Symptom:** `INV-WILD` and `INV-JACKPOT` are systematically missed and cannot be unlocked by docs alone — they are project-private design conventions ("wild substitutes, does not stack"; "jackpot is 5 DIAMOND on the middle row"). Slot-engine's README does not state them; the internal docs scaffolder doesn't have a source for them either.
 
-More importantly, this is the single highest-value item for **real-world enterprise audits** — it transforms Anatoly from "generic linter+" into "auditor with domain awareness", which is exactly the gap most static-analysis tools have.
+**Proposed fix:** support a user-edited `.anatoly/domain.md` (free-form markdown) and/or a structured `.anatoly/invariants.yml` (one entry per invariant: id, statement, applies_to_files). Loaded by Anatoly with explicit precedence over generated internal-docs context. The user writes them once for project-specific conventions that no auto-extraction can reach.
 
-**Effort:** 1–2 weeks for the YAML-preset path, more if the preset library is to be substantial.
+**Estimated bench gain on slot-engine:** +2 TPs correction (INV-WILD, INV-JACKPOT). Global +3 pp. Useful primarily for projects where the spec exists in someone's head, not in the docs.
+
+**Effort:** ~1 week. Format design + parser + axis-prompt integration + cache key extension.
 
 ### 6. Sub-symbol granularity
 
@@ -133,20 +145,21 @@ More importantly, this is the single highest-value item for **real-world enterpr
 
 ## Summary
 
-| Priority | Items | Effort | Status | Cumulative bench gain (estimated) |
+| Priority | Items | Effort | Status | Cumulative bench gain |
 |---|---|---|---|---|
-| Shipped | Duplication tier-1 invariant, per-axis triage | — | ✅ | (delivered) |
-| Quick win | Multi-defect findings (item 2) | <1 day | open | v8 62.7% → ~65% global F1 |
-| Medium (3–4) | DEAD ↛ skip duplication, OE class-hierarchy context | 1–3 days each | open | ~65% → ~71% |
-| Hard (5–6) | Domain context injection, sub-symbol granularity | 1–4 weeks | open | ~71% → ~82%+ |
+| Shipped | Dup tier-1 invariant, per-axis triage, multi-defect findings, internal-docs injection | — | ✅ | v6 0% dup → 66.7% · v8 utility +19pp · v10 correction +7pp |
+| Quick win | Industry-knowledge prompting (item 5a) | <1 day | open | v10 65.0% → ~66% global F1 |
+| Medium (3–4) | DEAD ↛ skip duplication, OE class-hierarchy context | 1–3 days each | open | ~66% → ~72% |
+| User-config | Domain invariants override (item 5c) | ~1 week | open | ~72% → ~75% |
+| Hard (6) | Sub-symbol granularity (DUP-WILD inline, DEAD-DEBUG-BRANCH) | 2–4 weeks | open | ~75% → ~80%+ |
 
 **Recommended order:**
 
-1. **Item 2** (multi-defect findings) — short PR, restores INV-ROUND immediately. ~1 day.
-2. **Item 5** (domain context injection) — by far the highest-value architectural change because it generalizes beyond the slot-engine fixture: any future fixture in a regulated or domain-specific vertical (finance, healthcare, security-critical) will benefit from the same mechanism. On its own it lifts slot-engine global F1 by 7–8 points and unlocks Anatoly's positioning as a domain-aware auditor rather than a generic linter.
-3. **Items 3, 4, and 6** can land in any order after that; they are independent.
-
-Items 2, 3, 4, and 6 are not blocked by anything in `anatoly-bench` — they can be implemented and merged independently. Item 5 (domain context) may benefit from a small `anatoly-bench` extension to declare the fixture's domain in the SPEC and route it back to Anatoly's `--spec`-style flag, but this is additive.
+1. **Item 5a** (industry-knowledge prompting) — minimal cost, plausibly catches BP-RNG. ~1h.
+2. **Item 3** (don't suppress duplication on DEAD) — DUP-PAYOUT, ~1–3 days.
+3. **Item 4** (OE class-hierarchy context) — OVER-STRATEGY, ~1–3 days.
+4. **Item 5c** (user-provided invariants) — INV-WILD, INV-JACKPOT, ~1 week. Most valuable for domain-private conventions.
+5. **Item 6** (sub-symbol granularity) — last because it's the most architecturally disruptive; gains are real but diminish vs the cheaper items above.
 
 ---
 

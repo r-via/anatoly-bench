@@ -94,40 +94,48 @@ A perfect audit scores `1.0`. In practice, the target is movement over time — 
 | v6  | 2026-04-24 | 56.8%     | 54.5%      | 60.0%   | **66.7%**   | 66.7%           | 36.4%          |
 | v7  | 2026-04-26 | 65.5%     | 61.5%      | 60.0%   | 66.7%       | 66.7%           | **72.7%**      |
 | v7† | 2026-04-26 | 66.9%     | 61.5%      | 66.7%   | 66.7%       | 66.7%           | 72.7%          |
-| **v8**  | 2026-04-27 | 62.7%  | 36.4%‡     | **85.7%** | 66.7%     | 75.0%           | 50.0%‡         |
+| v8  | 2026-04-27 | 62.7%     | 36.4%‡     | **85.7%** | 66.7%     | 75.0%           | 50.0%‡         |
+| v9  | 2026-04-27 | 61.0%     | 46.2%      | 85.7%   | 66.7%       | 66.7%           | 40.0%          |
+| **v10** | 2026-04-28 | **65.0%** | **53.3%** | 85.7%   | 66.7%       | **75.0%**       | 44.4%          |
 
 \* v1 used a different scoring scope (7 axes vs 5). Comparisons are meaningful from v2 onwards.
 † v7 re-scored against the v8 catalog (DEAD-WILD-HELPER + DEAD-LINE-WIN added) for an apples-to-apples delta against v8.
 ‡ v8 lost three findings vs v7 to LLM variance (INV-WEIGHTS, INV-BETCAP on correction; BP-STRING-THROW on best-practices). The structural improvement is the **+19pp on utility** (DEAD-TYPE, DEAD-WILD-HELPER, DEAD-LINE-WIN all caught after the triage fix).
 
-Two Anatoly fixes have landed during the lifetime of this benchmark:
+Four Anatoly fixes have landed during the lifetime of this benchmark:
 
 - **v6 — duplication tier-1 invariant** ([r-via/anatoly@44f0617](https://github.com/r-via/anatoly/commit/44f0617)). Tier-1 refinement was overriding the LLM's `DUPLICATE` verdict whenever the underlying RAG embedding score stayed below 0.68, even when the LLM had committed to a concrete `duplicate_target`. The bench surfaced the bug; the fix landed; v6 measured the gain (duplication 0% → 66.7%).
 - **v8 — per-axis triage policy** ([r-via/anatoly@b784caf](https://github.com/r-via/anatoly/commit/b784caf)). Triage's `skip` tier was binary: type-only / trivial / barrel-export files bypassed every axis with blanket safe defaults, including utility. Files like `src/types.ts` (an exported type alias never imported) silently classified as `USED`, and a 4-line `src/wild.ts` never saw the LLM at all. The fix splits triage decisions per-axis, consults the usage graph for utility on skipped files, and routes trivial files through `correction`/`duplication`/`utility` evaluators. utility 66.7% → 85.7%.
+- **v9 — multi-defect findings per symbol** ([r-via/anatoly@75cdf08](https://github.com/r-via/anatoly/commit/75cdf08)). The correction axis used to return one record per symbol — symbols carrying several distinct defects collapsed into a single prose detail, leaving downstream consumers no way to count the second defect. Schema now supports an optional `findings` array per symbol; the shard renderer emits one row per finding.
+- **v10 — internal-docs injection into business-logic axes**. Anatoly's existing `.anatoly/docs/` scaffolder produces high-quality, agent-curated business context that previously only fed the `documentation` axis. The fix injects it into `correction`, `best_practices`, and `overengineering` user messages, with a prompt rule instructing the model to treat documented invariants as authoritative ground truth. correction 46.2% → 53.3%; INV-ROUND now detected.
 
 Per-run JSON + Markdown baselines are in [`baselines/`](./baselines/).
 
-### Remaining misses on v8
+### Remaining misses on v10
 
-Eight defects from the catalog that Anatoly does not yet detect on this fixture:
+Ten defects (varies slightly with LLM variance) from the catalog that Anatoly does not yet detect on this fixture:
 
 | Axis | ID | Difficulty | Defect |
 |------|----|----|--------|
+| correction | INV-WEIGHTS | medium | DIAMOND symbol weight 30 instead of ~3 across all reels |
 | correction | INV-WILD | hard | wild multiplier stacks `(1+wc)·2^wc` instead of `2^wc` (wild.ts) |
 | correction | INV-JACKPOT | medium | jackpot triggers on 4 diamonds anywhere instead of 5 on middle row |
-| correction | INV-ROUND | trivial | `Math.ceil` rounds payouts up (mentioned in passing on the INV-RTP finding but not split as its own finding) |
 | utility | DEAD-DEBUG-BRANCH | medium | `if (DEBUG_MODE)` branch with `DEBUG_MODE = false` const — statically unreachable |
 | duplication | DUP-PAYOUT | medium | `legacy.ts::computeLegacyPayout` duplicates `engine.ts::computePayout` — duplication axis appears suppressed on dead code |
 | duplication | DUP-WILD | hard | wild multiplier formula duplicated inline in `engine.ts::evaluateLine` vs the helper in `wild.ts::applyWildBonus` (sub-symbol granularity) |
 | overengineering | OVER-STRATEGY | medium | `SpinStrategy` abstraction for a single used implementation (needs class-hierarchy + use-site cross-reference) |
 | best-practices | BP-RNG | medium | `Math.random()` used as gaming RNG (requires domain-aware rule) |
+| best-practices | BP-MUTATION | medium | `handleFreeSpins` mutates argument in place (LLM variance — found in v8/v9, missed in v10) |
+| best-practices | BP-STRING-THROW | trivial | `throw "invalid bet"` (Anatoly flags it but routes to correction axis instead of best-practices) |
 
-These eight cluster around four themes:
+These cluster around four themes:
 
-- **Domain knowledge** (INV-WILD, INV-JACKPOT, BP-RNG) — defects that look fine in isolation but violate domain conventions (gambling math, regulated gaming RNG)
-- **Sub-symbol granularity** (INV-ROUND collapsed into another finding, DUP-WILD inline, DEAD-DEBUG-BRANCH branch-level) — defects that sit below the symbol level
-- **Inter-axis suppression** (DUP-PAYOUT) — DEAD code shouldn't suppress duplication detection
-- **Hierarchy + usage cross-reference** (OVER-STRATEGY) — overengineering needs to count concrete subclasses + their use sites
+- **Project-private design conventions** (INV-WILD, INV-JACKPOT) — not in the README, not in `.anatoly/docs/`. Need user-provided invariants (ROADMAP item 5c).
+- **Industry knowledge LLM has but doesn't volunteer** (BP-RNG) — addressable via prompting (ROADMAP item 5a).
+- **Sub-symbol granularity** (DUP-WILD inline, DEAD-DEBUG-BRANCH branch-level) — defects that sit below the named-symbol level (ROADMAP item 6).
+- **Inter-axis suppression** (DUP-PAYOUT) — DEAD code shouldn't suppress duplication detection (ROADMAP item 3).
+- **Hierarchy + usage cross-reference** (OVER-STRATEGY) — overengineering needs to count concrete subclasses + their use sites (ROADMAP item 4).
+- **Axis routing** (BP-STRING-THROW) — Anatoly correctly identifies the defect but routes it to the correction axis instead of best-practices; the bench's strict per-axis matching counts this as both a miss on BP and an FP on correction.
 
 A prioritized roadmap of the Anatoly evolutions needed to close these gaps lives in [ROADMAP.md](./ROADMAP.md). The original 3-run feedback report (more historical context) is in [docs/01-feedback-anatoly.md](./docs/01-feedback-anatoly.md).
 
