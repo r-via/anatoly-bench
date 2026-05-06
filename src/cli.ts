@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { writeFile } from "node:fs/promises";
 import { parseSpec } from "./spec-parser.js";
-import { parseReport } from "./parser.js";
+import { parseReport, parseRunMeta } from "./parser.js";
 import { score, renderMarkdown } from "./score.js";
 
 const USAGE = `anatoly-bench <command> [options]
@@ -57,11 +57,12 @@ async function main(): Promise<number> {
         process.stderr.write("score: --spec and --report are required\n");
         return 1;
       }
-      const [spec, findings] = await Promise.all([
+      const [spec, findings, meta] = await Promise.all([
         parseSpec(specPath),
         parseReport(reportDir),
+        parseRunMeta(reportDir),
       ]);
-      const report = score(spec, findings);
+      const report = score(spec, findings, meta);
       const md = renderMarkdown(report);
       process.stdout.write(md + "\n");
       if (mdOut) await writeFile(mdOut, md + "\n", "utf-8");

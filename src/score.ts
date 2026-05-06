@@ -2,6 +2,7 @@ import type {
   Axis,
   AxisScore,
   Finding,
+  RunMeta,
   ScoreReport,
   SpecCatalog,
   Verdict,
@@ -105,7 +106,7 @@ function resolveScoredAxes(spec: SpecCatalog, findings: Finding[]): Axis[] {
   );
 }
 
-export function score(spec: SpecCatalog, findings: Finding[]): ScoreReport {
+export function score(spec: SpecCatalog, findings: Finding[], meta?: RunMeta): ScoreReport {
   const scoredAxes = resolveScoredAxes(spec, findings);
   const scoredSet = new Set(scoredAxes);
 
@@ -181,6 +182,7 @@ export function score(spec: SpecCatalog, findings: Finding[]): ScoreReport {
 
   return {
     fixture: spec.fixture,
+    meta,
     global_f1: globalF1,
     scored_axes: scoredAxes,
     per_axis: byAxis,
@@ -195,6 +197,36 @@ export function renderMarkdown(report: ScoreReport): string {
   const lines: string[] = [];
   lines.push(`# Anatoly Bench Score — ${report.fixture}`);
   lines.push("");
+  if (report.meta) {
+    const m = report.meta;
+    const runParts: string[] = [];
+    if (m.runId) runParts.push(`\`${m.runId}\``);
+    if (m.anatolyVersion) {
+      const commit = m.anatolyCommit ? ` (\`${m.anatolyCommit}\`)` : "";
+      runParts.push(`Anatoly v${m.anatolyVersion}${commit}`);
+    }
+    if (m.projectBranch || m.projectCommit) {
+      const ref = [m.projectBranch, m.projectCommit ? `\`${m.projectCommit}\`` : undefined]
+        .filter(Boolean)
+        .join(" @ ");
+      runParts.push(`project ${ref}`);
+    }
+    if (runParts.length > 0) {
+      lines.push(`**Run:** ${runParts.join(" · ")}`);
+    }
+    const perfParts: string[] = [];
+    if (m.durationMs !== undefined) perfParts.push(`**Duration:** ${formatDuration(m.durationMs)}`);
+    if (m.costUsd !== undefined) perfParts.push(`**Cost:** $${m.costUsd.toFixed(2)}`);
+    if (m.totalInputTokens !== undefined || m.totalOutputTokens !== undefined) {
+      const inTok = m.totalInputTokens !== undefined ? formatTokens(m.totalInputTokens) : "?";
+      const outTok = m.totalOutputTokens !== undefined ? formatTokens(m.totalOutputTokens) : "?";
+      perfParts.push(`**Tokens:** ${inTok} in / ${outTok} out`);
+    }
+    if (perfParts.length > 0) {
+      lines.push(perfParts.join(" · "));
+    }
+    lines.push("");
+  }
   lines.push(`**Global F1:** ${(report.global_f1 * 100).toFixed(1)}%`);
   lines.push("");
   lines.push(`**Scored axes:** ${report.scored_axes.join(", ")}`);
@@ -269,6 +301,18 @@ export function renderMarkdown(report: ScoreReport): string {
     }
   }
   return lines.join("\n");
+}
+
+function formatDuration(ms: number): string {
+  const s = Math.round(ms / 1000);
+  if (s < 60) return `${s}s`;
+  return `${Math.floor(s / 60)}m ${s % 60}s`;
+}
+
+function formatTokens(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
+  return String(n);
 }
 
 function renderFindingBullet(f: Finding): string {

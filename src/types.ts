@@ -87,8 +87,21 @@ export interface AxisScore {
   f1: number;
 }
 
+export interface RunMeta {
+  runId: string;
+  anatolyVersion?: string;
+  anatolyCommit?: string;
+  projectBranch?: string;
+  projectCommit?: string;
+  durationMs?: number;
+  costUsd?: number;
+  totalInputTokens?: number;
+  totalOutputTokens?: number;
+}
+
 export interface ScoreReport {
   fixture: string;
+  meta?: RunMeta;
   global_f1: number;
   scored_axes: Axis[];
   per_axis: Partial<Record<Axis, AxisScore>>;

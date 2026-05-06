@@ -1,6 +1,6 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
-import type { Axis, Finding, Verdict } from "./types.js";
+import type { Axis, Finding, RunMeta, Verdict } from "./types.js";
 
 // Directory name under axes/ → our canonical Axis.
 // Anatoly's layout uses hyphenated names that already match our Axis union
@@ -40,6 +40,45 @@ const VERDICT_MAP: Record<string, Verdict> = {
   DOCUMENTED: "OK",
   UNIQUE: "OK",
 };
+
+async function readJsonSilent(path: string): Promise<Record<string, unknown>> {
+  try {
+    return JSON.parse(await readFile(path, "utf-8")) as Record<string, unknown>;
+  } catch {
+    return {};
+  }
+}
+
+export async function parseRunMeta(reportDir: string): Promise<RunMeta> {
+  const runDir = await resolveRunDir(reportDir);
+  const [cfg, status, metrics] = await Promise.all([
+    readJsonSilent(join(runDir, "run-config.json")),
+    readJsonSilent(join(runDir, "run-status.json")),
+    readJsonSilent(join(runDir, "run-metrics.json")),
+  ]);
+  const conversations = metrics["conversations"] as Record<string, unknown> | undefined;
+  return {
+    runId: (cfg["runId"] ?? status["runId"] ?? metrics["runId"] ?? "") as string,
+    anatolyVersion: cfg["anatolyVersion"] as string | undefined,
+    anatolyCommit: cfg["anatolyCommit"] as string | undefined,
+    projectBranch: status["branch"] as string | undefined,
+    projectCommit: status["commit"] as string | undefined,
+    durationMs: metrics["durationMs"] as number | undefined,
+    costUsd: metrics["costUsd"] as number | undefined,
+    totalInputTokens: conversations?.["totalInputTokens"] as number | undefined,
+    totalOutputTokens: conversations?.["totalOutputTokens"] as number | undefined,
+  };
+}
+
+async function resolveRunDir(reportDir: string): Promise<string> {
+  // If reportDir contains axes/, it's already a run dir. If reportDir IS
+  // the axes/ dir, go up one level.
+  const axesCandidate = join(reportDir, "axes");
+  const s = await stat(axesCandidate).catch(() => null);
+  if (s?.isDirectory()) return reportDir;
+  // Assume reportDir is axes/ itself — parent is the run dir.
+  return join(reportDir, "..");
+}
 
 export async function parseReport(reportDir: string): Promise<Finding[]> {
   // Tolerate being given either the run directory (contains axes/) or the
