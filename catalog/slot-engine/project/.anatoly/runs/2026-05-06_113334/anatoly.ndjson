@@ -1,0 +1,393 @@
+{"level":30,"time":1778060015245,"pid":1069359,"hostname":"DESKTOP-P9A7332","runId":"2026-05-06_113334","concurrency":8,"projectRoot":"/home/rviau/project/anatoly-bench/catalog/slot-engine/project","msg":"run started"}
+{"level":30,"time":1778060015247,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","runId":"2026-05-06_113334","msg":"phase started"}
+{"level":30,"time":1778060015334,"pid":1069359,"hostname":"DESKTOP-P9A7332","msg":"RAG · lite · ok"}
+{"level":20,"time":1778060015340,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"mode=lite table=function_cards_lite codeRuntime=onnx"}
+{"level":20,"time":1778060015340,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"models — code=jinaai/jina-embeddings-v2-base-code (onnx) + nlp=Xenova/all-MiniLM-L6-v2 (onnx)"}
+{"level":20,"time":1778060015342,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"vector-store: connecting to /home/rviau/project/anatoly-bench/catalog/slot-engine/project/.anatoly/rag/lancedb (table: function_cards_lite)"}
+{"level":20,"time":1778060015344,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"vector-store: existing tables: (none)"}
+{"level":20,"time":1778060015344,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"loading ONNX embedding model jinaai/jina-embeddings-v2-base-code (first time: ~50-150 MB download from HuggingFace, cached locally afterwards)..."}
+{"level":20,"time":1778060015964,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ config.json (starting…)"}
+{"level":20,"time":1778060015965,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json (starting…)"}
+{"level":20,"time":1778060015965,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer_config.json (starting…)"}
+{"level":20,"time":1778060015967,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ✓ config.json"}
+{"level":20,"time":1778060015968,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx (starting…)"}
+{"level":20,"time":1778060016098,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ✓ tokenizer_config.json"}
+{"level":20,"time":1778060016271,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 10%"}
+{"level":20,"time":1778060016274,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 20%"}
+{"level":20,"time":1778060016279,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 30%"}
+{"level":20,"time":1778060016284,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 40%"}
+{"level":20,"time":1778060016293,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 50%"}
+{"level":20,"time":1778060016296,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 60%"}
+{"level":20,"time":1778060016298,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 70%"}
+{"level":20,"time":1778060016304,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 80%"}
+{"level":20,"time":1778060016310,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 90%"}
+{"level":20,"time":1778060016322,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ✓ tokenizer.json"}
+{"level":20,"time":1778060016802,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 10%"}
+{"level":20,"time":1778060017318,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 20%"}
+{"level":20,"time":1778060017787,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 30%"}
+{"level":20,"time":1778060018270,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 40%"}
+{"level":20,"time":1778060018740,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 50%"}
+{"level":20,"time":1778060019216,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 60%"}
+{"level":20,"time":1778060019711,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 70%"}
+{"level":20,"time":1778060020237,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 80%"}
+{"level":20,"time":1778060020700,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 90%"}
+{"level":20,"time":1778060021160,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ✓ onnx/model.onnx"}
+{"level":20,"time":1778060022889,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"embedding model ready: jinaai/jina-embeddings-v2-base-code"}
+{"level":20,"time":1778060022915,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[1/8] src/engine.ts"}
+{"level":20,"time":1778060022916,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[2/8] src/freespin.ts"}
+{"level":20,"time":1778060022917,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[3/8] src/jackpot.ts"}
+{"level":20,"time":1778060022917,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[4/8] src/legacy.ts"}
+{"level":20,"time":1778060022917,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[5/8] src/paytable.ts"}
+{"level":20,"time":1778060022917,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[6/8] src/reels.ts"}
+{"level":20,"time":1778060022918,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[7/8] src/rng.ts"}
+{"level":20,"time":1778060022918,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[8/8] src/wild.ts"}
+{"level":20,"time":1778060024767,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"code phase done — 8 files with cards (of 8 indexed)"}
+{"level":20,"time":1778060024767,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"summarizing 8 files via LLM..."}
+{"level":20,"time":1778060050088,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"embedding summaries for 8 files..."}
+{"level":20,"time":1778060050088,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"loading ONNX embedding model Xenova/all-MiniLM-L6-v2 (first time: ~50-150 MB download from HuggingFace, cached locally afterwards)..."}
+{"level":20,"time":1778060050605,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ config.json (starting…)"}
+{"level":20,"time":1778060050605,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json (starting…)"}
+{"level":20,"time":1778060050605,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer_config.json (starting…)"}
+{"level":20,"time":1778060050607,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ✓ config.json"}
+{"level":20,"time":1778060050608,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx (starting…)"}
+{"level":20,"time":1778060050754,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ✓ tokenizer_config.json"}
+{"level":20,"time":1778060050856,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 10%"}
+{"level":20,"time":1778060050905,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 10%"}
+{"level":20,"time":1778060050909,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 20%"}
+{"level":20,"time":1778060050914,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 30%"}
+{"level":20,"time":1778060050917,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 40%"}
+{"level":20,"time":1778060050920,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 50%"}
+{"level":20,"time":1778060050924,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 60%"}
+{"level":20,"time":1778060050935,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 70%"}
+{"level":20,"time":1778060050937,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 80%"}
+{"level":20,"time":1778060050939,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 20%"}
+{"level":20,"time":1778060050940,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ tokenizer.json: 90%"}
+{"level":20,"time":1778060050947,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ✓ tokenizer.json"}
+{"level":20,"time":1778060051048,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 30%"}
+{"level":20,"time":1778060051117,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 40%"}
+{"level":20,"time":1778060051183,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 50%"}
+{"level":20,"time":1778060051248,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 60%"}
+{"level":20,"time":1778060051312,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 70%"}
+{"level":20,"time":1778060051380,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 80%"}
+{"level":20,"time":1778060051445,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ↓ onnx/model.onnx: 90%"}
+{"level":20,"time":1778060051511,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  ✓ onnx/model.onnx"}
+{"level":20,"time":1778060051713,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"embedding model ready: Xenova/all-MiniLM-L6-v2"}
+{"level":20,"time":1778060052068,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"NLP phase complete"}
+{"level":20,"time":1778060052068,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"upserting 8 file results to function_cards_lite"}
+{"level":20,"time":1778060052069,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"vector-store: creating table function_cards_lite (1 rows, vector dim=768)"}
+{"level":20,"time":1778060052215,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"no project docs/ directory found"}
+{"level":20,"time":1778060052219,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"processing 19 internal doc files via smart-chunk (0 cached)"}
+{"level":20,"time":1778060052219,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[1/19] chunking .anatoly/docs/01-Getting-Started/01-Overview.md"}
+{"level":20,"time":1778060052220,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/01-Getting-Started/01-Overview.md → 6 sections (smart-chunked)"}
+{"level":20,"time":1778060052220,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[2/19] chunking .anatoly/docs/01-Getting-Started/02-Installation.md"}
+{"level":20,"time":1778060052220,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/01-Getting-Started/02-Installation.md → 7 sections (smart-chunked)"}
+{"level":20,"time":1778060052220,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[3/19] chunking .anatoly/docs/01-Getting-Started/03-Configuration.md"}
+{"level":20,"time":1778060052220,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/01-Getting-Started/03-Configuration.md → 10 sections (smart-chunked)"}
+{"level":20,"time":1778060052220,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[4/19] chunking .anatoly/docs/01-Getting-Started/04-Quick-Start.md"}
+{"level":20,"time":1778060052220,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/01-Getting-Started/04-Quick-Start.md → 7 sections (smart-chunked)"}
+{"level":20,"time":1778060052221,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[5/19] chunking .anatoly/docs/02-Architecture/01-System-Overview.md"}
+{"level":20,"time":1778060052221,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/02-Architecture/01-System-Overview.md → 8 sections (smart-chunked)"}
+{"level":20,"time":1778060052221,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[6/19] chunking .anatoly/docs/02-Architecture/02-Core-Concepts.md"}
+{"level":20,"time":1778060052221,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/02-Architecture/02-Core-Concepts.md → 12 sections (smart-chunked)"}
+{"level":20,"time":1778060052221,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[7/19] chunking .anatoly/docs/02-Architecture/03-Data-Flow.md"}
+{"level":20,"time":1778060052221,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/02-Architecture/03-Data-Flow.md → 11 sections (smart-chunked)"}
+{"level":20,"time":1778060052221,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[8/19] chunking .anatoly/docs/02-Architecture/04-Design-Decisions.md"}
+{"level":20,"time":1778060052222,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/02-Architecture/04-Design-Decisions.md → 39 sections (smart-chunked)"}
+{"level":20,"time":1778060052222,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[9/19] chunking .anatoly/docs/03-Guides/01-Common-Workflows.md"}
+{"level":20,"time":1778060052222,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/03-Guides/01-Common-Workflows.md → 14 sections (smart-chunked)"}
+{"level":20,"time":1778060052222,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[10/19] chunking .anatoly/docs/03-Guides/02-Advanced-Configuration.md"}
+{"level":20,"time":1778060052222,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/03-Guides/02-Advanced-Configuration.md → 13 sections (smart-chunked)"}
+{"level":20,"time":1778060052222,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[11/19] chunking .anatoly/docs/03-Guides/03-Troubleshooting.md"}
+{"level":20,"time":1778060052223,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/03-Guides/03-Troubleshooting.md → 12 sections (smart-chunked)"}
+{"level":20,"time":1778060052223,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[12/19] chunking .anatoly/docs/04-API-Reference/01-Public-API.md"}
+{"level":20,"time":1778060052223,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/04-API-Reference/01-Public-API.md → 10 sections (smart-chunked)"}
+{"level":20,"time":1778060052223,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[13/19] chunking .anatoly/docs/04-API-Reference/02-Configuration-Schema.md"}
+{"level":20,"time":1778060052224,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/04-API-Reference/02-Configuration-Schema.md → 11 sections (smart-chunked)"}
+{"level":20,"time":1778060052224,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[14/19] chunking .anatoly/docs/04-API-Reference/03-Types-and-Interfaces.md"}
+{"level":20,"time":1778060052224,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/04-API-Reference/03-Types-and-Interfaces.md → 8 sections (smart-chunked)"}
+{"level":20,"time":1778060052224,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[15/19] chunking .anatoly/docs/05-Development/01-Source-Tree.md"}
+{"level":20,"time":1778060052224,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/05-Development/01-Source-Tree.md → 17 sections (smart-chunked)"}
+{"level":20,"time":1778060052225,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[16/19] chunking .anatoly/docs/05-Development/02-Build-and-Test.md"}
+{"level":20,"time":1778060052225,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/05-Development/02-Build-and-Test.md → 9 sections (smart-chunked)"}
+{"level":20,"time":1778060052225,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[17/19] chunking .anatoly/docs/05-Development/03-Code-Conventions.md"}
+{"level":20,"time":1778060052225,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/05-Development/03-Code-Conventions.md → 19 sections (smart-chunked)"}
+{"level":20,"time":1778060052225,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[18/19] chunking .anatoly/docs/05-Development/04-Release-Process.md"}
+{"level":20,"time":1778060052225,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/05-Development/04-Release-Process.md → 8 sections (smart-chunked)"}
+{"level":20,"time":1778060052225,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"[19/19] chunking .anatoly/docs/index.md"}
+{"level":20,"time":1778060052225,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/index.md → 0 sections (smart-chunked)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (554 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"What It Does\" (65 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"What It Does (cont.)\" (774 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Return-to-Player\" (151 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Scope and Constraints\" (110 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (595 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (293 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Prerequisites\" (71 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Install\" (204 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Verify the Installation\" (255 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"First Import\" (275 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"TypeScript Configuration\" (284 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (408 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (360 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Engine Constants\" (87 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Symbol Weights\" (146 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Pay Table\" (249 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Bonus Feature Thresholds\" (97 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Bonus Feature Thresholds — Wild Multiplier (`src/wild.ts`)\" (84 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Payline Layout\" (129 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Payout Strategy\" (210 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"TypeScript Compiler Settings\" (457 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (475 chars)"}
+{"level":20,"time":1778060052226,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (252 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Prerequisites\" (122 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Step 2 — Run Your First Spin\" (148 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Step 3 — Inspect the Result\" (57 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Step 4 — Iterate Over Winning Lines\" (80 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Step 6 — Verify the Build\" (132 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (596 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (567 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Map\" (367 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Architectural Patterns — Dependency Injection — `EngineContainer`\" (338 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Architectural Patterns — Factory — `AbstractReelBuilderFactory`\" (274 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Architectural Patterns — Strategy — `SpinStrategy`\" (269 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Architectural Patterns — Pub-Sub — `SpinEventEmitter`\" (270 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Examples\" (272 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (627 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (270 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Symbol\" (256 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Reel and Grid\" (417 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Payline\" (278 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Line Win\" (279 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Paytable\" (237 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Wild and Wild Multiplier\" (382 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Scatter and Free Spins\" (491 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Progressive Jackpot\" (240 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"House Edge and RTP\" (319 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Bet\" (252 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (467 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (466 chars)"}
+{"level":20,"time":1778060052227,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Pipeline Stages\" (69 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Pipeline Stages — Stage 1 — Input Validation (`engine.ts`)\" (144 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Pipeline Stages — Stage 2 — Reel Construction (`factories.ts`, `reels.ts`, `rng.ts`)\" (324 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Pipeline Stages — Stage 3 — Payline Evaluation (`engine.ts`, `paytable.ts`)\" (588 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Pipeline Stages — Stage 3 — Payline Evaluation (`engine.ts`, `paytable.ts`) (cont.)\" (277 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Pipeline Stages — Stage 4 — Bonus Detection (`freespin.ts`, `jackpot.ts`)\" (572 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Pipeline Stages — Stage 4 — Bonus Detection (`freespin.ts`, `jackpot.ts`) (cont.)\" (121 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Pipeline Stages — Stage 5 — Payout Calculation (`engine.ts`)\" (215 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Pipeline Stages — Stage 6 — Result Assembly and Dispatch (`engine.ts`, `strategy.ts`, `events.ts`)\" (492 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (580 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (472 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-001: Dependency Injection via `EngineContainer` — Context\" (248 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-001: Dependency Injection via `EngineContainer` — Decision\" (169 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-001: Dependency Injection via `EngineContainer` — Rationale\" (349 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-001: Dependency Injection via `EngineContainer` — Consequences\" (236 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-002: Factory Pattern for Reel Construction\" (85 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-002: Factory Pattern for Reel Construction — Context\" (243 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-002: Factory Pattern for Reel Construction — Decision\" (126 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-002: Factory Pattern for Reel Construction — Rationale\" (332 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-002: Factory Pattern for Reel Construction — Consequences\" (290 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-003: Strategy Pattern for Payout Adjustment\" (81 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-003: Strategy Pattern for Payout Adjustment — Context\" (235 chars)"}
+{"level":20,"time":1778060052228,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-003: Strategy Pattern for Payout Adjustment — Decision\" (203 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-003: Strategy Pattern for Payout Adjustment — Rationale\" (257 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-003: Strategy Pattern for Payout Adjustment — Consequences\" (228 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-004: Pub-Sub Event Emitter for Spin Lifecycle\" (55 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-004: Pub-Sub Event Emitter for Spin Lifecycle — Context\" (154 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-004: Pub-Sub Event Emitter for Spin Lifecycle — Decision\" (131 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-004: Pub-Sub Event Emitter for Spin Lifecycle — Rationale\" (326 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-004: Pub-Sub Event Emitter for Spin Lifecycle — Consequences\" (321 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-005: Pure, Zero-Dependency Public API — Context\" (189 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-005: Pure, Zero-Dependency Public API — Decision\" (213 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-005: Pure, Zero-Dependency Public API — Rationale\" (334 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-005: Pure, Zero-Dependency Public API — Consequences\" (270 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-006: Exponential Wild Multiplier Formula — Context\" (180 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-006: Exponential Wild Multiplier Formula — Decision\" (132 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-006: Exponential Wild Multiplier Formula — Rationale\" (278 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-006: Exponential Wild Multiplier Formula — Consequences\" (342 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-007: Retained `legacy.ts` Module — Context\" (173 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-007: Retained `legacy.ts` Module — Decision\" (283 chars)"}
+{"level":20,"time":1778060052229,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-007: Retained `legacy.ts` Module — Rationale\" (242 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-007: Retained `legacy.ts` Module — Consequences\" (252 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-008: TypeScript `noEmit` Build\" (59 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-008: TypeScript `noEmit` Build — Context\" (191 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-008: TypeScript `noEmit` Build — Decision\" (111 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-008: TypeScript `noEmit` Build — Rationale\" (347 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"ADR-008: TypeScript `noEmit` Build — Consequences\" (281 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Examples\" (206 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (545 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (404 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 1 — Run a Single Spin and Inspect the Result\" (85 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 1 — Run a Single Spin and Inspect the Result — Steps\" (268 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 2 — Iterate Over Winning Lines\" (163 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 2 — Iterate Over Winning Lines — Steps\" (267 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 3 — Print the Reel Grid\" (118 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 3 — Print the Reel Grid — Steps\" (210 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 4 — Handle Free Spins\" (224 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 4 — Handle Free Spins — Steps\" (349 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 5 — Batch Simulation and RTP Verification\" (195 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 5 — Batch Simulation and RTP Verification — Steps\" (254 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 6 — Detect the Progressive Jackpot\" (112 chars)"}
+{"level":20,"time":1778060052230,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Workflow 6 — Detect the Progressive Jackpot — Steps\" (257 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (556 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (433 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Reel Symbol Weights\" (333 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Reel Symbol Weights (cont.)\" (267 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Reel Symbol Weights — Per-Reel Weight Differentiation\" (287 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Paytable Multipliers\" (422 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Paytable Multipliers (cont.)\" (180 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"House Edge\" (298 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Wild Multiplier Formula\" (313 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Free Spin Parameters\" (389 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Jackpot Condition\" (427 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Custom Spin Strategy\" (257 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Custom Reel Factory\" (269 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (542 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (223 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Runtime Errors — `spin()` throws a plain string, not an `Error`\" (405 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Runtime Errors — Bet above 100 does not throw — it warns\" (336 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Runtime Errors — `totalPayout` is non-zero even with no line wins\" (477 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Type Errors — `Bet` type does not enforce the valid range at compile time\" (501 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Build and Module Errors — `Cannot find module 'slot-engine'` or `ERR_MODULE_NOT_FOUND`\" (570 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Build and Module Errors — `npm run build` produces no output files\" (449 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Unexpected Results — RTP differs significantly from 95% in short runs\" (441 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Unexpected Results — `freeSpinsAwarded` is always 0\" (537 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Unexpected Results — `wildMultiplier` is `1` when wilds are present on the reels\" (393 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Unexpected Results — `wildMultiplier` is `1` when wilds are present on the reels (cont.)\" (263 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (552 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (348 chars)"}
+{"level":20,"time":1778060052231,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"`spin`\" (641 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"`spin` — Returns\" (112 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"`spin` — Throws\" (67 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"`Bet`\" (212 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"`LineWin`\" (215 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Payline Layout\" (119 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Paytable Reference\" (125 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Error Handling\" (165 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (500 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (490 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"`Bet` — Runtime Parameter\" (222 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"House Edge and RTP\" (194 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Debug Mode\" (213 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Paytable\" (373 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Wild Multiplier\" (281 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Scatter and Free Spins\" (349 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Progressive Jackpot\" (245 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Reel Symbol Weights\" (225 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Paylines\" (340 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (460 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (288 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Type: `Symbol`\" (231 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Type Alias: `Bet`\" (320 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Interface: `LineWin`\" (251 chars)"}
+{"level":20,"time":1778060052232,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Interface: `SpinResult`\" (197 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Interface: `FreeSpinState`\" (171 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Type: `LegacySpinResult`\" (281 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (436 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (292 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/index.ts` — Public Entry Point\" (155 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/engine.ts` — Spin Orchestration\" (375 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/types.ts` — Shared Types\" (164 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/reels.ts` — Reel Definitions\" (172 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/paytable.ts` — Pay Table\" (72 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/wild.ts` — Wild Bonus\" (198 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/jackpot.ts` — Jackpot Detection\" (113 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/freespin.ts` — Free-Spin State Machine\" (154 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/rng.ts` — Random Number Generator\" (141 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/events.ts` — Event Emitter\" (361 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/factories.ts` — Reel Builder Factory\" (214 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/strategy.ts` — Payout Strategy\" (162 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/legacy.ts` — Legacy Payout Helper\" (230 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Descriptions — `src/__tests__/basic.test.ts` — Unit Tests\" (133 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Examples\" (160 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (478 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (343 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Prerequisites\" (51 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Install Dependencies\" (84 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Type Checking\" (305 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Running Tests\" (392 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Running Tests — Running All Test Files\" (130 chars)"}
+{"level":20,"time":1778060052233,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Full Local CI Sequence\" (159 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Notes\" (574 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (217 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (300 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"TypeScript Configuration\" (109 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Naming Conventions — Event Names\" (57 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Module Organisation\" (116 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Import Style — ESM `.js` Extensions\" (133 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Import Style — `import type` for Type-Only Imports\" (104 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Import Style — No Default Exports\" (77 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Type Patterns — Prefer `ReadonlyArray` in Public API\" (103 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Type Patterns — String-Literal Unions over Enums\" (179 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Type Patterns — `Record` for Lookup Tables\" (58 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Type Patterns — Generics Only Where Necessary\" (169 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Design Patterns — Strategy\" (267 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Design Patterns — Service Container\" (150 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Design Patterns — Abstract Factory\" (246 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Error Handling\" (243 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"JSDoc Comments\" (185 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Testing\" (253 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Anti-Patterns to Avoid\" (508 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (544 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Overview\" (535 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Versioning Scheme\" (158 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Release Checklist\" (72 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Release Checklist — 1. Verify the build passes\" (184 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Release Checklist — 3. Commit the version bump\" (69 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Release Checklist — 4. Tag the release\" (57 chars)"}
+{"level":20,"time":1778060052234,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"Breaking-Change Policy\" (436 chars)"}
+{"level":20,"time":1778060052235,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"  section \"See Also\" (201 chars)"}
+{"level":20,"time":1778060052235,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"embedding 221 sections across 18 files in one batch..."}
+{"level":20,"time":1778060054634,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/01-Getting-Started/01-Overview.md → 6 sections"}
+{"level":20,"time":1778060054653,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/01-Getting-Started/02-Installation.md → 7 sections"}
+{"level":20,"time":1778060054666,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/01-Getting-Started/03-Configuration.md → 10 sections"}
+{"level":20,"time":1778060054676,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/01-Getting-Started/04-Quick-Start.md → 7 sections"}
+{"level":20,"time":1778060054692,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/02-Architecture/01-System-Overview.md → 8 sections"}
+{"level":20,"time":1778060054706,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/02-Architecture/02-Core-Concepts.md → 12 sections"}
+{"level":20,"time":1778060054731,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/02-Architecture/03-Data-Flow.md → 11 sections"}
+{"level":20,"time":1778060054749,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/02-Architecture/04-Design-Decisions.md → 39 sections"}
+{"level":20,"time":1778060054768,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/03-Guides/01-Common-Workflows.md → 14 sections"}
+{"level":20,"time":1778060054781,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/03-Guides/02-Advanced-Configuration.md → 13 sections"}
+{"level":20,"time":1778060054794,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/03-Guides/03-Troubleshooting.md → 12 sections"}
+{"level":20,"time":1778060054808,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/04-API-Reference/01-Public-API.md → 10 sections"}
+{"level":20,"time":1778060054822,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/04-API-Reference/02-Configuration-Schema.md → 11 sections"}
+{"level":20,"time":1778060054839,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/04-API-Reference/03-Types-and-Interfaces.md → 8 sections"}
+{"level":20,"time":1778060054853,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/05-Development/01-Source-Tree.md → 17 sections"}
+{"level":20,"time":1778060054864,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/05-Development/02-Build-and-Test.md → 9 sections"}
+{"level":20,"time":1778060054878,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/05-Development/03-Code-Conventions.md → 19 sections"}
+{"level":20,"time":1778060054890,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":".anatoly/docs/05-Development/04-Release-Process.md → 8 sections"}
+{"level":20,"time":1778060054892,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","msg":"indexed 221 internal doc sections from 19 files"}
+{"level":30,"time":1778060055158,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"rag-index","runId":"2026-05-06_113334","durationMs":39911,"cardsGenerated":17,"cached":0,"costUsd":0.22418944999999998,"msg":"phase completed"}
+{"level":30,"time":1778060055159,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"review","runId":"2026-05-06_113334","concurrency":8,"msg":"phase started"}
+{"level":30,"time":1778060055163,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"package.json","phase":"review","worker":0,"tier":"evaluate","symbolCount":0,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060055165,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"src/engine.ts","phase":"review","worker":1,"tier":"evaluate","symbolCount":10,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060055165,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"src/events.ts","phase":"review","worker":2,"tier":"evaluate","symbolCount":3,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060055165,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"src/factories.ts","phase":"review","worker":3,"tier":"evaluate","symbolCount":2,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060055166,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"src/freespin.ts","phase":"review","worker":4,"tier":"evaluate","symbolCount":2,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060055167,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_skip","phase":"review","file":"src/index.ts","reason":"barrel-export","msg":"file skipped"}
+{"level":30,"time":1778060055167,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"src/jackpot.ts","phase":"review","worker":6,"tier":"evaluate","symbolCount":1,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060055168,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"src/legacy.ts","phase":"review","worker":7,"tier":"evaluate","symbolCount":1,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060055170,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"src/paytable.ts","phase":"review","worker":5,"tier":"evaluate","symbolCount":4,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060086743,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"package.json","verdict":"CLEAN","tier":"evaluate","symbolCount":0,"costUsd":0.18901225,"durationMs":31238,"inputTokens":12,"outputTokens":3405,"cacheReadTokens":63992,"cacheCreationTokens":11493,"axisTiming":[{"axisId":"utility","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"duplication","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"correction","durationMs":28310,"costUsd":0.073764,"inputTokens":3,"outputTokens":1640},{"axisId":"overengineering","durationMs":2364,"costUsd":0.024195249999999998,"inputTokens":3,"outputTokens":17},{"axisId":"tests","durationMs":1986,"costUsd":0.022220249999999997,"inputTokens":3,"outputTokens":8},{"axisId":"best_practices","durationMs":24442,"costUsd":0.06883275,"inputTokens":3,"outputTokens":1740},{"axisId":"documentation","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0}],"msg":"file review completed"}
+{"level":30,"time":1778060086744,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"src/reels.ts","phase":"review","worker":0,"tier":"evaluate","symbolCount":9,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060135942,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"src/jackpot.ts","verdict":"NEEDS_REFACTOR","tier":"evaluate","symbolCount":1,"costUsd":0.23721875,"durationMs":79539,"inputTokens":15,"outputTokens":4795,"cacheReadTokens":87300,"cacheCreationTokens":11779,"axisTiming":[{"axisId":"utility","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"duplication","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"correction","durationMs":3777,"costUsd":0.041414000000000006,"inputTokens":3,"outputTokens":120},{"axisId":"overengineering","durationMs":4004,"costUsd":0.0248765,"inputTokens":3,"outputTokens":169},{"axisId":"tests","durationMs":14851,"costUsd":0.0194165,"inputTokens":3,"outputTokens":178},{"axisId":"best_practices","durationMs":73338,"costUsd":0.12664,"inputTokens":3,"outputTokens":4161},{"axisId":"documentation","durationMs":4868,"costUsd":0.024871749999999998,"inputTokens":3,"outputTokens":167}],"msg":"file review completed"}
+{"level":30,"time":1778060135943,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"src/rng.ts","phase":"review","worker":6,"tier":"evaluate","symbolCount":1,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060161809,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"src/factories.ts","verdict":"NEEDS_REFACTOR","tier":"evaluate","symbolCount":2,"costUsd":0.4435825,"durationMs":106540,"inputTokens":15,"outputTokens":11669,"cacheReadTokens":79990,"cacheCreationTokens":17886,"axisTiming":[{"axisId":"utility","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"duplication","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"correction","durationMs":28973,"costUsd":0.07885775,"inputTokens":3,"outputTokens":1702},{"axisId":"overengineering","durationMs":37277,"costUsd":0.0803015,"inputTokens":3,"outputTokens":2095},{"axisId":"tests","durationMs":5693,"costUsd":0.02793275,"inputTokens":3,"outputTokens":220},{"axisId":"best_practices","durationMs":103629,"costUsd":0.20637025,"inputTokens":3,"outputTokens":6771},{"axisId":"documentation","durationMs":16323,"costUsd":0.050120250000000005,"inputTokens":3,"outputTokens":881}],"msg":"file review completed"}
+{"level":30,"time":1778060161810,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"src/strategy.ts","phase":"review","worker":3,"tier":"evaluate","symbolCount":3,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060174023,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"src/events.ts","verdict":"NEEDS_REFACTOR","tier":"evaluate","symbolCount":3,"costUsd":0.50702695,"durationMs":118336,"inputTokens":25,"outputTokens":15240,"cacheReadTokens":97685,"cacheCreationTokens":18677,"axisTiming":[{"axisId":"utility","durationMs":8175,"costUsd":0.00991795,"inputTokens":10,"outputTokens":1066},{"axisId":"duplication","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"correction","durationMs":43862,"costUsd":0.11168275,"inputTokens":3,"outputTokens":3015},{"axisId":"overengineering","durationMs":15974,"costUsd":0.0523265,"inputTokens":3,"outputTokens":983},{"axisId":"tests","durationMs":8773,"costUsd":0.031176499999999996,"inputTokens":3,"outputTokens":324},{"axisId":"best_practices","durationMs":115162,"costUsd":0.24473275,"inputTokens":3,"outputTokens":8308},{"axisId":"documentation","durationMs":29160,"costUsd":0.057190500000000005,"inputTokens":3,"outputTokens":1544}],"msg":"file review completed"}
+{"level":30,"time":1778060174024,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_skip","phase":"review","file":"src/types.ts","reason":"type-only","msg":"file skipped"}
+{"level":30,"time":1778060174025,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"src/wild.ts","phase":"review","worker":2,"tier":"skip","symbolCount":1,"axes":["utility","duplication","correction"],"partialSkip":true,"msg":"file review started"}
+{"level":30,"time":1778060181545,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"src/freespin.ts","verdict":"NEEDS_REFACTOR","tier":"evaluate","symbolCount":2,"costUsd":0.42653574999999994,"durationMs":124878,"inputTokens":15,"outputTokens":12771,"cacheReadTokens":90259,"cacheCreationTokens":9929,"axisTiming":[{"axisId":"utility","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"duplication","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"correction","durationMs":73121,"costUsd":0.15086225,"inputTokens":3,"outputTokens":5118},{"axisId":"overengineering","durationMs":5600,"costUsd":0.027914,"inputTokens":3,"outputTokens":230},{"axisId":"tests","durationMs":5086,"costUsd":0.021979000000000002,"inputTokens":3,"outputTokens":242},{"axisId":"best_practices","durationMs":115281,"costUsd":0.19267124999999996,"inputTokens":3,"outputTokens":6745},{"axisId":"documentation","durationMs":9164,"costUsd":0.03310925,"inputTokens":3,"outputTokens":436}],"msg":"file review completed"}
+{"level":30,"time":1778060181545,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_start","file":"tsconfig.json","phase":"review","worker":4,"tier":"evaluate","symbolCount":0,"axes":["utility","duplication","correction","overengineering","tests","best_practices","documentation"],"partialSkip":false,"msg":"file review started"}
+{"level":30,"time":1778060186516,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"src/wild.ts","verdict":"NEEDS_REFACTOR","tier":"skip","symbolCount":1,"costUsd":0.03336225,"durationMs":12445,"inputTokens":3,"outputTokens":646,"cacheReadTokens":18957,"cacheCreationTokens":1235,"axisTiming":[{"axisId":"utility","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"duplication","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"correction","durationMs":10159,"costUsd":0.03336225,"inputTokens":3,"outputTokens":646}],"msg":"file review completed"}
+{"level":30,"time":1778060201910,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"tsconfig.json","verdict":"CLEAN","tier":"evaluate","symbolCount":0,"costUsd":0.151681,"durationMs":20314,"inputTokens":15,"outputTokens":1971,"cacheReadTokens":88487,"cacheCreationTokens":9294,"axisTiming":[{"axisId":"utility","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"duplication","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"correction","durationMs":13320,"costUsd":0.035981,"inputTokens":3,"outputTokens":472},{"axisId":"overengineering","durationMs":7245,"costUsd":0.02660775,"inputTokens":3,"outputTokens":127},{"axisId":"tests","durationMs":5820,"costUsd":0.030258,"inputTokens":6,"outputTokens":12},{"axisId":"best_practices","durationMs":18161,"costUsd":0.058834250000000005,"inputTokens":3,"outputTokens":1360},{"axisId":"documentation","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0}],"msg":"file review completed"}
+{"level":30,"time":1778060216078,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"src/reels.ts","verdict":"NEEDS_REFACTOR","tier":"evaluate","symbolCount":9,"costUsd":0.6752231499999999,"durationMs":129206,"inputTokens":35,"outputTokens":27239,"cacheReadTokens":124533,"cacheCreationTokens":13481,"axisTiming":[{"axisId":"utility","durationMs":16378,"costUsd":0.01961745,"inputTokens":10,"outputTokens":3099},{"axisId":"duplication","durationMs":19024,"costUsd":0.01849495,"inputTokens":10,"outputTokens":2782},{"axisId":"correction","durationMs":81344,"costUsd":0.18246849999999998,"inputTokens":3,"outputTokens":6447},{"axisId":"overengineering","durationMs":47168,"costUsd":0.10097025,"inputTokens":3,"outputTokens":3217},{"axisId":"tests","durationMs":12602,"costUsd":0.039560250000000005,"inputTokens":3,"outputTokens":825},{"axisId":"best_practices","durationMs":118465,"costUsd":0.24074624999999997,"inputTokens":3,"outputTokens":8758},{"axisId":"documentation","durationMs":33058,"costUsd":0.0733655,"inputTokens":3,"outputTokens":2111}],"msg":"file review completed"}
+{"level":30,"time":1778060220801,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"src/legacy.ts","verdict":"NEEDS_REFACTOR","tier":"evaluate","symbolCount":1,"costUsd":0.5980264500000001,"durationMs":164766,"inputTokens":25,"outputTokens":21266,"cacheReadTokens":101689,"cacheCreationTokens":17839,"axisTiming":[{"axisId":"utility","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"duplication","durationMs":27745,"costUsd":0.0240217,"inputTokens":10,"outputTokens":3637},{"axisId":"correction","durationMs":95598,"costUsd":0.21858275,"inputTokens":3,"outputTokens":7150},{"axisId":"overengineering","durationMs":14133,"costUsd":0.04077025,"inputTokens":3,"outputTokens":748},{"axisId":"tests","durationMs":4076,"costUsd":0.01832275,"inputTokens":3,"outputTokens":104},{"axisId":"best_practices","durationMs":161250,"costUsd":0.26090875,"inputTokens":3,"outputTokens":9475},{"axisId":"documentation","durationMs":4702,"costUsd":0.03542025,"inputTokens":3,"outputTokens":152}],"msg":"file review completed"}
+{"level":30,"time":1778060233395,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"src/paytable.ts","verdict":"NEEDS_REFACTOR","tier":"evaluate","symbolCount":4,"costUsd":0.6476494,"durationMs":176726,"inputTokens":35,"outputTokens":24692,"cacheReadTokens":124533,"cacheCreationTokens":13282,"axisTiming":[{"axisId":"utility","durationMs":7394,"costUsd":0.00860495,"inputTokens":10,"outputTokens":986},{"axisId":"duplication","durationMs":25796,"costUsd":0.0201712,"inputTokens":10,"outputTokens":3101},{"axisId":"correction","durationMs":88095,"costUsd":0.1939435,"inputTokens":3,"outputTokens":6886},{"axisId":"overengineering","durationMs":18195,"costUsd":0.04422025,"inputTokens":3,"outputTokens":927},{"axisId":"tests","durationMs":7336,"costUsd":0.02827275,"inputTokens":3,"outputTokens":448},{"axisId":"best_practices","durationMs":157837,"costUsd":0.28889625,"inputTokens":3,"outputTokens":10646},{"axisId":"documentation","durationMs":26849,"costUsd":0.0635405,"inputTokens":3,"outputTokens":1698}],"msg":"file review completed"}
+{"level":30,"time":1778060258052,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"src/rng.ts","verdict":"NEEDS_REFACTOR","tier":"evaluate","symbolCount":1,"costUsd":0.34047445,"durationMs":122066,"inputTokens":25,"outputTokens":11602,"cacheReadTokens":107471,"cacheCreationTokens":6991,"axisTiming":[{"axisId":"utility","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"duplication","durationMs":15026,"costUsd":0.01178245,"inputTokens":10,"outputTokens":1616},{"axisId":"correction","durationMs":43446,"costUsd":0.07402475,"inputTokens":3,"outputTokens":2323},{"axisId":"overengineering","durationMs":4023,"costUsd":0.0186765,"inputTokens":3,"outputTokens":139},{"axisId":"tests","durationMs":5254,"costUsd":0.0192165,"inputTokens":3,"outputTokens":156},{"axisId":"best_practices","durationMs":119692,"costUsd":0.19705875,"inputTokens":3,"outputTokens":7195},{"axisId":"documentation","durationMs":4975,"costUsd":0.0197155,"inputTokens":3,"outputTokens":173}],"msg":"file review completed"}
+{"level":30,"time":1778060266007,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"src/strategy.ts","verdict":"NEEDS_REFACTOR","tier":"evaluate","symbolCount":3,"costUsd":0.3220044999999999,"durationMs":104138,"inputTokens":15,"outputTokens":9248,"cacheReadTokens":90259,"cacheCreationTokens":7296,"axisTiming":[{"axisId":"utility","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"duplication","durationMs":0,"costUsd":0,"inputTokens":0,"outputTokens":0},{"axisId":"correction","durationMs":4165,"costUsd":0.02311225,"inputTokens":3,"outputTokens":173},{"axisId":"overengineering","durationMs":36615,"costUsd":0.065689,"inputTokens":3,"outputTokens":1877},{"axisId":"tests","durationMs":6414,"costUsd":0.022741499999999998,"inputTokens":3,"outputTokens":297},{"axisId":"best_practices","durationMs":101667,"costUsd":0.17140249999999996,"inputTokens":3,"outputTokens":6062},{"axisId":"documentation","durationMs":14855,"costUsd":0.039059250000000004,"inputTokens":3,"outputTokens":839}],"msg":"file review completed"}
+{"level":30,"time":1778060395867,"pid":1069359,"hostname":"DESKTOP-P9A7332","event":"file_review_end","file":"src/engine.ts","verdict":"NEEDS_REFACTOR","tier":"evaluate","symbolCount":10,"costUsd":1.2194506499999997,"durationMs":339112,"inputTokens":35,"outputTokens":46883,"cacheReadTokens":124533,"cacheCreationTokens":24935,"axisTiming":[{"axisId":"utility","durationMs":15264,"costUsd":0.01951495,"inputTokens":10,"outputTokens":2775},{"axisId":"duplication","durationMs":25213,"costUsd":0.023212449999999996,"inputTokens":10,"outputTokens":3398},{"axisId":"correction","durationMs":180606,"costUsd":0.37723724999999997,"inputTokens":3,"outputTokens":13757},{"axisId":"overengineering","durationMs":72588,"costUsd":0.12478275,"inputTokens":3,"outputTokens":3672},{"axisId":"tests","durationMs":14056,"costUsd":0.04824150000000001,"inputTokens":3,"outputTokens":880},{"axisId":"best_practices","durationMs":310710,"costUsd":0.5363274999999998,"inputTokens":3,"outputTokens":20100},{"axisId":"documentation","durationMs":43377,"costUsd":0.09013425,"inputTokens":3,"outputTokens":2301}],"msg":"file review completed"}
+{"level":30,"time":1778060395868,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"review","runId":"2026-05-06_113334","durationMs":340709,"filesReviewed":15,"findings":89,"concurrency":8,"msg":"phase completed"}
+{"level":30,"time":1778060545630,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"report","runId":"2026-05-06_113334","msg":"phase started"}
+{"level":30,"time":1778060545642,"pid":1069359,"hostname":"DESKTOP-P9A7332","docScore":16,"docVerdict":"UNDOCUMENTED","msg":"doc report aggregated"}
+{"level":30,"time":1778060545668,"pid":1069359,"hostname":"DESKTOP-P9A7332","phase":"report","runId":"2026-05-06_113334","durationMs":38,"msg":"phase completed"}
+{"level":30,"time":1778060545668,"pid":1069359,"hostname":"DESKTOP-P9A7332","runId":"2026-05-06_113334","totalDurationMs":530932,"totalCostUsd":6.454828,"filesReviewed":15,"findings":68,"errors":0,"errorsByCode":{},"phaseDurations":{"scan":86,"estimate":124,"triage":1,"rag-index":39911,"review":340709,"refinement":149752,"internal-docs":3,"report":38},"msg":"run completed"}
