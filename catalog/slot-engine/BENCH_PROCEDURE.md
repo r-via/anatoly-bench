@@ -51,23 +51,31 @@ Puis exécution non-bloquante :
 ```bash
 ssh ... '
   cd ~/project/anatoly-bench/catalog/slot-engine/project/.anatoly
-  rm -rf runs cache rag tasks anatoly.lock deliberation-memory.json
+  rm -rf runs cache tasks anatoly.lock deliberation-memory.json
   rm -f /tmp/anatoly-run.log
   nohup bash /tmp/launch-run.sh > /tmp/launch-run.log 2>&1 &
 '
 ```
 
-### Pourquoi pas `anatoly reset` ?
+### Ce qu'on préserve entre runs
 
-`anatoly reset` supprime aussi `.anatoly/docs/` (la doc interne générée par
-le `bootstrap-doc`). Cette doc coûte ~$1 et plusieurs minutes à regénérer ;
-elle ne change pas tant que le code source du fixture ne change pas. Donc on
-garde `.anatoly/docs/` intacte et on ne nettoie que :
+Le bench scorant la performance des axes sur un fixture dont le code source
+ne change pas, deux artefacts générés par Anatoly sont **déterministes** vis
+à vis du code + des embeddings, et donc réutilisables sans biais :
 
-- `runs/` (les artefacts du dernier run)
-- `cache/` (cache LLM — déjà neutralisé par `--no-cache` mais propre)
-- `rag/` (index RAG — sera reconstruit en quelques secondes)
+- `.anatoly/docs/` — doc interne (`bootstrap-doc`). Coûte ~$1 et plusieurs
+  minutes en regénération LLM. Versionnée dans le repo bench.
+- `.anatoly/rag/` — index RAG (chunks + embeddings code + nlp). Sert de
+  référence pour les axes `duplication` et `correction`.
+
+On nettoie uniquement les artefacts spécifiques au run :
+
+- `runs/` (output du dernier run)
+- `cache/` (cache LLM — neutralisé par `--no-cache` mais propre)
 - `tasks/`, `anatoly.lock`, `deliberation-memory.json` (état transitoire)
+
+Pas de `anatoly reset` : la commande supprime `docs/` et `rag/`, ce qui force
+des regénérations coûteuses sans valeur ajoutée pour le bench.
 
 ### Pourquoi `--no-cache` ?
 

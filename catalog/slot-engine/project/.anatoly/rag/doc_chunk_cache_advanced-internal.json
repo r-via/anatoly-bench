@@ -1,0 +1,1201 @@
+{
+  ".anatoly/docs/index.md": {
+    "sha": "6d10591c63762e65de1cc435d548c4a22d1215503b7f8fbe11c777cde3b4ea0b",
+    "sections": []
+  },
+  ".anatoly/docs/01-Getting-Started/01-Overview.md": {
+    "sha": "6987ca550921c04391c88330cdf332d25134c9480fc6c261ceee52ba2e599066",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "slot-engine is a self-contained slot machine simulation library written in TypeScript. It implements the complete game-logic pipeline for a classic reel-based slot — from random symbol generation through payline evaluation, wild substitution and multiplier application, scatter detection, free-spin awarding, and jackpot resolution — and returns a fully structured result.\n\nThe library ships **no UI, no persistence layer, and no networking**. It is designed to serve as a deterministic, embeddable backend for games, simulators, or RTP-analysis tooling.",
+        "content": "`slot-engine` is a self-contained slot machine simulation library written in TypeScript. It implements the complete game-logic pipeline for a classic reel-based slot — from random symbol generation through payline evaluation, wild substitution and multiplier application, scatter detection, free-spin awarding, and jackpot resolution — and returns a fully structured result.\n\nThe library ships **no UI, no persistence layer, and no networking**. It is designed to serve as a deterministic, embeddable backend for games, simulators, or RTP-analysis tooling."
+      },
+      {
+        "heading": "What It Does",
+        "embedText": "A single call to spin() performs the following steps in sequence:",
+        "content": "A single call to `spin()` performs the following steps in sequence:"
+      },
+      {
+        "heading": "What It Does (cont.)",
+        "embedText": "1. **Reel generation** — five independent reels of three rows each are populated with weighted-random symbols.\n2. **Payline evaluation** — ten left-to-right paylines are checked for runs of three or more matching symbols (with WILD substitution).\n3. **Wild multiplier** — winning lines that include WILD symbols receive an exponential multiplier on top of the base payout.\n4. **Scatter detection** — SCATTER symbols anywhere on the grid are counted regardless of payline position.\n5. **Free-spin award** — sufficient scatter count triggers an award of free spins tracked in the result.\n6. **Jackpot check** — a qualifying reel pattern activates the progressive jackpot flag.\n7. **Payout calculation** — line-win payouts are aggregated and adjusted toward the target 95% RTP.",
+        "content": "1. **Reel generation** — five independent reels of three rows each are populated with weighted-random symbols.\n2. **Payline evaluation** — ten left-to-right paylines are checked for runs of three or more matching symbols (with `WILD` substitution).\n3. **Wild multiplier** — winning lines that include `WILD` symbols receive an exponential multiplier on top of the base payout.\n4. **Scatter detection** — `SCATTER` symbols anywhere on the grid are counted regardless of payline position.\n5. **Free-spin award** — sufficient scatter count triggers an award of free spins tracked in the result.\n6. **Jackpot check** — a qualifying reel pattern activates the progressive jackpot flag.\n7. **Payout calculation** — line-win payouts are aggregated and adjusted toward the target 95% RTP."
+      },
+      {
+        "heading": "Return-to-Player",
+        "embedText": "The engine targets a theoretical **RTP of 95%**. The house edge of 5% is enforced inside computePayout() and applied consistently across all bet sizes.",
+        "content": "The engine targets a theoretical **RTP of 95%**. The house edge of 5% is enforced inside `computePayout()` and applied consistently across all bet sizes."
+      },
+      {
+        "heading": "Scope and Constraints",
+        "embedText": "Valid bets are integers in the range **1–100 coins**. Fractional or out-of-range values cause spin() to throw.",
+        "content": "| In scope | Out of scope |\n|----------|-------------|\n| Spin simulation and outcome calculation | Rendering / display |\n| 10-payline left-to-right evaluation | Persistence or session state |\n| Wild substitution and exponential multipliers | Networking or real-money integration |\n| Scatter-triggered free spins | Sound, animation, or UI assets |\n| Progressive jackpot detection | Configurable RTP targets |\n\nValid bets are integers in the range **1–100 coins**. Fractional or out-of-range values cause `spin()` to throw."
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Installation](02-Installation.md) — prerequisites and install steps\n- [Quick Start](04-Quick-Start.md) — end-to-end tutorial from install to first spin\n- [Public API](../04-API-Reference/01-Public-API.md) — full signature reference for spin() and computePayout()\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — SpinResult, LineWin, Bet, and all exported types\n- [System Overview](../02-Architecture/01-System-Overview.md) — component diagram and module responsibilities\n- [Core Concepts](../02-Architecture/02-Core-Concepts.md) — glossary and key domain definitions",
+        "content": "- [Installation](02-Installation.md) — prerequisites and install steps\n- [Quick Start](04-Quick-Start.md) — end-to-end tutorial from install to first spin\n- [Public API](../04-API-Reference/01-Public-API.md) — full signature reference for `spin()` and `computePayout()`\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — `SpinResult`, `LineWin`, `Bet`, and all exported types\n- [System Overview](../02-Architecture/01-System-Overview.md) — component diagram and module responsibilities\n- [Core Concepts](../02-Architecture/02-Core-Concepts.md) — glossary and key domain definitions"
+      }
+    ]
+  },
+  ".anatoly/docs/01-Getting-Started/02-Installation.md": {
+    "sha": "c669952630c194fd6df6689ba0d2b6c1e4d3ba80efe5d24e7ce09826401cd499",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "slot-engine is distributed as a TypeScript-native package with no runtime dependencies. Installation requires only Node.js and npm. The package exposes its entry point directly as a TypeScript source file (src/index.ts), so a TypeScript-aware runtime or build pipeline is needed to consume it.",
+        "content": "slot-engine is distributed as a TypeScript-native package with no runtime dependencies. Installation requires only Node.js and npm. The package exposes its entry point directly as a TypeScript source file (`src/index.ts`), so a TypeScript-aware runtime or build pipeline is needed to consume it."
+      },
+      {
+        "heading": "Prerequisites",
+        "embedText": "No external services, databases, or environment variables are required.",
+        "content": "| Requirement | Minimum version | Notes |\n|-------------|-----------------|-------|\n| Node.js | 18.x or later | ESM support required (`\"type\": \"module\"`) |\n| npm | 8.x or later | Bundled with Node.js 18+ |\n| TypeScript | 5.6.x | Listed as a `devDependency` |\n\nNo external services, databases, or environment variables are required."
+      },
+      {
+        "heading": "Install",
+        "embedText": "Run the following command in your project directory:\n\nTo install within the repository itself (for local development or to run examples directly):\n\nThis installs the two declared development dependencies:",
+        "content": "Run the following command in your project directory:\n\n```bash\nnpm install slot-engine\n```\n\nTo install within the repository itself (for local development or to run examples directly):\n\n```bash\nnpm install\n```\n\nThis installs the two declared development dependencies:\n\n| Package | Version | Purpose |\n|---------|---------|---------|\n| `typescript` | `^5.6.3` | Type checking and compilation |\n| `tsx` | `^4.19.2` | Execute TypeScript files directly via Node.js |"
+      },
+      {
+        "heading": "Verify the Installation",
+        "embedText": "After installing, confirm that the TypeScript compiler resolves the package without errors:\n\nA successful run produces no output and exits with code 0.\n\nTo run a TypeScript file that imports slot-engine directly (without a separate compile step), use tsx:",
+        "content": "After installing, confirm that the TypeScript compiler resolves the package without errors:\n\n```bash\nnpx tsc --noEmit\n```\n\nA successful run produces no output and exits with code `0`.\n\nTo run a TypeScript file that imports slot-engine directly (without a separate compile step), use `tsx`:\n\n```bash\nnpx tsx my-script.ts\n```"
+      },
+      {
+        "heading": "First Import",
+        "embedText": "Once installed, import the spin function from the package entry point:\n\nThe main field in package.json points to src/index.ts. Consumers using a bundler with TypeScript support (e.g., tsx, ts-node, esbuild) can import the package directly without a separate compilation step.",
+        "content": "Once installed, import the `spin` function from the package entry point:\n\n```typescript\nimport { spin } from \"slot-engine\";\n\nconst result = spin(10);\nconsole.log(result.totalPayout);\n```\n\nThe `main` field in `package.json` points to `src/index.ts`. Consumers using a bundler with TypeScript support (e.g., `tsx`, `ts-node`, `esbuild`) can import the package directly without a separate compilation step."
+      },
+      {
+        "heading": "TypeScript Configuration",
+        "embedText": "The repository ships a tsconfig.json with the following key settings relevant to consumers:\n\nmoduleResolution: \"Bundler\" is required to resolve the src/index.ts entry point. Consumers using \"moduleResolution\": \"Node\" or \"Node16\" may need to adjust their own tsconfig.json accordingly.",
+        "content": "The repository ships a `tsconfig.json` with the following key settings relevant to consumers:\n\n```json\n{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"ESNext\",\n    \"moduleResolution\": \"Bundler\",\n    \"strict\": true,\n    \"esModuleInterop\": true,\n    \"isolatedModules\": true,\n    \"noEmit\": true\n  }\n}\n```\n\n`moduleResolution: \"Bundler\"` is required to resolve the `src/index.ts` entry point. Consumers using `\"moduleResolution\": \"Node\"` or `\"Node16\"` may need to adjust their own `tsconfig.json` accordingly."
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Overview](01-Getting-Started/01-Overview.md) — What slot-engine does and why it exists\n- [Quick Start](01-Getting-Started/04-Quick-Start.md) — End-to-end tutorial from install to first spin result\n- [Build and Test](05-Development/02-Build-and-Test.md) — Running the build, type-checker, and tests locally\n- [Public API](04-API-Reference/01-Public-API.md) — Full reference for spin and the SpinResult type",
+        "content": "- [Overview](01-Getting-Started/01-Overview.md) — What slot-engine does and why it exists\n- [Quick Start](01-Getting-Started/04-Quick-Start.md) — End-to-end tutorial from install to first spin result\n- [Build and Test](05-Development/02-Build-and-Test.md) — Running the build, type-checker, and tests locally\n- [Public API](04-API-Reference/01-Public-API.md) — Full reference for `spin` and the `SpinResult` type"
+      }
+    ]
+  },
+  ".anatoly/docs/01-Getting-Started/03-Configuration.md": {
+    "sha": "36a5401c17dc5c894c6ffc613815c179d2b6c56277ebaadc462916a447cc4c55",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "slot-engine is a self-contained library with no external configuration files, no environment variables, and no CLI flags. All behaviour is controlled by compile-time constants embedded in the source modules. The sections below enumerate every constant, along with the SpinStrategy extension point that callers can use to post-process payout results at runtime.",
+        "content": "slot-engine is a self-contained library with no external configuration files, no environment variables, and no CLI flags. All behaviour is controlled by compile-time constants embedded in the source modules. The sections below enumerate every constant, along with the `SpinStrategy` extension point that callers can use to post-process payout results at runtime.\n\n<!-- Note: docs may be outdated — verified against source. The README references `simulate()`, but the source exports `spin()`. This page uses the authoritative source name. -->"
+      },
+      {
+        "heading": "Engine Constants",
+        "embedText": "The following constants are defined in src/engine.ts and apply to every call to spin().",
+        "content": "The following constants are defined in `src/engine.ts` and apply to every call to `spin()`.\n\n| Constant | Value | Effect |\n|---|---|---|\n| `HOUSE_EDGE` | `0.05` | Winning line payouts are multiplied by `1 + 0.05 = 1.05` before the house edge is applied to keep the long-run RTP at 95 %. |\n| `DEBUG_MODE` | `false` | When `true`, each spin logs raw reel state and payout to `console.log`. |\n| Payline count | `10` | The engine always evaluates all ten fixed paylines. |\n| Bet distributed | `bet / 10` | Each payline receives an equal share of the total bet (`lineBet = bet / 10`). |"
+      },
+      {
+        "heading": "Symbol Weights",
+        "embedText": "Reel composition is configured in src/reels.ts via DEFAULT_WEIGHTS. All five reels share identical weights, giving a total weight of 120 per reel.",
+        "content": "Reel composition is configured in `src/reels.ts` via `DEFAULT_WEIGHTS`. All five reels share identical weights, giving a total weight of 120 per reel.\n\n| Symbol | Weight | Approx. frequency |\n|---|---|---|\n| `CHERRY` | 25 | 20.8 % |\n| `LEMON` | 25 | 20.8 % |\n| `DIAMOND` | 30 | 25.0 % |\n| `BELL` | 15 | 12.5 % |\n| `BAR` | 10 | 8.3 % |\n| `SEVEN` | 5 | 4.2 % |\n| `WILD` | 5 | 4.2 % |\n| `SCATTER` | 5 | 4.2 % |"
+      },
+      {
+        "heading": "Pay Table",
+        "embedText": "Base multipliers are defined in src/paytable.ts. The per-line payout is multiplier × lineBet where lineBet = bet / 10.\n\nWILD and SCATTER have no base multiplier. WILD instead amplifies the payout of the line it completes (see Wild Multiplier below).",
+        "content": "Base multipliers are defined in `src/paytable.ts`. The per-line payout is `multiplier × lineBet` where `lineBet = bet / 10`.\n\n| Symbol | 3-of-a-kind | 4-of-a-kind | 5-of-a-kind |\n|---|---|---|---|\n| `CHERRY` | 2 | 5 | 25 |\n| `LEMON` | 2 | 5 | 25 |\n| `BELL` | 5 | 20 | 100 |\n| `BAR` | 10 | 40 | 200 |\n| `SEVEN` | 25 | 100 | 500 |\n| `DIAMOND` | 50 | 250 | 1 000 |\n\n`WILD` and `SCATTER` have no base multiplier. `WILD` instead amplifies the payout of the line it completes (see Wild Multiplier below)."
+      },
+      {
+        "heading": "Bonus Feature Thresholds",
+        "embedText": "These values are hardcoded in their respective source modules and are not overridable at runtime.",
+        "content": "These values are hardcoded in their respective source modules and are not overridable at runtime."
+      },
+      {
+        "heading": "Bonus Feature Thresholds — Wild Multiplier (`src/wild.ts`)",
+        "embedText": "When one or more WILD symbols appear in a winning run, the line payout is scaled by:",
+        "content": "When one or more `WILD` symbols appear in a winning run, the line payout is scaled by:\n\n```\nbasePayout × (1 + wildCount) × 2^wildCount\n```\n\n| Wilds in run | Scale factor |\n|---|---|\n| 1 | ×4 |\n| 2 | ×12 |\n| 3 | ×32 |"
+      },
+      {
+        "heading": "Payline Layout",
+        "embedText": "Ten left-to-right paylines are fixed in src/engine.ts. Each entry is a row index (0 = top, 1 = middle, 2 = bottom) for reels 1–5.",
+        "content": "Ten left-to-right paylines are fixed in `src/engine.ts`. Each entry is a row index (0 = top, 1 = middle, 2 = bottom) for reels 1–5.\n\n```typescript\nconst PAYLINES: number[][] = [\n  [1, 1, 1, 1, 1],  // 0 – centre horizontal\n  [0, 0, 0, 0, 0],  // 1 – top horizontal\n  [2, 2, 2, 2, 2],  // 2 – bottom horizontal\n  [0, 1, 2, 1, 0],  // 3 – V-shape downward\n  [2, 1, 0, 1, 2],  // 4 – V-shape upward\n  [0, 0, 1, 2, 2],  // 5 – diagonal right\n  [2, 2, 1, 0, 0],  // 6 – diagonal left\n  [1, 0, 1, 2, 1],  // 7 – zigzag A\n  [1, 2, 1, 0, 1],  // 8 – zigzag B\n  [0, 1, 0, 1, 0],  // 9 – alternating top-mid\n];\n```"
+      },
+      {
+        "heading": "Payout Strategy",
+        "embedText": "src/strategy.ts exposes the SpinStrategy extension point. The engine internally applies DefaultStrategy, which returns results unmodified. ConservativeStrategy reduces totalPayout to 80 % of the computed value.",
+        "content": "`src/strategy.ts` exposes the `SpinStrategy` extension point. The engine internally applies `DefaultStrategy`, which returns results unmodified. `ConservativeStrategy` reduces `totalPayout` to 80 % of the computed value.\n\n```typescript\nimport type { SpinResult } from \"slot-engine\";\nimport { SpinStrategy } from \"./src/strategy.js\";\n\nclass HighVolatilityStrategy extends SpinStrategy {\n  adjustPayout(result: SpinResult): SpinResult {\n    // Double every payout — for simulation/testing only.\n    return { ...result, totalPayout: result.totalPayout * 2 };\n  }\n}\n```\n\n> **Note:** `spin()` always instantiates `DefaultStrategy` internally. To apply a custom strategy, wrap the return value of `spin()` manually using `strategy.adjustPayout(result)`."
+      },
+      {
+        "heading": "TypeScript Compiler Settings",
+        "embedText": "tsconfig.json controls how the project is compiled. No build output is emitted (noEmit: true); type-checking is the sole purpose of the build script.\n\nKey implications for consumers:\n\n- strict: true — all engine types are strict-null-safe.\n- isolatedModules: true — each file must be independently transpilable; type-only re-exports require the type keyword.\n- moduleResolution: \"Bundler\" — import specifiers in source use .js extensions even for .ts files.",
+        "content": "`tsconfig.json` controls how the project is compiled. No build output is emitted (`noEmit: true`); type-checking is the sole purpose of the build script.\n\n```json\n{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"ESNext\",\n    \"moduleResolution\": \"Bundler\",\n    \"strict\": true,\n    \"esModuleInterop\": true,\n    \"skipLibCheck\": true,\n    \"forceConsistentCasingInFileNames\": true,\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"noEmit\": true\n  },\n  \"include\": [\"src/**/*\"]\n}\n```\n\nKey implications for consumers:\n\n- `strict: true` — all engine types are strict-null-safe.\n- `isolatedModules: true` — each file must be independently transpilable; type-only re-exports require the `type` keyword.\n- `moduleResolution: \"Bundler\"` — import specifiers in source use `.js` extensions even for `.ts` files."
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Quick Start](01-Getting-Started/04-Quick-Start.md) — end-to-end usage walkthrough\n- [Public API](04-API-Reference/01-Public-API.md) — spin() signature and return type\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — SpinResult, LineWin, FreeSpinState, Symbol\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — glossary of domain terms (payline, wild, scatter, RTP)\n- [Build and Test](05-Development/02-Build-and-Test.md) — running tsc --noEmit",
+        "content": "- [Quick Start](01-Getting-Started/04-Quick-Start.md) — end-to-end usage walkthrough\n- [Public API](04-API-Reference/01-Public-API.md) — `spin()` signature and return type\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — `SpinResult`, `LineWin`, `FreeSpinState`, `Symbol`\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — glossary of domain terms (payline, wild, scatter, RTP)\n- [Build and Test](05-Development/02-Build-and-Test.md) — running `tsc --noEmit`"
+      }
+    ]
+  },
+  ".anatoly/docs/01-Getting-Started/04-Quick-Start.md": {
+    "sha": "9a78ccc67bb2c3acb9b2bdb46cbf0124f53969de864c1bca16e483ecbc7479e0",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "This guide covers installing the package, calling spin() with a bet amount, and interpreting every field of the returned SpinResult. No external services or configuration files are required — the engine is pure game logic that runs entirely in-process.",
+        "content": "This guide covers installing the package, calling `spin()` with a bet amount, and interpreting every field of the returned `SpinResult`. No external services or configuration files are required — the engine is pure game logic that runs entirely in-process.\n\n<!-- Note: docs may be outdated — verified against source. The README shows `simulate` as the entry point; the actual export is `spin`. -->"
+      },
+      {
+        "heading": "Prerequisites",
+        "embedText": "- **Node.js** — any version that supports ES modules and TypeScript compilation via tsc.\n- **npm** — bundled with Node.js.",
+        "content": "- **Node.js** — any version that supports ES modules and TypeScript compilation via `tsc`.\n- **npm** — bundled with Node.js."
+      },
+      {
+        "heading": "Step 2 — Run Your First Spin",
+        "embedText": "Import spin and pass an integer bet between 1 and 100 coins (inclusive).\n\nspin() is synchronous and returns a fully resolved SpinResult immediately.",
+        "content": "Import `spin` and pass an integer bet between 1 and 100 coins (inclusive).\n\n```typescript\nimport { spin } from \"slot-engine\";\n\nconst result = spin(10); // 10-coin bet\n\nconsole.log(\"Total payout:\", result.totalPayout);\nconsole.log(\"Jackpot hit:\", result.jackpotHit);\nconsole.log(\"Free spins awarded:\", result.freeSpinsAwarded);\n```\n\n`spin()` is synchronous and returns a fully resolved `SpinResult` immediately."
+      },
+      {
+        "heading": "Step 3 — Inspect the Result",
+        "embedText": "SpinResult exposes the complete outcome of a single spin:",
+        "content": "`SpinResult` exposes the complete outcome of a single spin:\n\n| Field | Type | Description |\n|---|---|---|\n| `reels` | `ReadonlyArray<ReadonlyArray<Symbol>>` | 5-column × 3-row grid of symbols produced by this spin. |\n| `lineWins` | `ReadonlyArray<LineWin>` | Each evaluated payline that produced a win. |\n| `wildMultiplier` | `number` | Highest wild multiplier applied across all winning lines; `1` when no wilds contributed. |\n| `scatterCount` | `number` | Total `SCATTER` symbols visible across all reels. |\n| `freeSpinsAwarded` | `number` | Number of free spins triggered (`0` when the scatter threshold was not met). |\n| `jackpotHit` | `boolean` | `true` when the progressive jackpot condition was satisfied. |\n| `totalPayout` | `number` | Coin payout after applying line wins, wild multipliers, and the house edge. |"
+      },
+      {
+        "heading": "Step 4 — Iterate Over Winning Lines",
+        "embedText": "Each entry in lineWins is a LineWin object describing an individual payline win:",
+        "content": "Each entry in `lineWins` is a `LineWin` object describing an individual payline win:\n\n```typescript\nimport { spin, type SpinResult, type LineWin } from \"slot-engine\";\n\nconst result: SpinResult = spin(25);\n\nfor (const win of result.lineWins) {\n  console.log(\n    `Line ${win.lineIndex}: ${win.count}× ${win.symbol} → ${win.payout} coins`\n  );\n}\n```"
+      },
+      {
+        "heading": "Step 6 — Verify the Build",
+        "embedText": "This runs tsc --noEmit to type-check the project without emitting output files. A clean exit confirms the source compiles correctly.",
+        "content": "```bash\nnpm run build\n```\n\nThis runs `tsc --noEmit` to type-check the project without emitting output files. A clean exit confirms the source compiles correctly."
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Overview](01-Getting-Started/01-Overview.md) — What the engine does and its design goals.\n- [Installation](01-Getting-Started/02-Installation.md) — Detailed install options and prerequisites.\n- [Public API](04-API-Reference/01-Public-API.md) — Full reference for spin() including error behaviour and bet validation.\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — Complete definitions for SpinResult, LineWin, Symbol, and Bet.\n- [Common Workflows](03-Guides/01-Common-Workflows.md) — Step-by-step guides for frequent use cases such as batch simulation and RTP analysis.",
+        "content": "- [Overview](01-Getting-Started/01-Overview.md) — What the engine does and its design goals.\n- [Installation](01-Getting-Started/02-Installation.md) — Detailed install options and prerequisites.\n- [Public API](04-API-Reference/01-Public-API.md) — Full reference for `spin()` including error behaviour and bet validation.\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — Complete definitions for `SpinResult`, `LineWin`, `Symbol`, and `Bet`.\n- [Common Workflows](03-Guides/01-Common-Workflows.md) — Step-by-step guides for frequent use cases such as batch simulation and RTP analysis."
+      }
+    ]
+  },
+  ".anatoly/docs/02-Architecture/01-System-Overview.md": {
+    "sha": "23633785a9de9dd5083112e4c662ea3be8188034ed8c53cdbc828880c84ca57c",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "slot-engine is composed of thirteen focused TypeScript modules wired together by engine.ts, which orchestrates one full spin per call to spin(). The library follows standard object-oriented design patterns — a lightweight dependency-injection container, a factory for reel construction, a strategy for payout adjustment, and a pub-sub event emitter for spin lifecycle hooks — all layered on top of a shared type contract defined in types.ts.\n\nFor a feature-level description of what the engine does during a spin, see [Overview](../01-Getting-Started/01-Overview.md).",
+        "content": "`slot-engine` is composed of thirteen focused TypeScript modules wired together by `engine.ts`, which orchestrates one full spin per call to `spin()`. The library follows standard object-oriented design patterns — a lightweight dependency-injection container, a factory for reel construction, a strategy for payout adjustment, and a pub-sub event emitter for spin lifecycle hooks — all layered on top of a shared type contract defined in `types.ts`.\n\nFor a feature-level description of what the engine does during a spin, see [Overview](../01-Getting-Started/01-Overview.md)."
+      },
+      {
+        "heading": "Module Map",
+        "embedText": "The diagram below shows the compile-time import graph. Arrows point from importer to imported module.\n\ntypes.ts is the dependency root — eight modules import from it. wild.ts is a standalone utility with no imports; it is called directly by engine.ts but is not shown in the graph above because it is not imported as a module dependency in the current implementation.",
+        "content": "The diagram below shows the compile-time import graph. Arrows point from importer to imported module.\n\n```mermaid\nflowchart TD\n    idx[\"index.ts\\n(public entry point)\"]\n    eng[\"engine.ts\\n(spin orchestrator)\"]\n    typ[\"types.ts\\n(shared type contract)\"]\n    rng[\"rng.ts\\n(weighted RNG)\"]\n    rel[\"reels.ts\\n(symbol catalog + reel spin)\"]\n    pay[\"paytable.ts\\n(multipliers + RTP constant)\"]\n    wld[\"wild.ts\\n(wild multiplier)\"]\n    fsp[\"freespin.ts\\n(scatter detection)\"]\n    jkp[\"jackpot.ts\\n(jackpot detection)\"]\n    fac[\"factories.ts\\n(reel builder factory)\"]\n    str[\"strategy.ts\\n(payout strategy)\"]\n    evt[\"events.ts\\n(event emitter)\"]\n    leg[\"legacy.ts\\n(legacy payout)\"]\n\n    idx --> eng\n    eng --> typ\n    eng --> rng\n    eng --> rel\n    eng --> pay\n    eng --> fsp\n    eng --> jkp\n    eng --> fac\n    eng --> str\n    eng --> evt\n    rel --> typ\n    pay --> typ\n    fsp --> typ\n    jkp --> typ\n    fac --> typ\n    fac --> rel\n    str --> typ\n    leg --> typ\n    leg --> pay\n```\n\n`types.ts` is the dependency root — eight modules import from it. `wild.ts` is a standalone utility with no imports; it is called directly by `engine.ts` but is not shown in the graph above because it is not imported as a module dependency in the current implementation."
+      },
+      {
+        "heading": "Architectural Patterns — Dependency Injection — `EngineContainer`",
+        "embedText": "engine.ts exposes a minimal DI registry with register(key, value) and resolve(key). Internal services (the reel factory, payout strategy, and event emitter) are registered at module initialisation and resolved by spin() at call time. This allows test code or advanced integrators to substitute implementations without modifying engine.ts.",
+        "content": "`engine.ts` exposes a minimal DI registry with `register(key, value)` and `resolve<T>(key)`. Internal services (the reel factory, payout strategy, and event emitter) are registered at module initialisation and resolved by `spin()` at call time. This allows test code or advanced integrators to substitute implementations without modifying `engine.ts`."
+      },
+      {
+        "heading": "Architectural Patterns — Factory — `AbstractReelBuilderFactory`",
+        "embedText": "Reel construction is isolated behind an abstract factory. StandardReelBuilderFactory implements buildReels(reelCount, rowCount) by delegating to spinReel for each reel index. A custom factory can be registered with EngineContainer to produce deterministic grids for testing.",
+        "content": "Reel construction is isolated behind an abstract factory. `StandardReelBuilderFactory` implements `buildReels(reelCount, rowCount)` by delegating to `spinReel` for each reel index. A custom factory can be registered with `EngineContainer` to produce deterministic grids for testing."
+      },
+      {
+        "heading": "Architectural Patterns — Strategy — `SpinStrategy`",
+        "embedText": "Post-calculation payout adjustment is encapsulated in a strategy object. DefaultStrategy is a pass-through. ConservativeStrategy multiplies the payout by 0.8. engine.ts resolves the active strategy from EngineContainer and applies it as the final step before returning.",
+        "content": "Post-calculation payout adjustment is encapsulated in a strategy object. `DefaultStrategy` is a pass-through. `ConservativeStrategy` multiplies the payout by `0.8`. `engine.ts` resolves the active strategy from `EngineContainer` and applies it as the final step before returning."
+      },
+      {
+        "heading": "Architectural Patterns — Pub-Sub — `SpinEventEmitter`",
+        "embedText": "events.ts provides a typed event emitter. engine.ts emits SPIN_DONE with the completed SpinResult at the end of every spin. Consumers that require post-spin hooks (logging, analytics, free-spin chaining) should subscribe via SpinEventEmitter rather than wrapping spin().",
+        "content": "`events.ts` provides a typed event emitter. `engine.ts` emits `SPIN_DONE` with the completed `SpinResult` at the end of every spin. Consumers that require post-spin hooks (logging, analytics, free-spin chaining) should subscribe via `SpinEventEmitter` rather than wrapping `spin()`."
+      },
+      {
+        "heading": "Examples",
+        "embedText": "The following example shows a single spin and maps each field of SpinResult back to the module that produced it:\n\nRunning many spins and summing payouts should converge on approximately 95% of total coins wagered, reflecting the ANCIENT_RTP = 0.95 constant in paytable.ts.",
+        "content": "The following example shows a single spin and maps each field of `SpinResult` back to the module that produced it:\n\n```typescript\nimport { spin } from \"slot-engine\";\n\nconst result = spin(25); // 25-coin bet\n\n// Produced by factories.ts + reels.ts via spinReel()\nconsole.log(\"Grid (5 reels × 3 rows):\", result.reels);\n\n// Produced by paytable.ts lineWins() evaluated over PAYLINES\nconsole.log(\"Payline wins:\", result.lineWins);\n// e.g. [{ lineIndex: 2, symbol: \"BELL\", count: 4, payout: 250 }]\n\n// Produced by wild.ts applyWildBonus()\nconsole.log(\"Wild multiplier applied:\", result.wildMultiplier);\n\n// Produced by freespin.ts detectScatters()\nconsole.log(\"Scatter symbols on grid:\", result.scatterCount);\n\n// Produced by freespin.ts handleFreeSpins()\nconsole.log(\"Free spins awarded:\", result.freeSpinsAwarded);\n\n// Produced by jackpot.ts isJackpotHit()\nconsole.log(\"Jackpot triggered:\", result.jackpotHit);\n\n// Produced by engine.ts computePayout() after strategy.ts adjustment\nconsole.log(\"Total payout (coins):\", result.totalPayout);\n```\n\nRunning many spins and summing payouts should converge on approximately 95% of total coins wagered, reflecting the `ANCIENT_RTP = 0.95` constant in `paytable.ts`.\n\n```typescript\nimport { spin } from \"slot-engine\";\n\nconst BET = 10;\nconst ROUNDS = 100_000;\nlet totalWagered = 0;\nlet totalReturned = 0;\n\nfor (let i = 0; i < ROUNDS; i++) {\n  totalWagered += BET;\n  totalReturned += spin(BET).totalPayout;\n}\n\nconst empiricalRTP = totalReturned / totalWagered;\nconsole.log(`Empirical RTP after ${ROUNDS} spins: ${(empiricalRTP * 100).toFixed(2)}%`);\n// Expected: approximately 95.00%\n```"
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Core Concepts](02-Core-Concepts.md) — glossary of domain terms (payline, scatter, wild, RTP)\n- [Data Flow](03-Data-Flow.md) — step-by-step trace of data through a single spin() call\n- [Design Decisions](04-Design-Decisions.md) — rationale for the factory, strategy, and DI patterns\n- [Public API](../04-API-Reference/01-Public-API.md) — full signature reference for spin() and computePayout()\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — SpinResult, LineWin, FreeSpinState, and all exported types\n- [Source Tree](../05-Development/01-Source-Tree.md) — annotated listing of every file under src/",
+        "content": "- [Core Concepts](02-Core-Concepts.md) — glossary of domain terms (payline, scatter, wild, RTP)\n- [Data Flow](03-Data-Flow.md) — step-by-step trace of data through a single `spin()` call\n- [Design Decisions](04-Design-Decisions.md) — rationale for the factory, strategy, and DI patterns\n- [Public API](../04-API-Reference/01-Public-API.md) — full signature reference for `spin()` and `computePayout()`\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — `SpinResult`, `LineWin`, `FreeSpinState`, and all exported types\n- [Source Tree](../05-Development/01-Source-Tree.md) — annotated listing of every file under `src/`"
+      }
+    ]
+  },
+  ".anatoly/docs/02-Architecture/02-Core-Concepts.md": {
+    "sha": "e44730ef856b4ae9e036dd9533bb40357fd3f06a1117113c66d6f0d68a559707",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "slot-engine models a classic 5-reel, 3-row video slot machine. Understanding the domain vocabulary is essential before reading the architecture, data-flow, or API reference pages. Every term defined here maps directly to a type, constant, or function in the source code.",
+        "content": "slot-engine models a classic 5-reel, 3-row video slot machine. Understanding the domain vocabulary is essential before reading the architecture, data-flow, or API reference pages. Every term defined here maps directly to a type, constant, or function in the source code."
+      },
+      {
+        "heading": "Symbol",
+        "embedText": "A Symbol is the atomic unit displayed in each cell of the grid. The engine defines exactly eight symbols:\n\nWeights control how often each symbol appears on a reel stop. All five reels share the same default weight profile (DEFAULT_WEIGHTS in src/reels.ts).",
+        "content": "A `Symbol` is the atomic unit displayed in each cell of the grid. The engine defines exactly eight symbols:\n\n| Symbol    | Role                  | Relative Weight |\n|-----------|-----------------------|-----------------|\n| `CHERRY`  | Low-value regular     | 25              |\n| `LEMON`   | Low-value regular     | 25              |\n| `BELL`    | Mid-value regular     | 15              |\n| `BAR`     | Mid-value regular     | 10              |\n| `SEVEN`   | High-value regular    | 5               |\n| `DIAMOND` | Premium / jackpot key | 30              |\n| `WILD`    | Substitutes + boosts  | 5               |\n| `SCATTER` | Triggers free spins   | 5               |\n\nWeights control how often each symbol appears on a reel stop. All five reels share the same default weight profile (`DEFAULT_WEIGHTS` in `src/reels.ts`).\n\n```typescript\n// src/types.ts\nexport type Symbol =\n  | \"CHERRY\" | \"LEMON\" | \"BELL\" | \"BAR\"\n  | \"SEVEN\"  | \"DIAMOND\" | \"WILD\" | \"SCATTER\";\n```"
+      },
+      {
+        "heading": "Reel and Grid",
+        "embedText": "The engine spins **five vertical reels** (columns), each exposing **three rows**. The visible grid is therefore 5 × 3 = 15 cells. In the SpinResult, the grid is represented as a ReadonlyArray> where the outer index is the column (reel) and the inner index is the row.\n\nEach reel column is produced independently by spinReel(reelIndex) in src/reels.ts, using weighted random selection via weightedPick from src/rng.ts.",
+        "content": "The engine spins **five vertical reels** (columns), each exposing **three rows**. The visible grid is therefore 5 × 3 = 15 cells. In the `SpinResult`, the grid is represented as a `ReadonlyArray<ReadonlyArray<Symbol>>` where the outer index is the column (reel) and the inner index is the row.\n\nEach reel column is produced independently by `spinReel(reelIndex)` in `src/reels.ts`, using weighted random selection via `weightedPick` from `src/rng.ts`."
+      },
+      {
+        "heading": "Payline",
+        "embedText": "A **payline** is a fixed path through the grid, one cell per reel, evaluated left-to-right for matching symbols. The engine defines **ten paylines**, stored as number[][] in src/engine.ts:\n\nThe **line bet** for each payline equals bet / 10 (one tenth of the total bet per line).",
+        "content": "A **payline** is a fixed path through the grid, one cell per reel, evaluated left-to-right for matching symbols. The engine defines **ten paylines**, stored as `number[][]` in `src/engine.ts`:\n\n| Index | Row per reel          | Pattern description |\n|-------|-----------------------|---------------------|\n| 0     | `[1,1,1,1,1]`         | Middle horizontal   |\n| 1     | `[0,0,0,0,0]`         | Top horizontal      |\n| 2     | `[2,2,2,2,2]`         | Bottom horizontal   |\n| 3     | `[0,1,2,1,0]`         | V-shape             |\n| 4     | `[2,1,0,1,2]`         | Inverted V          |\n| 5     | `[0,0,1,2,2]`         | Diagonal down       |\n| 6     | `[2,2,1,0,0]`         | Diagonal up         |\n| 7     | `[1,0,1,2,1]`         | Zigzag              |\n| 8     | `[1,2,1,0,1]`         | Inverse zigzag      |\n| 9     | `[0,1,0,1,0]`         | Step                |\n\nThe **line bet** for each payline equals `bet / 10` (one tenth of the total bet per line)."
+      },
+      {
+        "heading": "Line Win",
+        "embedText": "A LineWin is produced when a payline contains three or more consecutive matching symbols from reel 1 onward. WILD substitutes for any regular symbol. SCATTER does not participate in line wins.\n\nLine detection is implemented in checkLine() and evaluateLine() inside src/engine.ts.",
+        "content": "A `LineWin` is produced when a payline contains three or more consecutive matching symbols from reel 1 onward. `WILD` substitutes for any regular symbol. `SCATTER` does not participate in line wins.\n\n```typescript\n// src/types.ts\nexport interface LineWin {\n  lineIndex: number; // 0–9\n  symbol: Symbol;    // matched symbol (never WILD or SCATTER)\n  count: number;     // 3, 4, or 5\n  payout: number;    // coins awarded for this line\n}\n```\n\nLine detection is implemented in `checkLine()` and `evaluateLine()` inside `src/engine.ts`."
+      },
+      {
+        "heading": "Paytable",
+        "embedText": "The **paytable** maps (symbol, matchCount) pairs to a base multiplier. The multiplier is applied to the line bet to compute the raw line payout before wild bonuses.\n\ngetPayMultiplier(symbol, count) in src/paytable.ts performs the lookup.",
+        "content": "The **paytable** maps `(symbol, matchCount)` pairs to a base multiplier. The multiplier is applied to the line bet to compute the raw line payout before wild bonuses.\n\n| Symbol  | 3-of-a-kind | 4-of-a-kind | 5-of-a-kind |\n|---------|-------------|-------------|-------------|\n| CHERRY  | 2×          | 5×          | 25×         |\n| LEMON   | 2×          | 5×          | 25×         |\n| BELL    | 5×          | 20×         | 100×        |\n| BAR     | 10×         | 40×         | 200×        |\n| SEVEN   | 25×         | 100×        | 500×        |\n| DIAMOND | 50×         | 250×        | 1000×       |\n\n`getPayMultiplier(symbol, count)` in `src/paytable.ts` performs the lookup."
+      },
+      {
+        "heading": "Wild and Wild Multiplier",
+        "embedText": "WILD behaves as a universal substitute. When one or more WILD symbols appear within a winning run, the payout is boosted by the **wild multiplier formula**:\n\nThe wildMultiplier field in SpinResult reports the highest multiplier factor applied across all winning lines in the spin. The standalone applyWildBonus(basePayout, wildCount) utility in src/wild.ts encapsulates the formula.",
+        "content": "`WILD` behaves as a universal substitute. When one or more `WILD` symbols appear within a winning run, the payout is boosted by the **wild multiplier formula**:\n\n```\nboostedPayout = basePayout × (1 + wildCount) × 2^wildCount\n```\n\n| WILDs in run | Multiplier factor |\n|--------------|-------------------|\n| 1            | 2 × 2 = 4×        |\n| 2            | 3 × 4 = 12×       |\n| 3            | 4 × 8 = 32×       |\n\nThe `wildMultiplier` field in `SpinResult` reports the highest multiplier factor applied across all winning lines in the spin. The standalone `applyWildBonus(basePayout, wildCount)` utility in `src/wild.ts` encapsulates the formula."
+      },
+      {
+        "heading": "Scatter and Free Spins",
+        "embedText": "SCATTER symbols are counted across the entire 5 × 3 grid, regardless of payline position. When **three or more** scatters appear, the engine awards **10 free spins**:\n\n- **Retrigger**: if 3+ scatters appear while a free-spin session is already active, another 10 spins are added.\n- The freeSpinsAwarded field in SpinResult carries the number of spins awarded in the current spin.\n\nLogic lives in detectScatters() and handleFreeSpins() in src/freespin.ts, operating on a FreeSpinState record:",
+        "content": "`SCATTER` symbols are counted across the entire 5 × 3 grid, regardless of payline position. When **three or more** scatters appear, the engine awards **10 free spins**:\n\n- **Retrigger**: if 3+ scatters appear while a free-spin session is already active, another 10 spins are added.\n- The `freeSpinsAwarded` field in `SpinResult` carries the number of spins awarded in the current spin.\n\nLogic lives in `detectScatters()` and `handleFreeSpins()` in `src/freespin.ts`, operating on a `FreeSpinState` record:\n\n```typescript\n// src/types.ts\nexport interface FreeSpinState {\n  active: boolean;\n  remaining: number;\n  totalWon: number;\n}\n```"
+      },
+      {
+        "heading": "Progressive Jackpot",
+        "embedText": "The jackpot is triggered when **four or more DIAMOND symbols** appear anywhere in the 5 × 3 grid in a single spin. The jackpotHit boolean in SpinResult signals this condition. Detection is performed by isJackpotHit(reels) in src/jackpot.ts.",
+        "content": "The jackpot is triggered when **four or more `DIAMOND` symbols** appear anywhere in the 5 × 3 grid in a single spin. The `jackpotHit` boolean in `SpinResult` signals this condition. Detection is performed by `isJackpotHit(reels)` in `src/jackpot.ts`."
+      },
+      {
+        "heading": "House Edge and RTP",
+        "embedText": "The engine targets a theoretical **Return-to-Player (RTP) of 95%**, corresponding to a house edge of **5%** (HOUSE_EDGE = 0.05). computePayout() in src/engine.ts applies this edge to the raw line-win total before returning the final coin amount:\n\nThe small bet × 0.01 term ensures a non-zero floor return on every spin.",
+        "content": "The engine targets a theoretical **Return-to-Player (RTP) of 95%**, corresponding to a house edge of **5%** (`HOUSE_EDGE = 0.05`). `computePayout()` in `src/engine.ts` applies this edge to the raw line-win total before returning the final coin amount:\n\n```\nadjustedTotal = rawTotal × (1 + HOUSE_EDGE)   // when rawTotal > 0\nfinalPayout   = ceil(adjustedTotal) + bet × 0.01\n```\n\nThe small `bet × 0.01` term ensures a non-zero floor return on every spin."
+      },
+      {
+        "heading": "Bet",
+        "embedText": "Bet is a plain number type alias representing the total coins wagered per spin. Valid values are **integers in the range 1–100** inclusive. The spin() function throws when the value is non-integer or less than 1, and logs a warning when it exceeds 100.",
+        "content": "`Bet` is a plain `number` type alias representing the total coins wagered per spin. Valid values are **integers in the range 1–100** inclusive. The `spin()` function throws when the value is non-integer or less than 1, and logs a warning when it exceeds 100."
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [System Overview](02-Architecture/01-System-Overview.md) — component diagram showing how these concepts map to source modules\n- [Data Flow](02-Architecture/03-Data-Flow.md) — step-by-step trace of a spin from bet to SpinResult\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — full TypeScript definitions for Symbol, LineWin, FreeSpinState, and SpinResult\n- [Public API](04-API-Reference/01-Public-API.md) — spin() function signature and usage",
+        "content": "- [System Overview](02-Architecture/01-System-Overview.md) — component diagram showing how these concepts map to source modules\n- [Data Flow](02-Architecture/03-Data-Flow.md) — step-by-step trace of a spin from `bet` to `SpinResult`\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — full TypeScript definitions for `Symbol`, `LineWin`, `FreeSpinState`, and `SpinResult`\n- [Public API](04-API-Reference/01-Public-API.md) — `spin()` function signature and usage"
+      }
+    ]
+  },
+  ".anatoly/docs/02-Architecture/03-Data-Flow.md": {
+    "sha": "531eef9722724c7e6e42250ce33f9e59e5735fbe88739d96bcf2c8fa39ee6695",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "When spin(bet) is called, the engine executes a deterministic sequence of six stages: input validation, reel construction, payline evaluation, bonus detection, payout calculation, and result assembly. Each stage is handled by a dedicated module; data passes forward as plain TypeScript values — no shared mutable state, no I/O. Understanding this pipeline is essential for reasoning about RTP, win frequency, and the contribution of wilds, scatters, and the jackpot.",
+        "content": "When `spin(bet)` is called, the engine executes a deterministic sequence of six stages: input validation, reel construction, payline evaluation, bonus detection, payout calculation, and result assembly. Each stage is handled by a dedicated module; data passes forward as plain TypeScript values — no shared mutable state, no I/O. Understanding this pipeline is essential for reasoning about RTP, win frequency, and the contribution of wilds, scatters, and the jackpot."
+      },
+      {
+        "heading": "Pipeline Stages",
+        "embedText": "The full pipeline is illustrated below, followed by per-stage detail.",
+        "content": "The full pipeline is illustrated below, followed by per-stage detail.\n\n```mermaid\nflowchart TD\n    A([spin bet]) --> B[Validate bet\\n1–100 integer]\n    B --> C[StandardReelBuilderFactory\\nbuildReels 5 × 3]\n    C --> D[spinReel × 5\\nweightedPick × 15]\n    D --> E{Reel grid\\nSymbol 5×3}\n    E --> F[evaluateLine × 10\\ngetPayMultiplier]\n    E --> G[detectScatters\\nhandleFreeSpins]\n    E --> H[isJackpotHit]\n    F --> I[computePayout\\nhouse edge + bonus]\n    F --> J[wildMultiplier\\nmax across wins]\n    I & J & G & H --> K[SpinResult]\n    K --> L[DefaultStrategy\\nadjustPayout]\n    L --> M[SpinEventEmitter\\nemit SPIN_DONE]\n    M --> N([return SpinResult])\n```"
+      },
+      {
+        "heading": "Pipeline Stages — Stage 1 — Input Validation (`engine.ts`)",
+        "embedText": "spin() rejects any bet that is not a positive integer in the range 1–100. A warning is logged when the bet exceeds 100, but execution continues.",
+        "content": "`spin()` rejects any bet that is not a positive integer in the range 1–100. A warning is logged when the bet exceeds 100, but execution continues.\n\n```typescript\nspin(0);    // throws \"invalid bet\"\nspin(1.5);  // throws \"invalid bet\"\nspin(101);  // console.warn, continues\n```"
+      },
+      {
+        "heading": "Pipeline Stages — Stage 2 — Reel Construction (`factories.ts`, `reels.ts`, `rng.ts`)",
+        "embedText": "StandardReelBuilderFactory.buildReels(5, 3) calls spinReel(i) once for each of the five reel columns. Each call invokes pickFromWeighted three times — once per row — against the column's weight table.\n\n**Symbol weights (identical for all five reels):**\n\nThe result is a Symbol[][] — five columns, three rows — held in reels.",
+        "content": "`StandardReelBuilderFactory.buildReels(5, 3)` calls `spinReel(i)` once for each of the five reel columns. Each call invokes `pickFromWeighted` three times — once per row — against the column's weight table.\n\n**Symbol weights (identical for all five reels):**\n\n| Symbol  | Weight | Approx. frequency |\n|---------|--------|-------------------|\n| DIAMOND | 30     | 25.0 %            |\n| CHERRY  | 25     | 20.8 %            |\n| LEMON   | 25     | 20.8 %            |\n| BELL    | 15     | 12.5 %            |\n| BAR     | 10     | 8.3 %             |\n| SEVEN   | 5      | 4.2 %             |\n| WILD    | 5      | 4.2 %             |\n| SCATTER | 5      | 4.2 %             |\n\nThe result is a `Symbol[][]` — five columns, three rows — held in `reels`."
+      },
+      {
+        "heading": "Pipeline Stages — Stage 3 — Payline Evaluation (`engine.ts`, `paytable.ts`)",
+        "embedText": "The engine defines ten hardcoded paylines, each a five-element row-index array mapping column → row:\nFor each payline, evaluateLine() reads five symbols from the grid and calls checkLine():\n- The **lead symbol** is determined: if column 0 holds a WILD, the first non-WILD symbol becomes the lead.\n- A consecutive run is counted left-to-right; WILDs extend the run as any symbol.\n- A run of fewer than three produces no win.\nWhen a run of three or more is found, getPayMultiplier(symbol, count) looks up the base multiplier and the line bet (bet / 10) is applied:\n**Paytable multipliers:**",
+        "content": "The engine defines ten hardcoded paylines, each a five-element row-index array mapping column → row:\n\n```typescript\nconst PAYLINES: number[][] = [\n  [1, 1, 1, 1, 1],  // middle row\n  [0, 0, 0, 0, 0],  // top row\n  [2, 2, 2, 2, 2],  // bottom row\n  [0, 1, 2, 1, 0],  // V shape\n  [2, 1, 0, 1, 2],  // inverted V\n  [0, 0, 1, 2, 2],  // diagonal down\n  [2, 2, 1, 0, 0],  // diagonal up\n  [1, 0, 1, 2, 1],  // zigzag\n  [1, 2, 1, 0, 1],  // zigzag inverted\n  [0, 1, 0, 1, 0],  // skip pattern\n];\n```\n\nFor each payline, `evaluateLine()` reads five symbols from the grid and calls `checkLine()`:\n\n- The **lead symbol** is determined: if column 0 holds a WILD, the first non-WILD symbol becomes the lead.\n- A consecutive run is counted left-to-right; WILDs extend the run as any symbol.\n- A run of fewer than three produces no win.\n\nWhen a run of three or more is found, `getPayMultiplier(symbol, count)` looks up the base multiplier and the line bet (`bet / 10`) is applied:\n\n```\nlineBet = bet / 10\nbasePayout = getPayMultiplier(symbol, run) × lineBet\n```\n\n**Paytable multipliers:**\n\n| Symbol  | 3-of-a-kind | 4-of-a-kind | 5-of-a-kind |\n|---------|-------------|-------------|-------------|\n| CHERRY  | 2           | 5           | 25          |\n| LEMON   | 2           | 5           | 25          |\n| BELL    | 5           | 20          | 100         |\n| BAR     | 10          | 40          | 200         |\n| SEVEN   | 25          | 100         | 500         |\n| DIAMOND | 50          | 250         | 1 000       |"
+      },
+      {
+        "heading": "Pipeline Stages — Stage 3 — Payline Evaluation (`engine.ts`, `paytable.ts`) (cont.)",
+        "embedText": "#### Wild Multiplier (applied inline)\nIf WILDs are present in the winning run, evaluateLine() escalates the payout using the formula from applyWildBonus() in wild.ts:\nThe highest wild-multiplier factor observed across all winning lines is returned as SpinResult.wildMultiplier.",
+        "content": "#### Wild Multiplier (applied inline)\n\nIf WILDs are present in the winning run, `evaluateLine()` escalates the payout using the formula from `applyWildBonus()` in `wild.ts`:\n\n```\npayout = basePayout × (1 + wildCount) × 2^wildCount\n```\n\n| WILDs in run | Multiplier factor |\n|---|---|\n| 1 | × 4  |\n| 2 | × 12 |\n| 3 | × 32 |\n\nThe highest wild-multiplier factor observed across all winning lines is returned as `SpinResult.wildMultiplier`."
+      },
+      {
+        "heading": "Pipeline Stages — Stage 4 — Bonus Detection (`freespin.ts`, `jackpot.ts`)",
+        "embedText": "Both bonus checks scan the entire 5×3 grid independently of paylines.\n**Scatter / free spins (freespin.ts)**\ndetectScatters(reels) counts every cell containing \"SCATTER\". The count is passed to handleFreeSpins(state, scatterCount):\n- 3 or more scatters on a non-active state → state.remaining = 10, state.active = true\n- 3 or more scatters on an already-active state → state.remaining += 10\n- Spin during active state with fewer than 3 scatters → state.remaining--\nSpinResult.freeSpinsAwarded is set to state.remaining after this call.\n**Progressive jackpot (jackpot.ts)**",
+        "content": "Both bonus checks scan the entire 5×3 grid independently of paylines.\n\n**Scatter / free spins (`freespin.ts`)**\n\n`detectScatters(reels)` counts every cell containing `\"SCATTER\"`. The count is passed to `handleFreeSpins(state, scatterCount)`:\n\n- 3 or more scatters on a non-active state → `state.remaining = 10`, `state.active = true`\n- 3 or more scatters on an already-active state → `state.remaining += 10`\n- Spin during active state with fewer than 3 scatters → `state.remaining--`\n\n`SpinResult.freeSpinsAwarded` is set to `state.remaining` after this call.\n\n**Progressive jackpot (`jackpot.ts`)**"
+      },
+      {
+        "heading": "Pipeline Stages — Stage 4 — Bonus Detection (`freespin.ts`, `jackpot.ts`) (cont.)",
+        "embedText": "isJackpotHit(reels) counts \"DIAMOND\" cells. Four or more diamonds anywhere on the grid sets SpinResult.jackpotHit = true.",
+        "content": "`isJackpotHit(reels)` counts `\"DIAMOND\"` cells. Four or more diamonds anywhere on the grid sets `SpinResult.jackpotHit = true`."
+      },
+      {
+        "heading": "Pipeline Stages — Stage 5 — Payout Calculation (`engine.ts`)",
+        "embedText": "computePayout(lineWins, bet) aggregates the line-level payouts and applies the house edge:\n\nThe 5% uplift on gross wins, combined with the base-return floor, targets the 95% theoretical RTP documented in the README.",
+        "content": "`computePayout(lineWins, bet)` aggregates the line-level payouts and applies the house edge:\n\n```\ntotal = Σ lineWin.payout\nif total > 0:\n    total = total × 1.05      // house edge baked in as +5 % on wins\ntotal += bet × 0.01           // minimum return on every spin\nreturn Math.ceil(total)\n```\n\nThe 5% uplift on gross wins, combined with the base-return floor, targets the 95% theoretical RTP documented in the README."
+      },
+      {
+        "heading": "Pipeline Stages — Stage 6 — Result Assembly and Dispatch (`engine.ts`, `strategy.ts`, `events.ts`)",
+        "embedText": "The engine constructs a SpinResult value, then passes it through the strategy and event layers:\n\n1. **DefaultStrategy.adjustPayout(result)** — returns the result unchanged. The ConservativeStrategy alternative (defined in strategy.ts) reduces totalPayout by 20% but is not wired into the default pipeline.\n2. **SpinEventEmitter.emit(SPIN_DONE, finalResult)** — fires the \"spin:done\" event with the finished result. No built-in listeners are registered; consumers may subscribe via emitter.on.",
+        "content": "The engine constructs a `SpinResult` value, then passes it through the strategy and event layers:\n\n1. **`DefaultStrategy.adjustPayout(result)`** — returns the result unchanged. The `ConservativeStrategy` alternative (defined in `strategy.ts`) reduces `totalPayout` by 20% but is not wired into the default pipeline.\n2. **`SpinEventEmitter.emit(SPIN_DONE, finalResult)`** — fires the `\"spin:done\"` event with the finished result. No built-in listeners are registered; consumers may subscribe via `emitter.on`."
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [System Overview](02-Architecture/01-System-Overview.md) — component responsibilities and top-level architecture\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — definitions for Symbol, payline, wild, scatter, and jackpot\n- [Design Decisions](02-Architecture/04-Design-Decisions.md) — rationale behind the pipeline structure and house-edge formula\n- [Public API](04-API-Reference/01-Public-API.md) — spin() signature and return value contract\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — full SpinResult, LineWin, and FreeSpinState definitions",
+        "content": "- [System Overview](02-Architecture/01-System-Overview.md) — component responsibilities and top-level architecture\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — definitions for Symbol, payline, wild, scatter, and jackpot\n- [Design Decisions](02-Architecture/04-Design-Decisions.md) — rationale behind the pipeline structure and house-edge formula\n- [Public API](04-API-Reference/01-Public-API.md) — `spin()` signature and return value contract\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — full `SpinResult`, `LineWin`, and `FreeSpinState` definitions"
+      }
+    ]
+  },
+  ".anatoly/docs/02-Architecture/04-Design-Decisions.md": {
+    "sha": "f610fc1cbca58a01612a4abe56403e8054e2d291b3e52c5dc446c86acc650d09",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "This page records the key design decisions made during the development of slot-engine. Each ADR follows a concise Context → Decision → Rationale → Consequences format. Decisions are tied to specific source modules so the rationale can be verified against the implementation.\n\nFor a component-level view of how these decisions manifest, see [System Overview](01-System-Overview.md). For domain concept definitions referenced below, see [Core Concepts](02-Core-Concepts.md).",
+        "content": "This page records the key design decisions made during the development of `slot-engine`. Each ADR follows a concise Context → Decision → Rationale → Consequences format. Decisions are tied to specific source modules so the rationale can be verified against the implementation.\n\nFor a component-level view of how these decisions manifest, see [System Overview](01-System-Overview.md). For domain concept definitions referenced below, see [Core Concepts](02-Core-Concepts.md).\n\n---"
+      },
+      {
+        "heading": "ADR-001: Dependency Injection via `EngineContainer` — Context",
+        "embedText": "spin() coordinates five independent sub-systems (RNG, paytable, reels, factory, strategy). Hard-coding references to each module makes the pipeline difficult to test in isolation and prevents integrators from substituting alternate implementations.",
+        "content": "`spin()` coordinates five independent sub-systems (RNG, paytable, reels, factory, strategy). Hard-coding references to each module makes the pipeline difficult to test in isolation and prevents integrators from substituting alternate implementations."
+      },
+      {
+        "heading": "ADR-001: Dependency Injection via `EngineContainer` — Decision",
+        "embedText": "A minimal service-locator registry (EngineContainer) is instantiated at module load time. Core services are registered by string key and resolved by spin() at call time:",
+        "content": "A minimal service-locator registry (`EngineContainer`) is instantiated at module load time. Core services are registered by string key and resolved by `spin()` at call time:\n\n```typescript\nconst container = new EngineContainer();\ncontainer.register(\"rng\",      weightedPick);\ncontainer.register(\"paytable\", getPayMultiplier);\ncontainer.register(\"reels\",    { getReelSymbols, getReelWeights });\n```"
+      },
+      {
+        "heading": "ADR-001: Dependency Injection via `EngineContainer` — Rationale",
+        "embedText": "- A full IoC framework would add an external runtime dependency to what is deliberately a zero-dependency library.\n- The string-key registry is sufficient to allow test harnesses to replace the RNG with a deterministic function without modifying engine.ts.\n- register / resolve is the complete public surface — no configuration files, no decorators.",
+        "content": "- A full IoC framework would add an external runtime dependency to what is deliberately a zero-dependency library.\n- The string-key registry is sufficient to allow test harnesses to replace the RNG with a deterministic function without modifying `engine.ts`.\n- `register` / `resolve<T>` is the complete public surface — no configuration files, no decorators."
+      },
+      {
+        "heading": "ADR-001: Dependency Injection via `EngineContainer` — Consequences",
+        "embedText": "- **Positive:** Sub-systems are swappable at runtime without touching the orchestrator.\n- **Negative:** Keys are untyped strings; a misspelled key silently resolves to undefined. No compile-time enforcement of registration completeness.",
+        "content": "- **Positive:** Sub-systems are swappable at runtime without touching the orchestrator.\n- **Negative:** Keys are untyped strings; a misspelled key silently resolves to `undefined`. No compile-time enforcement of registration completeness.\n\n---"
+      },
+      {
+        "heading": "ADR-002: Factory Pattern for Reel Construction",
+        "embedText": "**Module:** src/factories.ts — AbstractReelBuilderFactory, StandardReelBuilderFactory",
+        "content": "**Module:** `src/factories.ts` — `AbstractReelBuilderFactory`, `StandardReelBuilderFactory`"
+      },
+      {
+        "heading": "ADR-002: Factory Pattern for Reel Construction — Context",
+        "embedText": "The five-reel grid must be generated before any payline evaluation. The generation logic (call spinReel for each reel index) is straightforward today, but may need to produce deterministic or seeded grids for replay, certification, or testing.",
+        "content": "The five-reel grid must be generated before any payline evaluation. The generation logic (call `spinReel` for each reel index) is straightforward today, but may need to produce deterministic or seeded grids for replay, certification, or testing."
+      },
+      {
+        "heading": "ADR-002: Factory Pattern for Reel Construction — Decision",
+        "embedText": "Reel construction is placed behind an abstract factory. StandardReelBuilderFactory delegates to spinReel(i) from src/reels.ts:",
+        "content": "Reel construction is placed behind an abstract factory. `StandardReelBuilderFactory` delegates to `spinReel(i)` from `src/reels.ts`:\n\n```typescript\nexport abstract class AbstractReelBuilderFactory {\n  abstract buildReels(reelCount: number, rowCount: number): Symbol[][];\n}\n\nexport class StandardReelBuilderFactory extends AbstractReelBuilderFactory {\n  buildReels(reelCount: number, _rowCount: number): Symbol[][] {\n    const reels: Symbol[][] = [];\n    for (let i = 0; i < reelCount; i++) {\n      reels.push(spinReel(i));\n    }\n    return reels;\n  }\n}\n```"
+      },
+      {
+        "heading": "ADR-002: Factory Pattern for Reel Construction — Rationale",
+        "embedText": "- Separating construction from evaluation means evaluateLine() never needs to know how symbols were generated.\n- A test double factory can return a hand-crafted grid to exercise specific payline and bonus scenarios without relying on RNG.\n- The abstract base class documents the expected contract for any alternative implementation.",
+        "content": "- Separating construction from evaluation means `evaluateLine()` never needs to know how symbols were generated.\n- A test double factory can return a hand-crafted grid to exercise specific payline and bonus scenarios without relying on RNG.\n- The abstract base class documents the expected contract for any alternative implementation."
+      },
+      {
+        "heading": "ADR-002: Factory Pattern for Reel Construction — Consequences",
+        "embedText": "- **Positive:** Grid generation is replaceable without modifying engine.ts or reels.ts.\n- **Negative:** Adds one layer of indirection for what is currently a trivial loop. The rowCount parameter is unused by StandardReelBuilderFactory (the reel height is implicitly fixed at 3 by spinReel).",
+        "content": "- **Positive:** Grid generation is replaceable without modifying `engine.ts` or `reels.ts`.\n- **Negative:** Adds one layer of indirection for what is currently a trivial loop. The `rowCount` parameter is unused by `StandardReelBuilderFactory` (the reel height is implicitly fixed at 3 by `spinReel`).\n\n---"
+      },
+      {
+        "heading": "ADR-003: Strategy Pattern for Payout Adjustment",
+        "embedText": "**Module:** src/strategy.ts — SpinStrategy, DefaultStrategy, ConservativeStrategy",
+        "content": "**Module:** `src/strategy.ts` — `SpinStrategy`, `DefaultStrategy`, `ConservativeStrategy`"
+      },
+      {
+        "heading": "ADR-003: Strategy Pattern for Payout Adjustment — Context",
+        "embedText": "The final payout may need to be adjusted for different operating contexts (e.g., a lower-volatility mode for certain markets). Embedding conditional logic directly in computePayout() would couple business rules to the calculation core.",
+        "content": "The final payout may need to be adjusted for different operating contexts (e.g., a lower-volatility mode for certain markets). Embedding conditional logic directly in `computePayout()` would couple business rules to the calculation core."
+      },
+      {
+        "heading": "ADR-003: Strategy Pattern for Payout Adjustment — Decision",
+        "embedText": "Post-calculation adjustment is encapsulated in a SpinStrategy subclass. engine.ts applies the active strategy as the last step before returning SpinResult:\n\nTwo concrete strategies ship with the library:",
+        "content": "Post-calculation adjustment is encapsulated in a `SpinStrategy` subclass. `engine.ts` applies the active strategy as the last step before returning `SpinResult`:\n\n```typescript\nconst finalResult = strategy.adjustPayout(result);\n```\n\nTwo concrete strategies ship with the library:\n\n| Strategy | Behaviour |\n|---|---|\n| `DefaultStrategy` | Pass-through — returns the result unchanged |\n| `ConservativeStrategy` | Applies a `0.8×` factor: `Math.floor(result.totalPayout * 0.8)` |"
+      },
+      {
+        "heading": "ADR-003: Strategy Pattern for Payout Adjustment — Rationale",
+        "embedText": "- New adjustment rules (e.g., capped maximum payouts, progressive scaling) are added by subclassing SpinStrategy rather than branching inside engine.ts.\n- DefaultStrategy makes the no-adjustment case explicit rather than relying on a missing-strategy check.",
+        "content": "- New adjustment rules (e.g., capped maximum payouts, progressive scaling) are added by subclassing `SpinStrategy` rather than branching inside `engine.ts`.\n- `DefaultStrategy` makes the no-adjustment case explicit rather than relying on a missing-strategy check."
+      },
+      {
+        "heading": "ADR-003: Strategy Pattern for Payout Adjustment — Consequences",
+        "embedText": "- **Positive:** Payout policy is independently testable and replaceable via EngineContainer.\n- **Negative:** ConservativeStrategy reduces the effective RTP below the 95% target; callers must be aware of which strategy is active.",
+        "content": "- **Positive:** Payout policy is independently testable and replaceable via `EngineContainer`.\n- **Negative:** `ConservativeStrategy` reduces the effective RTP below the 95% target; callers must be aware of which strategy is active.\n\n---"
+      },
+      {
+        "heading": "ADR-004: Pub-Sub Event Emitter for Spin Lifecycle",
+        "embedText": "**Module:** src/events.ts — SpinEventEmitter, SPIN_DONE",
+        "content": "**Module:** `src/events.ts` — `SpinEventEmitter`, `SPIN_DONE`"
+      },
+      {
+        "heading": "ADR-004: Pub-Sub Event Emitter for Spin Lifecycle — Context",
+        "embedText": "Downstream concerns such as logging, analytics, and free-spin chaining need to observe the outcome of each spin without coupling their logic to engine.ts.",
+        "content": "Downstream concerns such as logging, analytics, and free-spin chaining need to observe the outcome of each spin without coupling their logic to `engine.ts`."
+      },
+      {
+        "heading": "ADR-004: Pub-Sub Event Emitter for Spin Lifecycle — Decision",
+        "embedText": "A lightweight pub-sub emitter (SpinEventEmitter) is used. engine.ts emits SPIN_DONE with the completed SpinResult after every spin:",
+        "content": "A lightweight pub-sub emitter (`SpinEventEmitter`) is used. `engine.ts` emits `SPIN_DONE` with the completed `SpinResult` after every spin:\n\n```typescript\nconst emitter = new SpinEventEmitter();\nemitter.on(SPIN_DONE, (result) => { /* logging, analytics, etc. */ });\nemitter.emit(SPIN_DONE, finalResult);\n```"
+      },
+      {
+        "heading": "ADR-004: Pub-Sub Event Emitter for Spin Lifecycle — Rationale",
+        "embedText": "- Observers can be attached and removed without modifying spin().\n- The emitter is a zero-dependency implementation rather than Node.js EventEmitter, keeping the library environment-agnostic (works in browsers, Deno, edge runtimes).\n- SPIN_DONE is exported as a named constant to prevent string-literal typos in consumer code.",
+        "content": "- Observers can be attached and removed without modifying `spin()`.\n- The emitter is a zero-dependency implementation rather than Node.js `EventEmitter`, keeping the library environment-agnostic (works in browsers, Deno, edge runtimes).\n- `SPIN_DONE` is exported as a named constant to prevent string-literal typos in consumer code."
+      },
+      {
+        "heading": "ADR-004: Pub-Sub Event Emitter for Spin Lifecycle — Consequences",
+        "embedText": "- **Positive:** Spin lifecycle hooks are decoupled from the core pipeline.\n- **Negative:** The emitter is currently instantiated per spin() call, so listeners registered on one emitter instance are not visible to the next call. Persistent cross-spin subscriptions require the caller to manage emitter lifetime externally.",
+        "content": "- **Positive:** Spin lifecycle hooks are decoupled from the core pipeline.\n- **Negative:** The emitter is currently instantiated per `spin()` call, so listeners registered on one emitter instance are not visible to the next call. Persistent cross-spin subscriptions require the caller to manage emitter lifetime externally.\n\n---"
+      },
+      {
+        "heading": "ADR-005: Pure, Zero-Dependency Public API — Context",
+        "embedText": "The library's stated scope is \"pure game logic — no UI, no persistence, no networking\" (README). A clean, synchronous function surface makes the engine composable with any host environment.",
+        "content": "The library's stated scope is \"pure game logic — no UI, no persistence, no networking\" (README). A clean, synchronous function surface makes the engine composable with any host environment."
+      },
+      {
+        "heading": "ADR-005: Pure, Zero-Dependency Public API — Decision",
+        "embedText": "The public entry point re-exports a single function and two types:\n\nspin() is synchronous, takes one integer argument, and returns a value — no callbacks, no promises, no global state mutations visible to callers.",
+        "content": "The public entry point re-exports a single function and two types:\n\n```typescript\nexport { spin, type Bet, type SpinResult } from \"./engine.js\";\n```\n\n`spin()` is synchronous, takes one integer argument, and returns a value — no callbacks, no promises, no global state mutations visible to callers."
+      },
+      {
+        "heading": "ADR-005: Pure, Zero-Dependency Public API — Rationale",
+        "embedText": "- Synchronous execution eliminates the need for await boilerplate in simulation loops.\n- No runtime dependencies means npm install for consumers adds zero additional packages to their dependency tree.\n- A minimal exported surface makes semver maintenance predictable: only spin, Bet, and SpinResult constitute the public API contract.",
+        "content": "- Synchronous execution eliminates the need for `await` boilerplate in simulation loops.\n- No runtime dependencies means `npm install` for consumers adds zero additional packages to their dependency tree.\n- A minimal exported surface makes semver maintenance predictable: only `spin`, `Bet`, and `SpinResult` constitute the public API contract."
+      },
+      {
+        "heading": "ADR-005: Pure, Zero-Dependency Public API — Consequences",
+        "embedText": "- **Positive:** Easy to embed in any JS/TS environment; simple to wrap with async if needed.\n- **Negative:** CPU-intensive batch simulations (e.g., 1 000 000 spins) block the event loop. Callers requiring parallelism must use worker threads or process-level concurrency.",
+        "content": "- **Positive:** Easy to embed in any JS/TS environment; simple to wrap with async if needed.\n- **Negative:** CPU-intensive batch simulations (e.g., 1 000 000 spins) block the event loop. Callers requiring parallelism must use worker threads or process-level concurrency.\n\n---"
+      },
+      {
+        "heading": "ADR-006: Exponential Wild Multiplier Formula — Context",
+        "embedText": "WILD symbols substitute for regular symbols in payline runs. A linear multiplier would produce modest boosts; the design goal is to make multiple wilds feel dramatically rewarding.",
+        "content": "`WILD` symbols substitute for regular symbols in payline runs. A linear multiplier would produce modest boosts; the design goal is to make multiple wilds feel dramatically rewarding."
+      },
+      {
+        "heading": "ADR-006: Exponential Wild Multiplier Formula — Decision",
+        "embedText": "The multiplier applied to the base line payout is:\n\nThe formula is isolated in applyWildBonus(basePayout, wildCount) in src/wild.ts.",
+        "content": "The multiplier applied to the base line payout is:\n\n```\nboostedPayout = basePayout × (1 + wildCount) × 2^wildCount\n```\n\n| WILDs | Multiplier |\n|---|---|\n| 1 | `2 × 2¹ = 4×` |\n| 2 | `3 × 2² = 12×` |\n| 3 | `4 × 2³ = 32×` |\n\nThe formula is isolated in `applyWildBonus(basePayout, wildCount)` in `src/wild.ts`."
+      },
+      {
+        "heading": "ADR-006: Exponential Wild Multiplier Formula — Rationale",
+        "embedText": "- The exponential component 2^wildCount creates supralinear growth that rewards rarer multi-wild combinations disproportionately.\n- Isolating the formula in its own module makes it easy to test in isolation and to tune independently of the payline evaluation logic in engine.ts.",
+        "content": "- The exponential component `2^wildCount` creates supralinear growth that rewards rarer multi-wild combinations disproportionately.\n- Isolating the formula in its own module makes it easy to test in isolation and to tune independently of the payline evaluation logic in `engine.ts`."
+      },
+      {
+        "heading": "ADR-006: Exponential Wild Multiplier Formula — Consequences",
+        "embedText": "- **Positive:** High excitement ceiling for multi-wild hits; formula is independently verifiable.\n- **Negative:** Three wilds on a high-multiplier symbol (e.g., DIAMOND at 1000× line bet) can produce very large payouts that the HOUSE_EDGE adjustment in computePayout does not cap. Callers may wish to apply an external maximum payout ceiling.",
+        "content": "- **Positive:** High excitement ceiling for multi-wild hits; formula is independently verifiable.\n- **Negative:** Three wilds on a high-multiplier symbol (e.g., `DIAMOND` at 1000× line bet) can produce very large payouts that the `HOUSE_EDGE` adjustment in `computePayout` does not cap. Callers may wish to apply an external maximum payout ceiling.\n\n---"
+      },
+      {
+        "heading": "ADR-007: Retained `legacy.ts` Module — Context",
+        "embedText": "An earlier version of the payout pipeline used a different calculation path. Removing it immediately would break any consumers who had imported computeLegacyPayout directly.",
+        "content": "An earlier version of the payout pipeline used a different calculation path. Removing it immediately would break any consumers who had imported `computeLegacyPayout` directly."
+      },
+      {
+        "heading": "ADR-007: Retained `legacy.ts` Module — Decision",
+        "embedText": "legacy.ts is retained in the source tree and exports computeLegacyPayout. It is **not called** by the current spin() pipeline in engine.ts. Its logic (identical match-counting from paytable.getPayMultiplier, without wild bonuses or house-edge adjustment) differs from evaluateLine().",
+        "content": "`legacy.ts` is retained in the source tree and exports `computeLegacyPayout`. It is **not called** by the current `spin()` pipeline in `engine.ts`. Its logic (identical match-counting from `paytable.getPayMultiplier`, without wild bonuses or house-edge adjustment) differs from `evaluateLine()`."
+      },
+      {
+        "heading": "ADR-007: Retained `legacy.ts` Module — Rationale",
+        "embedText": "- Keeping the module allows a controlled deprecation period without a major-version bump.\n- The divergence between computeLegacyPayout and evaluateLine is intentional and documented here to prevent confusion about which path is authoritative.",
+        "content": "- Keeping the module allows a controlled deprecation period without a major-version bump.\n- The divergence between `computeLegacyPayout` and `evaluateLine` is intentional and documented here to prevent confusion about which path is authoritative."
+      },
+      {
+        "heading": "ADR-007: Retained `legacy.ts` Module — Consequences",
+        "embedText": "- **Positive:** No immediate breaking change for direct importers.\n- **Negative:** Two parallel payout code paths risk drift if PAY_TABLE in paytable.ts is updated without also updating legacy.ts. The module should be removed in the next major version.",
+        "content": "- **Positive:** No immediate breaking change for direct importers.\n- **Negative:** Two parallel payout code paths risk drift if `PAY_TABLE` in `paytable.ts` is updated without also updating `legacy.ts`. The module should be removed in the next major version.\n\n---"
+      },
+      {
+        "heading": "ADR-008: TypeScript `noEmit` Build",
+        "embedText": "**Configuration:** tsconfig.json, package.json build script",
+        "content": "**Configuration:** `tsconfig.json`, `package.json` `build` script"
+      },
+      {
+        "heading": "ADR-008: TypeScript `noEmit` Build — Context",
+        "embedText": "The package ships TypeScript source directly (the main field in package.json points to src/index.ts). A runtime like tsx is used by consumers to execute the source without a compilation step.",
+        "content": "The package ships TypeScript source directly (the `main` field in `package.json` points to `src/index.ts`). A runtime like `tsx` is used by consumers to execute the source without a compilation step."
+      },
+      {
+        "heading": "ADR-008: TypeScript `noEmit` Build — Decision",
+        "embedText": "The build script is:\n\nNo JavaScript artefacts are emitted to disk. TypeScript is used solely as a type-checker.",
+        "content": "The build script is:\n\n```bash\nnpx tsc --noEmit\n```\n\nNo JavaScript artefacts are emitted to disk. TypeScript is used solely as a type-checker."
+      },
+      {
+        "heading": "ADR-008: TypeScript `noEmit` Build — Rationale",
+        "embedText": "- Eliminates a separate dist/ directory and the associated sync problems between source and compiled output during development.\n- tsx handles on-the-fly transpilation, so consumers and tests run directly against the TypeScript source.\n- Strict-mode type checking (\"strict\": true in tsconfig.json) is preserved — noEmit does not weaken type safety.",
+        "content": "- Eliminates a separate `dist/` directory and the associated sync problems between source and compiled output during development.\n- `tsx` handles on-the-fly transpilation, so consumers and tests run directly against the TypeScript source.\n- Strict-mode type checking (`\"strict\": true` in `tsconfig.json`) is preserved — `noEmit` does not weaken type safety."
+      },
+      {
+        "heading": "ADR-008: TypeScript `noEmit` Build — Consequences",
+        "embedText": "- **Positive:** No build artefacts to manage; the build script serves purely as a CI type-check gate.\n- **Negative:** Consumers who cannot use tsx or a bundler with TypeScript support must compile the source themselves. Publishing to npm as-is would require downstream build steps.",
+        "content": "- **Positive:** No build artefacts to manage; the `build` script serves purely as a CI type-check gate.\n- **Negative:** Consumers who cannot use `tsx` or a bundler with TypeScript support must compile the source themselves. Publishing to npm as-is would require downstream build steps.\n\n---"
+      },
+      {
+        "heading": "Examples",
+        "embedText": "The following snippet demonstrates substituting a deterministic reel factory via EngineContainer to reproduce ADR-002's testability benefit:\n\nTo verify the wild multiplier formula from ADR-006 in isolation:",
+        "content": "The following snippet demonstrates substituting a deterministic reel factory via `EngineContainer` to reproduce ADR-002's testability benefit:\n\n```typescript\nimport {\n  spin,\n  type SpinResult,\n} from \"slot-engine\";\nimport { AbstractReelBuilderFactory } from \"./src/factories.js\";\nimport type { Symbol } from \"./src/types.js\";\n\n// Deterministic factory: always returns a jackpot grid\nclass JackpotFactory extends AbstractReelBuilderFactory {\n  buildReels(_reelCount: number, _rowCount: number): Symbol[][] {\n    return [\n      [\"DIAMOND\", \"DIAMOND\", \"DIAMOND\"],\n      [\"DIAMOND\", \"DIAMOND\", \"DIAMOND\"],\n      [\"SEVEN\",   \"SEVEN\",   \"SEVEN\"],\n      [\"SEVEN\",   \"SEVEN\",   \"SEVEN\"],\n      [\"BELL\",    \"BELL\",    \"BELL\"],\n    ];\n  }\n}\n\n// Register the override before calling spin()\n// (requires direct access to the container — advanced usage)\nconst result: SpinResult = spin(50);\nconsole.log(\"Jackpot hit:\", result.jackpotHit);\nconsole.log(\"Total payout:\", result.totalPayout);\n```\n\nTo verify the wild multiplier formula from ADR-006 in isolation:\n\n```typescript\nimport { applyWildBonus } from \"./src/wild.js\";\n\nconst base = 100; // 100-coin base line payout\n\nconst oneWild   = applyWildBonus(base, 1); // 100 × (1+1) × 2^1 = 400\nconst twoWilds  = applyWildBonus(base, 2); // 100 × (1+2) × 2^2 = 1 200\nconst threeWilds = applyWildBonus(base, 3); // 100 × (1+3) × 2^3 = 3 200\n\nconsole.log({ oneWild, twoWilds, threeWilds });\n// { oneWild: 400, twoWilds: 1200, threeWilds: 3200 }\n```"
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [System Overview](01-System-Overview.md) — component diagram showing how each ADR's pattern maps to a source module\n- [Core Concepts](02-Core-Concepts.md) — definitions for Wild, Scatter, Payline, and RTP referenced above\n- [Data Flow](03-Data-Flow.md) — step-by-step trace of how these design decisions interact during a single spin() call\n- [Public API](../04-API-Reference/01-Public-API.md) — spin() and computePayout() signatures\n- [Source Tree](../05-Development/01-Source-Tree.md) — annotated file listing showing where each module lives",
+        "content": "- [System Overview](01-System-Overview.md) — component diagram showing how each ADR's pattern maps to a source module\n- [Core Concepts](02-Core-Concepts.md) — definitions for Wild, Scatter, Payline, and RTP referenced above\n- [Data Flow](03-Data-Flow.md) — step-by-step trace of how these design decisions interact during a single `spin()` call\n- [Public API](../04-API-Reference/01-Public-API.md) — `spin()` and `computePayout()` signatures\n- [Source Tree](../05-Development/01-Source-Tree.md) — annotated file listing showing where each module lives"
+      }
+    ]
+  },
+  ".anatoly/docs/03-Guides/01-Common-Workflows.md": {
+    "sha": "5e3824a98bcfcf2f1e8363100259fe96f4e9a606eb820e346cf57fa4bdb90e27",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "This page documents the most common tasks performed with slot-engine. Each workflow is self-contained and uses only the public spin() function and the types exported from the package. No external services or configuration files are required.\n\nAll examples import from \"slot-engine\". The canonical entry point exports spin, SpinResult, and LineWin. The Bet type alias is number (integer, 1–100 inclusive).",
+        "content": "This page documents the most common tasks performed with slot-engine. Each workflow is self-contained and uses only the public `spin()` function and the types exported from the package. No external services or configuration files are required.\n\nAll examples import from `\"slot-engine\"`. The canonical entry point exports `spin`, `SpinResult`, and `LineWin`. The `Bet` type alias is `number` (integer, 1–100 inclusive).\n\n> **Note:** The README refers to an entry point named `simulate`. The actual exported function is `spin`. See [Public API](../04-API-Reference/01-Public-API.md) for the authoritative signature.\n\n---"
+      },
+      {
+        "heading": "Workflow 1 — Run a Single Spin and Inspect the Result",
+        "embedText": "The simplest usage: call spin() with an integer bet and read the returned SpinResult.",
+        "content": "The simplest usage: call `spin()` with an integer bet and read the returned `SpinResult`."
+      },
+      {
+        "heading": "Workflow 1 — Run a Single Spin and Inspect the Result — Steps",
+        "embedText": "1. Import spin from \"slot-engine\".\n2. Call spin(bet) with an integer between 1 and 100 coins.\n3. Read totalPayout for the coin outcome.\n4. Check jackpotHit and freeSpinsAwarded for special outcomes.\n\nspin() is synchronous; there are no promises or callbacks to handle.",
+        "content": "1. Import `spin` from `\"slot-engine\"`.\n2. Call `spin(bet)` with an integer between 1 and 100 coins.\n3. Read `totalPayout` for the coin outcome.\n4. Check `jackpotHit` and `freeSpinsAwarded` for special outcomes.\n\n```typescript\nimport { spin } from \"slot-engine\";\n\nconst result = spin(10); // 10-coin bet\n\nconsole.log(\"Payout:\", result.totalPayout);\nconsole.log(\"Jackpot:\", result.jackpotHit);\nconsole.log(\"Free spins awarded:\", result.freeSpinsAwarded);\nconsole.log(\"Wild multiplier:\", result.wildMultiplier);\nconsole.log(\"Scatter count:\", result.scatterCount);\n```\n\n`spin()` is synchronous; there are no promises or callbacks to handle.\n\n---"
+      },
+      {
+        "heading": "Workflow 2 — Iterate Over Winning Lines",
+        "embedText": "SpinResult.lineWins is a read-only array of LineWin objects, one per winning payline. Each describes the symbol, the run length, and the coin payout for that line.",
+        "content": "`SpinResult.lineWins` is a read-only array of `LineWin` objects, one per winning payline. Each describes the symbol, the run length, and the coin payout for that line."
+      },
+      {
+        "heading": "Workflow 2 — Iterate Over Winning Lines — Steps",
+        "embedText": "1. Call spin(bet).\n2. Iterate result.lineWins.\n3. Access lineIndex, symbol, count, and payout on each entry.\n\nThe engine evaluates ten left-to-right paylines. lineIndex is zero-based (0–9). A run of 3, 4, or 5 matching symbols (with WILD substitution) produces a win.",
+        "content": "1. Call `spin(bet)`.\n2. Iterate `result.lineWins`.\n3. Access `lineIndex`, `symbol`, `count`, and `payout` on each entry.\n\n```typescript\nimport { spin, type SpinResult, type LineWin } from \"slot-engine\";\n\nconst result: SpinResult = spin(25);\n\nif (result.lineWins.length === 0) {\n  console.log(\"No winning lines this spin.\");\n} else {\n  for (const win of result.lineWins) {\n    console.log(\n      `Payline ${win.lineIndex}: ${win.count}× ${win.symbol} → ${win.payout} coins`\n    );\n  }\n}\n```\n\nThe engine evaluates ten left-to-right paylines. `lineIndex` is zero-based (0–9). A run of 3, 4, or 5 matching symbols (with `WILD` substitution) produces a win.\n\n---"
+      },
+      {
+        "heading": "Workflow 3 — Print the Reel Grid",
+        "embedText": "SpinResult.reels is a 5-column × 3-row read-only grid accessed as reels[col][row]. Each cell contains a Symbol string.",
+        "content": "`SpinResult.reels` is a 5-column × 3-row read-only grid accessed as `reels[col][row]`. Each cell contains a `Symbol` string."
+      },
+      {
+        "heading": "Workflow 3 — Print the Reel Grid — Steps",
+        "embedText": "1. Destructure reels from the spin() return value.\n2. Iterate rows (0–2) and columns (0–4) to render the grid.\n\nExample output:\n\nValid symbol values are: CHERRY, LEMON, BELL, BAR, SEVEN, DIAMOND, WILD, SCATTER.",
+        "content": "1. Destructure `reels` from the `spin()` return value.\n2. Iterate rows (0–2) and columns (0–4) to render the grid.\n\n```typescript\nimport { spin } from \"slot-engine\";\n\nconst { reels } = spin(5);\n\n// Print a 3-row display; reels[col][row]\nfor (let row = 0; row < 3; row++) {\n  const line = reels.map(col => col[row].padEnd(8)).join(\"| \");\n  console.log(line);\n}\n```\n\nExample output:\n\n```text\nCHERRY  | WILD    | BELL    | BAR     | LEMON\nSEVEN   | CHERRY  | LEMON   | CHERRY  | BELL\nBAR     | BAR     | WILD    | SEVEN   | CHERRY\n```\n\nValid symbol values are: `CHERRY`, `LEMON`, `BELL`, `BAR`, `SEVEN`, `DIAMOND`, `WILD`, `SCATTER`.\n\n---"
+      },
+      {
+        "heading": "Workflow 4 — Handle Free Spins",
+        "embedText": "When three or more SCATTER symbols appear across all reels in a single spin, freeSpinsAwarded is set to 10. The engine does not execute free spins automatically; the caller is responsible for performing the additional spins.",
+        "content": "When three or more `SCATTER` symbols appear across all reels in a single spin, `freeSpinsAwarded` is set to `10`. The engine does not execute free spins automatically; the caller is responsible for performing the additional spins."
+      },
+      {
+        "heading": "Workflow 4 — Handle Free Spins — Steps",
+        "embedText": "1. Call spin(bet) for the triggering spin.\n2. Check result.freeSpinsAwarded > 0.\n3. Loop for the awarded count, calling spin(bet) each time.\n4. Accumulate payouts from each free spin result.\n\nFree spins themselves can also trigger freeSpinsAwarded > 0, in which case the same pattern applies recursively or iteratively depending on the game's rules.",
+        "content": "1. Call `spin(bet)` for the triggering spin.\n2. Check `result.freeSpinsAwarded > 0`.\n3. Loop for the awarded count, calling `spin(bet)` each time.\n4. Accumulate payouts from each free spin result.\n\n```typescript\nimport { spin } from \"slot-engine\";\n\nconst BET = 20;\nconst result = spin(BET);\n\nlet bonusPayout = 0;\n\nif (result.freeSpinsAwarded > 0) {\n  console.log(`${result.freeSpinsAwarded} free spins triggered!`);\n\n  for (let i = 0; i < result.freeSpinsAwarded; i++) {\n    const freeResult = spin(BET);\n    bonusPayout += freeResult.totalPayout;\n    console.log(`Free spin ${i + 1}: ${freeResult.totalPayout} coins`);\n  }\n\n  console.log(\"Total bonus payout:\", bonusPayout);\n}\n```\n\nFree spins themselves can also trigger `freeSpinsAwarded > 0`, in which case the same pattern applies recursively or iteratively depending on the game's rules.\n\n---"
+      },
+      {
+        "heading": "Workflow 5 — Batch Simulation and RTP Verification",
+        "embedText": "To measure the engine's empirical Return-to-Player (RTP) over a large sample, run many spins and calculate the ratio of total payout to total bet. The engine targets a theoretical RTP of **95%**.",
+        "content": "To measure the engine's empirical Return-to-Player (RTP) over a large sample, run many spins and calculate the ratio of total payout to total bet. The engine targets a theoretical RTP of **95%**."
+      },
+      {
+        "heading": "Workflow 5 — Batch Simulation and RTP Verification — Steps",
+        "embedText": "1. Choose a bet amount and number of rounds.\n2. Accumulate totalIn (sum of bets) and totalOut (sum of payouts).\n3. Compute totalOut / totalIn after all rounds.\n\nOver a sufficiently large sample (≥ 100 000 spins), the empirical RTP should approximate 95%.",
+        "content": "1. Choose a bet amount and number of rounds.\n2. Accumulate `totalIn` (sum of bets) and `totalOut` (sum of payouts).\n3. Compute `totalOut / totalIn` after all rounds.\n\n```typescript\nimport { spin, type SpinResult } from \"slot-engine\";\n\nconst BET = 10;\nconst ROUNDS = 100_000;\n\nlet totalIn = 0;\nlet totalOut = 0;\nlet jackpots = 0;\nlet freeSpinTriggers = 0;\n\nfor (let i = 0; i < ROUNDS; i++) {\n  const result: SpinResult = spin(BET);\n  totalIn += BET;\n  totalOut += result.totalPayout;\n  if (result.jackpotHit) jackpots++;\n  if (result.freeSpinsAwarded > 0) freeSpinTriggers++;\n}\n\nconst empiricalRtp = totalOut / totalIn;\nconsole.log(`Rounds:          ${ROUNDS}`);\nconsole.log(`Empirical RTP:   ${(empiricalRtp * 100).toFixed(2)}%`);\nconsole.log(`Jackpot hits:    ${jackpots}`);\nconsole.log(`Free spin triggers: ${freeSpinTriggers}`);\n```\n\nOver a sufficiently large sample (≥ 100 000 spins), the empirical RTP should approximate 95%.\n\n---"
+      },
+      {
+        "heading": "Workflow 6 — Detect the Progressive Jackpot",
+        "embedText": "The jackpot fires when four or more DIAMOND symbols appear anywhere across the 5 × 3 reel grid in a single spin.",
+        "content": "The jackpot fires when four or more `DIAMOND` symbols appear anywhere across the 5 × 3 reel grid in a single spin."
+      },
+      {
+        "heading": "Workflow 6 — Detect the Progressive Jackpot — Steps",
+        "embedText": "1. Check result.jackpotHit after each spin() call.\n2. React accordingly — e.g., display a jackpot screen or award a progressive pool.\n\njackpotHit is a boolean in SpinResult. The engine does not track a running jackpot pool; that logic belongs to the caller.",
+        "content": "1. Check `result.jackpotHit` after each `spin()` call.\n2. React accordingly — e.g., display a jackpot screen or award a progressive pool.\n\n```typescript\nimport { spin } from \"slot-engine\";\n\nconst result = spin(100); // maximum bet\n\nif (result.jackpotHit) {\n  console.log(\"PROGRESSIVE JACKPOT HIT!\");\n  console.log(\"Spin payout:\", result.totalPayout);\n}\n```\n\n`jackpotHit` is a boolean in `SpinResult`. The engine does not track a running jackpot pool; that logic belongs to the caller.\n\n---"
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Quick Start](../01-Getting-Started/04-Quick-Start.md) — End-to-end tutorial for first-time users.\n- [Public API](../04-API-Reference/01-Public-API.md) — Full reference for spin() including bet validation and error behaviour.\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — Complete definitions for SpinResult, LineWin, Symbol, and Bet.\n- [Advanced Configuration](../03-Guides/02-Advanced-Configuration.md) — Tuning options and overrides.\n- [Troubleshooting](../03-Guides/03-Troubleshooting.md) — Common errors and diagnostics.",
+        "content": "- [Quick Start](../01-Getting-Started/04-Quick-Start.md) — End-to-end tutorial for first-time users.\n- [Public API](../04-API-Reference/01-Public-API.md) — Full reference for `spin()` including bet validation and error behaviour.\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — Complete definitions for `SpinResult`, `LineWin`, `Symbol`, and `Bet`.\n- [Advanced Configuration](../03-Guides/02-Advanced-Configuration.md) — Tuning options and overrides.\n- [Troubleshooting](../03-Guides/03-Troubleshooting.md) — Common errors and diagnostics."
+      }
+    ]
+  },
+  ".anatoly/docs/03-Guides/02-Advanced-Configuration.md": {
+    "sha": "b325ac920c894df8f9ef407fccfd75ed13bf386a3511ae04600789e6e9236f1a",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "slot-engine exposes no external config files, environment variables, or CLI flags. All configurable behaviour lives in the TypeScript source modules. Advanced users tune the engine by editing the relevant constants and, optionally, subclassing the provided abstract types before wiring them back into src/engine.ts.\n\nThe sections below map each tunable axis to its source location, explain the trade-offs, and show concrete examples.",
+        "content": "slot-engine exposes no external config files, environment variables, or CLI flags. All configurable behaviour lives in the TypeScript source modules. Advanced users tune the engine by editing the relevant constants and, optionally, subclassing the provided abstract types before wiring them back into `src/engine.ts`.\n\nThe sections below map each tunable axis to its source location, explain the trade-offs, and show concrete examples.\n\n<!-- Note: docs may be outdated — verified against source. The README exports `simulate`, but src/index.ts exports `spin`. All examples on this page use `spin`. -->\n\n---"
+      },
+      {
+        "heading": "Reel Symbol Weights",
+        "embedText": "**File:** src/reels.ts\nThe DEFAULT_WEIGHTS object controls how frequently each symbol lands on any given reel position. Higher weight = more appearances relative to the pool total.\nThe effective probability of a symbol on a single cell is weight / Σweights. With the defaults, Σ = 120, so DIAMOND lands with probability 30/120 = 25%.",
+        "content": "**File:** `src/reels.ts`\n\nThe `DEFAULT_WEIGHTS` object controls how frequently each symbol lands on any given reel position. Higher weight = more appearances relative to the pool total.\n\n```typescript\n// src/reels.ts (default values)\nconst DEFAULT_WEIGHTS: ReelWeightConfig = {\n  CHERRY:  25,\n  LEMON:   25,\n  BELL:    15,\n  BAR:     10,\n  SEVEN:    5,\n  DIAMOND: 30,\n  WILD:     5,\n  SCATTER:  5,\n};\n```\n\nThe effective probability of a symbol on a single cell is `weight / Σweights`. With the defaults, `Σ = 120`, so `DIAMOND` lands with probability `30/120 = 25%`."
+      },
+      {
+        "heading": "Reel Symbol Weights (cont.)",
+        "embedText": "**RTP impact:** Reducing WILD or high-value symbol weights lowers long-run return. Raising SCATTER weight increases free-spin frequency. After any weight change, run a Monte Carlo simulation over ≥ 10 000 spins to verify the resulting RTP approximates the target 95%.",
+        "content": "**RTP impact:** Reducing WILD or high-value symbol weights lowers long-run return. Raising SCATTER weight increases free-spin frequency. After any weight change, run a Monte Carlo simulation over ≥ 10 000 spins to verify the resulting RTP approximates the target 95%."
+      },
+      {
+        "heading": "Reel Symbol Weights — Per-Reel Weight Differentiation",
+        "embedText": "REEL_WEIGHTS is a 5-element array (one per reel column). All five columns share DEFAULT_WEIGHTS out of the box, but each index can carry distinct weights:\n\nArray order follows the symbol order returned by getReelSymbols():  \nCHERRY · LEMON · BELL · BAR · SEVEN · DIAMOND · WILD · SCATTER",
+        "content": "`REEL_WEIGHTS` is a 5-element array (one per reel column). All five columns share `DEFAULT_WEIGHTS` out of the box, but each index can carry distinct weights:\n\n```typescript\n// src/reels.ts — make reel 4 (rightmost) harder\nconst REEL_WEIGHTS: number[][] = [\n  weightsToArray(DEFAULT_WEIGHTS),\n  weightsToArray(DEFAULT_WEIGHTS),\n  weightsToArray(DEFAULT_WEIGHTS),\n  weightsToArray(DEFAULT_WEIGHTS),\n  // reel 4: fewer WILDs and SCATTERs\n  [25, 25, 15, 10, 5, 35, 2, 3],\n];\n```\n\nArray order follows the symbol order returned by `getReelSymbols()`:  \n`CHERRY · LEMON · BELL · BAR · SEVEN · DIAMOND · WILD · SCATTER`\n\n---"
+      },
+      {
+        "heading": "Paytable Multipliers",
+        "embedText": "**File:** src/paytable.ts\nPAY_TABLE maps each paying symbol to a triple of base multipliers for 3-of-a-kind, 4-of-a-kind, and 5-of-a-kind runs. WILD and SCATTER are not in the paytable; they receive separate treatment in the engine.\nEach multiplier is applied to the per-line bet (totalBet / 10). A SEVEN 5-of-a-kind on a 50-coin bet yields 500 × (50/10) = 2 500 coins before the wild multiplier and house-edge adjustment.",
+        "content": "**File:** `src/paytable.ts`\n\n`PAY_TABLE` maps each paying symbol to a triple of base multipliers for 3-of-a-kind, 4-of-a-kind, and 5-of-a-kind runs. WILD and SCATTER are not in the paytable; they receive separate treatment in the engine.\n\n```typescript\n// src/paytable.ts (default values)\nconst PAY_TABLE: Record<string, [number, number, number]> = {\n  CHERRY:  [2,    5,   25],\n  LEMON:   [2,    5,   25],\n  BELL:    [5,   20,  100],\n  BAR:     [10,  40,  200],\n  SEVEN:   [25, 100,  500],\n  DIAMOND: [50, 250, 1000],\n};\n```\n\nEach multiplier is applied to the per-line bet (`totalBet / 10`). A SEVEN 5-of-a-kind on a 50-coin bet yields `500 × (50/10) = 2 500` coins before the wild multiplier and house-edge adjustment."
+      },
+      {
+        "heading": "Paytable Multipliers (cont.)",
+        "embedText": "**Tip:** Raising low-symbol multipliers (CHERRY, LEMON) increases hit frequency pay without drastically affecting jackpot volatility; raising DIAMOND multipliers inflates variance.",
+        "content": "**Tip:** Raising low-symbol multipliers (CHERRY, LEMON) increases hit frequency pay without drastically affecting jackpot volatility; raising DIAMOND multipliers inflates variance.\n\n---"
+      },
+      {
+        "heading": "House Edge",
+        "embedText": "**File:** src/engine.ts\n\ncomputePayout applies this constant as a bonus on top of raw line-win totals, then adds a small floor of bet × 0.01:\n\nDecreasing HOUSE_EDGE pushes RTP toward 100 %; setting it negative (e.g. -0.05) produces a player-advantage configuration useful for certified RTP testing.",
+        "content": "**File:** `src/engine.ts`\n\n```typescript\nconst HOUSE_EDGE = 0.05; // 5 %\n```\n\n`computePayout` applies this constant as a bonus on top of raw line-win totals, then adds a small floor of `bet × 0.01`:\n\n```typescript\nexport function computePayout(lineWins: LineWin[], bet: any): number {\n  let total = lineWins.reduce((sum, lw) => sum + lw.payout, 0);\n  if (total > 0) {\n    total = total * (1 + HOUSE_EDGE);\n  }\n  total += bet * 0.01;\n  return Math.ceil(total);\n}\n```\n\nDecreasing `HOUSE_EDGE` pushes RTP toward 100 %; setting it negative (e.g. `-0.05`) produces a player-advantage configuration useful for certified RTP testing.\n\n---"
+      },
+      {
+        "heading": "Wild Multiplier Formula",
+        "embedText": "**File:** src/engine.ts\n\nWhen one or more WILD symbols appear within a winning run, the engine escalates the payout using:\n\nThis is computed inside evaluateLine. A single WILD doubles the base payout (×4); two WILDs multiply it by 12 (3 × 4). Modify the formula directly in evaluateLine to change wild escalation.",
+        "content": "**File:** `src/engine.ts`\n\nWhen one or more WILD symbols appear within a winning run, the engine escalates the payout using:\n\n```\neffectivePayout = basePayout × (1 + wildCount) × 2^wildCount\n```\n\nThis is computed inside `evaluateLine`. A single WILD doubles the base payout (×4); two WILDs multiply it by 12 (3 × 4). Modify the formula directly in `evaluateLine` to change wild escalation.\n\n---"
+      },
+      {
+        "heading": "Free Spin Parameters",
+        "embedText": "**File:** src/freespin.ts\n\nFree spins are triggered when **3 or more SCATTER** symbols appear anywhere across the 5 × 3 grid. The award and retrigger amount are both hardcoded at **10 spins**:\n\nTo change the trigger threshold or award count, edit the numeric literals in handleFreeSpins. For example, setting the trigger to >= 2 and the award to 15 requires two edits inside that function.",
+        "content": "**File:** `src/freespin.ts`\n\nFree spins are triggered when **3 or more SCATTER** symbols appear anywhere across the 5 × 3 grid. The award and retrigger amount are both hardcoded at **10 spins**:\n\n```typescript\nexport function handleFreeSpins(state: FreeSpinState, scatters: number): void {\n  if (!state.active && scatters >= 3) {\n    state.active = true;\n    state.remaining = 10;           // initial award\n  } else if (state.active && scatters >= 3) {\n    state.remaining += 10;          // retrigger\n  } else if (state.active) {\n    state.remaining--;\n    if (state.remaining <= 0) state.active = false;\n  }\n}\n```\n\nTo change the trigger threshold or award count, edit the numeric literals in `handleFreeSpins`. For example, setting the trigger to `>= 2` and the award to `15` requires two edits inside that function.\n\n---"
+      },
+      {
+        "heading": "Jackpot Condition",
+        "embedText": "**File:** src/jackpot.ts\n\nThe progressive jackpot fires when **4 or more DIAMOND** symbols appear anywhere across all 15 cells (5 reels × 3 rows):\n\nIncrease the threshold to reduce jackpot frequency; decrease it for promotional events. jackpotHit: true is informational only — the engine does not apply a separate jackpot payout on top of totalPayout. Callers must read result.jackpotHit and apply the jackpot prize themselves.",
+        "content": "**File:** `src/jackpot.ts`\n\nThe progressive jackpot fires when **4 or more DIAMOND** symbols appear anywhere across all 15 cells (5 reels × 3 rows):\n\n```typescript\nexport function isJackpotHit(reels: ReadonlyArray<ReadonlyArray<Symbol>>): boolean {\n  let diamondCount = 0;\n  for (const col of reels) {\n    for (const sym of col) {\n      if (sym === \"DIAMOND\") diamondCount++;\n    }\n  }\n  return diamondCount >= 4;\n}\n```\n\nIncrease the threshold to reduce jackpot frequency; decrease it for promotional events. `jackpotHit: true` is informational only — the engine does not apply a separate jackpot payout on top of `totalPayout`. Callers must read `result.jackpotHit` and apply the jackpot prize themselves.\n\n---"
+      },
+      {
+        "heading": "Custom Spin Strategy",
+        "embedText": "**File:** src/strategy.ts\n\nSpinStrategy is an abstract class that receives the fully computed SpinResult and may return a modified copy. Two implementations ship with the engine:\n\nTo add a custom strategy, extend SpinStrategy and wire it into src/engine.ts:",
+        "content": "**File:** `src/strategy.ts`\n\n`SpinStrategy` is an abstract class that receives the fully computed `SpinResult` and may return a modified copy. Two implementations ship with the engine:\n\n| Class | Behaviour |\n|---|---|\n| `DefaultStrategy` | Returns `result` unchanged. |\n| `ConservativeStrategy` | Floors `totalPayout` to 80 % of the computed value. |\n\nTo add a custom strategy, extend `SpinStrategy` and wire it into `src/engine.ts`:\n\n```typescript\n// src/strategy.ts — add a new strategy\nimport type { SpinResult } from \"./types.js\";\nimport { SpinStrategy } from \"./strategy.js\";\n\nexport class BonusRoundStrategy extends SpinStrategy {\n  constructor(private readonly bonusMultiplier: number) {\n    super();\n  }\n\n  adjustPayout(result: SpinResult): SpinResult {\n    return {\n      ...result,\n      totalPayout: Math.ceil(result.totalPayout * this.bonusMultiplier),\n    };\n  }\n}\n```\n\n```typescript\n// src/engine.ts — replace DefaultStrategy with BonusRoundStrategy\nimport { BonusRoundStrategy } from \"./strategy.js\";\n\n// inside spin():\nconst strategy = new BonusRoundStrategy(1.5); // 50 % bonus round\n```\n\n---"
+      },
+      {
+        "heading": "Custom Reel Factory",
+        "embedText": "**File:** src/factories.ts\n\nAbstractReelBuilderFactory governs how reel columns are built. StandardReelBuilderFactory delegates to spinReel from src/reels.ts. Override buildReels to supply deterministic reels (useful for testing) or load strips from an external source:",
+        "content": "**File:** `src/factories.ts`\n\n`AbstractReelBuilderFactory` governs how reel columns are built. `StandardReelBuilderFactory` delegates to `spinReel` from `src/reels.ts`. Override `buildReels` to supply deterministic reels (useful for testing) or load strips from an external source:\n\n```typescript\n// Deterministic factory for unit testing\nimport type { Symbol } from \"./types.js\";\nimport { AbstractReelBuilderFactory } from \"./factories.js\";\n\nexport class FixedReelFactory extends AbstractReelBuilderFactory {\n  constructor(private readonly fixture: Symbol[][]) {\n    super();\n  }\n\n  buildReels(_reelCount: number, _rowCount: number): Symbol[][] {\n    return this.fixture;\n  }\n}\n```\n\n```typescript\n// src/engine.ts — use the fixed factory inside spin():\nimport { FixedReelFactory } from \"./factories.js\";\n\nconst factory = new FixedReelFactory([\n  [\"SEVEN\", \"SEVEN\", \"SEVEN\"],\n  [\"SEVEN\", \"SEVEN\", \"SEVEN\"],\n  [\"SEVEN\", \"SEVEN\", \"SEVEN\"],\n  [\"SEVEN\", \"SEVEN\", \"SEVEN\"],\n  [\"SEVEN\", \"SEVEN\", \"SEVEN\"],\n]);\nconst reels = factory.buildReels(5, 3);\n```\n\n---"
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Public API](../04-API-Reference/01-Public-API.md) — spin signature, Bet constraints, and SpinResult fields\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — Symbol, LineWin, FreeSpinState, and SpinResult definitions\n- [Core Concepts](../02-Architecture/02-Core-Concepts.md) — Paylines, scatter logic, and the wild multiplier model\n- [Common Workflows](../03-Guides/01-Common-Workflows.md) — Everyday usage patterns\n- [Troubleshooting](../03-Guides/03-Troubleshooting.md) — Diagnosing unexpected payout or RTP drift",
+        "content": "- [Public API](../04-API-Reference/01-Public-API.md) — `spin` signature, `Bet` constraints, and `SpinResult` fields\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — `Symbol`, `LineWin`, `FreeSpinState`, and `SpinResult` definitions\n- [Core Concepts](../02-Architecture/02-Core-Concepts.md) — Paylines, scatter logic, and the wild multiplier model\n- [Common Workflows](../03-Guides/01-Common-Workflows.md) — Everyday usage patterns\n- [Troubleshooting](../03-Guides/03-Troubleshooting.md) — Diagnosing unexpected payout or RTP drift"
+      }
+    ]
+  },
+  ".anatoly/docs/03-Guides/03-Troubleshooting.md": {
+    "sha": "c206513045cb15f98e200c40dcaf5051f3fdb4941ae3a5a7d91968ef17b61754",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "This page covers the most frequently encountered problems when integrating or running slot-engine, organized in **Problem / Cause / Solution** format. All behavior described here is verified against the source code in src/.",
+        "content": "This page covers the most frequently encountered problems when integrating or running slot-engine, organized in **Problem / Cause / Solution** format. All behavior described here is verified against the source code in `src/`.\n\n<!-- Note: docs may be outdated — verified against source. The README and installation docs reference a `simulate` export; the actual public export from `src/index.ts` is `spin`. Use `spin` in all call sites. -->\n\n---"
+      },
+      {
+        "heading": "Runtime Errors — `spin()` throws a plain string, not an `Error`",
+        "embedText": "**Problem:** Catching the exception thrown by spin() with instanceof Error never matches.\n\n**Cause:** The guard in src/engine.ts executes throw \"invalid bet\" — a string literal — when the bet is not a positive integer number:\n\n**Solution:** Check the caught value as a string rather than an Error:\n\nValid bets are positive integers. Fractions (1.5), zero, negatives, and non-numbers all trigger the throw.",
+        "content": "**Problem:** Catching the exception thrown by `spin()` with `instanceof Error` never matches.\n\n```typescript\ntry {\n  spin(0);\n} catch (e) {\n  console.log(e instanceof Error); // false\n  console.log(e);                  // \"invalid bet\"\n}\n```\n\n**Cause:** The guard in `src/engine.ts` executes `throw \"invalid bet\"` — a string literal — when the bet is not a positive integer number:\n\n```typescript\nif (typeof bet !== \"number\" || bet < 1 || !Number.isInteger(bet)) {\n  throw \"invalid bet\";\n}\n```\n\n**Solution:** Check the caught value as a string rather than an `Error`:\n\n```typescript\nimport { spin } from \"slot-engine\";\n\nfunction safeSpin(bet: number) {\n  try {\n    return spin(bet);\n  } catch (e) {\n    if (e === \"invalid bet\") {\n      console.error(\"Bet must be a positive integer.\");\n    } else {\n      throw e;\n    }\n  }\n}\n```\n\nValid bets are positive integers. Fractions (`1.5`), zero, negatives, and non-numbers all trigger the throw.\n\n---"
+      },
+      {
+        "heading": "Runtime Errors — Bet above 100 does not throw — it warns",
+        "embedText": "**Problem:** Passing a bet larger than 100 produces a console.warn message but spin() continues and returns a result. Callers expecting an exception will not receive one.\n\n**Cause:** src/engine.ts contains:\n\nThe check does not halt execution.\n\n**Solution:** Clamp or validate the bet to the documented 1–100 range before calling spin():",
+        "content": "**Problem:** Passing a bet larger than 100 produces a `console.warn` message but `spin()` continues and returns a result. Callers expecting an exception will not receive one.\n\n**Cause:** `src/engine.ts` contains:\n\n```typescript\nif (bet > 100) console.warn(\"bet exceeds maximum\");\n```\n\nThe check does not halt execution.\n\n**Solution:** Clamp or validate the bet to the documented `1–100` range before calling `spin()`:\n\n```typescript\nimport { spin, type Bet } from \"slot-engine\";\n\nfunction clampedSpin(rawBet: number) {\n  const bet: Bet = Math.max(1, Math.min(100, Math.trunc(rawBet)));\n  return spin(bet);\n}\n```\n\n---"
+      },
+      {
+        "heading": "Runtime Errors — `totalPayout` is non-zero even with no line wins",
+        "embedText": "**Problem:** result.totalPayout is always at least 1, even when result.lineWins is empty.\n\n**Cause:** computePayout in src/engine.ts unconditionally adds bet * 0.01 to the running total before applying Math.ceil:\n\nFor a bet of 10, this floor contribution is Math.ceil(0.1) = 1 coin.\n\n**Solution:** This is expected behavior, not a bug. Do not treat a non-zero totalPayout as evidence of a line win. Inspect result.lineWins.length to determine whether any paylines were matched.",
+        "content": "**Problem:** `result.totalPayout` is always at least `1`, even when `result.lineWins` is empty.\n\n**Cause:** `computePayout` in `src/engine.ts` unconditionally adds `bet * 0.01` to the running total before applying `Math.ceil`:\n\n```typescript\ntotal += bet * 0.01;\nreturn Math.ceil(total);\n```\n\nFor a bet of `10`, this floor contribution is `Math.ceil(0.1) = 1` coin.\n\n**Solution:** This is expected behavior, not a bug. Do not treat a non-zero `totalPayout` as evidence of a line win. Inspect `result.lineWins.length` to determine whether any paylines were matched.\n\n---"
+      },
+      {
+        "heading": "Type Errors — `Bet` type does not enforce the valid range at compile time",
+        "embedText": "**Problem:** TypeScript accepts any number where Bet is expected, so out-of-range values reach spin() without a compile-time error.\n\n**Cause:** Bet is a simple type alias:\n\nTypeScript does not model integer or range constraints in the type system.\n\n**Solution:** Range validation is enforced at runtime by spin(). Add an explicit guard in calling code if compile-time safety is required, or use a validated wrapper as shown in the [bet-clamping example](#bet-above-100-does-not-throw--it-warns) above.",
+        "content": "**Problem:** TypeScript accepts any `number` where `Bet` is expected, so out-of-range values reach `spin()` without a compile-time error.\n\n**Cause:** `Bet` is a simple type alias:\n\n```typescript\nexport type Bet = number; // 1..100 coins, integer\n```\n\nTypeScript does not model integer or range constraints in the type system.\n\n**Solution:** Range validation is enforced at runtime by `spin()`. Add an explicit guard in calling code if compile-time safety is required, or use a validated wrapper as shown in the [bet-clamping example](#bet-above-100-does-not-throw--it-warns) above.\n\n---"
+      },
+      {
+        "heading": "Build and Module Errors — `Cannot find module 'slot-engine'` or `ERR_MODULE_NOT_FOUND`",
+        "embedText": "**Problem:** Importing slot-engine fails at runtime or during type-checking.\n\n**Cause:** The package entry point is src/index.ts (a TypeScript file). Environments that require pre-compiled JavaScript or use \"moduleResolution\": \"Node\" / \"Node16\" cannot resolve this entry point.\n\n**Solution:**\n\n1. Use tsx to execute TypeScript files directly without a separate compile step:\n\n2. Ensure your tsconfig.json uses \"moduleResolution\": \"Bundler\" — the setting required by the project's own tsconfig.json:\n\n3. Confirm that npm install has been run and node_modules/ is present.",
+        "content": "**Problem:** Importing `slot-engine` fails at runtime or during type-checking.\n\n**Cause:** The package entry point is `src/index.ts` (a TypeScript file). Environments that require pre-compiled JavaScript or use `\"moduleResolution\": \"Node\"` / `\"Node16\"` cannot resolve this entry point.\n\n**Solution:**\n\n1. Use `tsx` to execute TypeScript files directly without a separate compile step:\n\n   ```bash\n   npx tsx my-script.ts\n   ```\n\n2. Ensure your `tsconfig.json` uses `\"moduleResolution\": \"Bundler\"` — the setting required by the project's own `tsconfig.json`:\n\n   ```json\n   {\n     \"compilerOptions\": {\n       \"moduleResolution\": \"Bundler\",\n       \"module\": \"ESNext\"\n     }\n   }\n   ```\n\n3. Confirm that `npm install` has been run and `node_modules/` is present.\n\n---"
+      },
+      {
+        "heading": "Build and Module Errors — `npm run build` produces no output files",
+        "embedText": "**Problem:** Running npm run build exits cleanly but no compiled .js files appear.\n\n**Cause:** The build script is tsc --noEmit. It performs type-checking only; no JavaScript is emitted by design.\n\n**Solution:** This is the intended behavior — slot-engine is consumed as TypeScript source, not as compiled JavaScript. Use tsx for direct execution, or configure your own bundler (e.g., esbuild) if compiled output is required in a downstream project.",
+        "content": "**Problem:** Running `npm run build` exits cleanly but no compiled `.js` files appear.\n\n**Cause:** The `build` script is `tsc --noEmit`. It performs type-checking only; no JavaScript is emitted by design.\n\n**Solution:** This is the intended behavior — slot-engine is consumed as TypeScript source, not as compiled JavaScript. Use `tsx` for direct execution, or configure your own bundler (e.g., `esbuild`) if compiled output is required in a downstream project.\n\n---"
+      },
+      {
+        "heading": "Unexpected Results — RTP differs significantly from 95% in short runs",
+        "embedText": "**Problem:** Summing totalPayout over a small number of spins yields an RTP far from 95%.\n\n**Cause:** The 95% RTP is a theoretical long-run average. Short runs exhibit high variance due to the probabilistic nature of Math.random() and the weighted symbol draws in src/reels.ts.\n\n**Solution:** Accumulate results over many thousands of spins to approach the theoretical figure. The following snippet demonstrates a basic RTP measurement loop:",
+        "content": "**Problem:** Summing `totalPayout` over a small number of spins yields an RTP far from 95%.\n\n**Cause:** The 95% RTP is a theoretical long-run average. Short runs exhibit high variance due to the probabilistic nature of `Math.random()` and the weighted symbol draws in `src/reels.ts`.\n\n**Solution:** Accumulate results over many thousands of spins to approach the theoretical figure. The following snippet demonstrates a basic RTP measurement loop:\n\n```typescript\nimport { spin } from \"slot-engine\";\n\nconst BET = 10;\nconst ROUNDS = 100_000;\nlet totalWagered = 0;\nlet totalReturned = 0;\n\nfor (let i = 0; i < ROUNDS; i++) {\n  totalWagered += BET;\n  totalReturned += spin(BET).totalPayout;\n}\n\nconst rtp = totalReturned / totalWagered;\nconsole.log(`Measured RTP over ${ROUNDS} spins: ${(rtp * 100).toFixed(2)}%`);\n```\n\n---"
+      },
+      {
+        "heading": "Unexpected Results — `freeSpinsAwarded` is always 0",
+        "embedText": "**Problem:** result.freeSpinsAwarded is 0 on every observed spin.\n\n**Cause:** Free spins require 3 or more SCATTER symbols across all 15 cells (5 reels × 3 rows) in a single spin. With a default weight of 5 out of a total weight of 120 per cell (~4.2%), simultaneous triple-scatter results are statistically uncommon.\n\n**Solution:** This is expected. Run a large number of spins (see the RTP example above) to observe free spin awards. No configuration change is needed unless you are modifying the engine internals for testing purposes.",
+        "content": "**Problem:** `result.freeSpinsAwarded` is `0` on every observed spin.\n\n**Cause:** Free spins require 3 or more `SCATTER` symbols across all 15 cells (5 reels × 3 rows) in a single spin. With a default weight of `5` out of a total weight of `120` per cell (~4.2%), simultaneous triple-scatter results are statistically uncommon.\n\n**Solution:** This is expected. Run a large number of spins (see the RTP example above) to observe free spin awards. No configuration change is needed unless you are modifying the engine internals for testing purposes.\n\n---"
+      },
+      {
+        "heading": "Unexpected Results — `wildMultiplier` is `1` when wilds are present on the reels",
+        "embedText": "**Problem:** result.wildMultiplier reports 1 despite WILD symbols appearing in result.reels.\n**Cause:** wildMultiplier reflects the highest wild multiplier applied across *winning paylines only*. A WILD that appears on the reels but does not contribute to a matched run of 3 or more on any evaluated payline does not affect wildMultiplier. The value of 1 means no winning line included a WILD.",
+        "content": "**Problem:** `result.wildMultiplier` reports `1` despite `WILD` symbols appearing in `result.reels`.\n\n**Cause:** `wildMultiplier` reflects the highest wild multiplier applied across *winning paylines only*. A `WILD` that appears on the reels but does not contribute to a matched run of 3 or more on any evaluated payline does not affect `wildMultiplier`. The value of `1` means no winning line included a `WILD`."
+      },
+      {
+        "heading": "Unexpected Results — `wildMultiplier` is `1` when wilds are present on the reels (cont.)",
+        "embedText": "**Solution:** Cross-reference result.lineWins to identify winning lines, then check whether those lines contain WILD symbols in result.reels. A wildMultiplier above 1 is only possible when result.lineWins is non-empty and at least one winning run contains a WILD.",
+        "content": "**Solution:** Cross-reference `result.lineWins` to identify winning lines, then check whether those lines contain `WILD` symbols in `result.reels`. A `wildMultiplier` above `1` is only possible when `result.lineWins` is non-empty and at least one winning run contains a `WILD`.\n\n---"
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Installation](../01-Getting-Started/02-Installation.md) — Node.js version requirements and module resolution configuration\n- [Quick Start](../01-Getting-Started/04-Quick-Start.md) — End-to-end working example\n- [Public API](../04-API-Reference/01-Public-API.md) — Full signature reference for spin() and SpinResult\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — Bet, SpinResult, LineWin, and FreeSpinState definitions\n- [Build and Test](../05-Development/02-Build-and-Test.md) — Running the type-checker and tests locally",
+        "content": "- [Installation](../01-Getting-Started/02-Installation.md) — Node.js version requirements and module resolution configuration\n- [Quick Start](../01-Getting-Started/04-Quick-Start.md) — End-to-end working example\n- [Public API](../04-API-Reference/01-Public-API.md) — Full signature reference for `spin()` and `SpinResult`\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — `Bet`, `SpinResult`, `LineWin`, and `FreeSpinState` definitions\n- [Build and Test](../05-Development/02-Build-and-Test.md) — Running the type-checker and tests locally"
+      }
+    ]
+  },
+  ".anatoly/docs/04-API-Reference/01-Public-API.md": {
+    "sha": "38b24fe5d73905d017a538236c10ffb1b970e7ef84cc8e81be73ca92bd863705",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "slot-engine exposes a single entry point — src/index.ts — which re-exports the spin function together with the Bet and SpinResult types. All game logic (reel generation, payline evaluation, wild multipliers, scatter detection, and jackpot assessment) executes synchronously inside spin and the full outcome is returned as a plain SpinResult object.",
+        "content": "`slot-engine` exposes a single entry point — `src/index.ts` — which re-exports the `spin` function together with the `Bet` and `SpinResult` types. All game logic (reel generation, payline evaluation, wild multipliers, scatter detection, and jackpot assessment) executes synchronously inside `spin` and the full outcome is returned as a plain `SpinResult` object.\n\n<!-- Note: docs may be outdated — verified against source. The README refers to a function named `simulate`; the actual exported name is `spin`. -->"
+      },
+      {
+        "heading": "`spin`",
+        "embedText": "Executes one complete slot spin. The function:\n1. Validates bet (throws if invalid).\n2. Builds five 3-symbol reels using StandardReelBuilderFactory.\n3. Evaluates ten left-to-right paylines against the reel grid.\n4. Applies wild-symbol multipliers to each winning line.\n5. Detects SCATTER symbols and awards free spins when three or more appear.\n6. Detects the progressive jackpot (four or more DIAMOND symbols anywhere on the grid).\n7. Computes the total coin payout via computePayout, which applies the 5 % house-edge adjustment and returns a ceiling-rounded integer.\n8. Passes the assembled SpinResult through DefaultStrategy.adjustPayout.",
+        "content": "```typescript\nfunction spin(bet: Bet): SpinResult\n```\n\nExecutes one complete slot spin. The function:\n\n1. Validates `bet` (throws if invalid).\n2. Builds five 3-symbol reels using `StandardReelBuilderFactory`.\n3. Evaluates ten left-to-right paylines against the reel grid.\n4. Applies wild-symbol multipliers to each winning line.\n5. Detects SCATTER symbols and awards free spins when three or more appear.\n6. Detects the progressive jackpot (four or more DIAMOND symbols anywhere on the grid).\n7. Computes the total coin payout via `computePayout`, which applies the 5 % house-edge adjustment and returns a ceiling-rounded integer.\n8. Passes the assembled `SpinResult` through `DefaultStrategy.adjustPayout`."
+      },
+      {
+        "heading": "`spin` — Returns",
+        "embedText": "A fully-populated [SpinResult](#spinresult) object. The call is synchronous and never returns null or undefined.",
+        "content": "A fully-populated [`SpinResult`](#spinresult) object. The call is synchronous and never returns `null` or `undefined`."
+      },
+      {
+        "heading": "`spin` — Throws",
+        "embedText": "Throws the string \"invalid bet\" when bet is not a positive integer.",
+        "content": "Throws the string `\"invalid bet\"` when `bet` is not a positive integer."
+      },
+      {
+        "heading": "`Bet`",
+        "embedText": "A plain number type alias that represents a coin wager. Valid values are **integers in the range 1–100 inclusive**. The constraint is enforced at runtime inside spin; TypeScript does not narrow the alias further.",
+        "content": "```typescript\ntype Bet = number;\n```\n\nA plain `number` type alias that represents a coin wager. Valid values are **integers in the range 1–100 inclusive**. The constraint is enforced at runtime inside `spin`; TypeScript does not narrow the alias further.\n\n---"
+      },
+      {
+        "heading": "`LineWin`",
+        "embedText": "LineWin is part of the public surface (imported from src/types.ts and present on SpinResult.lineWins) even though it is not explicitly re-exported from src/index.ts. It can be referenced through the SpinResult type.",
+        "content": "`LineWin` is part of the public surface (imported from `src/types.ts` and present on `SpinResult.lineWins`) even though it is not explicitly re-exported from `src/index.ts`. It can be referenced through the `SpinResult` type.\n\n```typescript\ninterface LineWin {\n  lineIndex: number;\n  symbol:    Symbol;\n  count:     number;\n  payout:    number;\n}\n```\n\n| Field | Description |\n|---|---|\n| `lineIndex` | Zero-based index of the winning payline (0–9). |\n| `symbol` | The non-wild symbol that anchored the run. |\n| `count` | Length of the matching run (3, 4, or 5). |\n| `payout` | Coin payout for this line after wild-multiplier boost, before house-edge rounding. |\n\n---"
+      },
+      {
+        "heading": "Payline Layout",
+        "embedText": "Ten fixed paylines are evaluated on every spin. Each entry in the array below is a row index [0, 1, 2] for columns 0–4.",
+        "content": "Ten fixed paylines are evaluated on every spin. Each entry in the array below is a row index `[0, 1, 2]` for columns 0–4.\n\n| Index | Pattern |\n|---|---|\n| 0 | `[1, 1, 1, 1, 1]` — middle row |\n| 1 | `[0, 0, 0, 0, 0]` — top row |\n| 2 | `[2, 2, 2, 2, 2]` — bottom row |\n| 3 | `[0, 1, 2, 1, 0]` — V-shape |\n| 4 | `[2, 1, 0, 1, 2]` — inverted V |\n| 5 | `[0, 0, 1, 2, 2]` — diagonal down-right |\n| 6 | `[2, 2, 1, 0, 0]` — diagonal up-right |\n| 7 | `[1, 0, 1, 2, 1]` — zigzag |\n| 8 | `[1, 2, 1, 0, 1]` — inverted zigzag |\n| 9 | `[0, 1, 0, 1, 0]` — wave |\n\n---"
+      },
+      {
+        "heading": "Paytable Reference",
+        "embedText": "Base multipliers before wild-boost, applied per line-bet (bet / 10):\n\nWILD and SCATTER symbols have no direct paytable entry.",
+        "content": "Base multipliers before wild-boost, applied per line-bet (`bet / 10`):\n\n| Symbol | 3-of-a-kind | 4-of-a-kind | 5-of-a-kind |\n|---|---|---|---|\n| CHERRY | 2× | 5× | 25× |\n| LEMON | 2× | 5× | 25× |\n| BELL | 5× | 20× | 100× |\n| BAR | 10× | 40× | 200× |\n| SEVEN | 25× | 100× | 500× |\n| DIAMOND | 50× | 250× | 1,000× |\n\nWILD and SCATTER symbols have no direct paytable entry.\n\n---"
+      },
+      {
+        "heading": "Error Handling",
+        "embedText": "spin throws a string (not an Error object) when the bet argument fails validation:\n\nBets above 100 do **not** throw; they log a warning to console.warn and continue.",
+        "content": "`spin` throws a string (not an `Error` object) when the bet argument fails validation:\n\n```typescript\nimport { spin } from \"slot-engine\";\n\ntry {\n  spin(0);          // below minimum\n} catch (err) {\n  console.error(err); // \"invalid bet\"\n}\n\ntry {\n  spin(1.5);        // non-integer\n} catch (err) {\n  console.error(err); // \"invalid bet\"\n}\n```\n\nBets above 100 do **not** throw; they log a warning to `console.warn` and continue.\n\n---"
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — Full listing of all public TypeScript types\n- [Configuration Schema](04-API-Reference/02-Configuration-Schema.md) — Engine configuration options\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — Glossary of domain terms (Symbol, payline, scatter, wild)\n- [Data Flow](02-Architecture/03-Data-Flow.md) — How a bet moves through the engine pipeline\n- [Quick Start](01-Getting-Started/04-Quick-Start.md) — End-to-end tutorial",
+        "content": "- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — Full listing of all public TypeScript types\n- [Configuration Schema](04-API-Reference/02-Configuration-Schema.md) — Engine configuration options\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — Glossary of domain terms (Symbol, payline, scatter, wild)\n- [Data Flow](02-Architecture/03-Data-Flow.md) — How a bet moves through the engine pipeline\n- [Quick Start](01-Getting-Started/04-Quick-Start.md) — End-to-end tutorial"
+      }
+    ]
+  },
+  ".anatoly/docs/04-API-Reference/02-Configuration-Schema.md": {
+    "sha": "22993e03587187c4a490ab925ecb6bea3e88d3cf69b0afd17dd324646db55f8a",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "slot-engine has no external configuration file or environment variables. All engine behaviour is defined by compile-time constants baked into the source modules. The only value a caller supplies at runtime is the Bet — an integer coin amount passed to spin(). This page documents every configurable constant, the Bet constraint, the paytable, the reel-weight distribution, and the payline layout so that developers understand the full parameter space before forking or extending the engine.",
+        "content": "`slot-engine` has no external configuration file or environment variables. All engine behaviour is defined by compile-time constants baked into the source modules. The only value a caller supplies at runtime is the `Bet` — an integer coin amount passed to `spin()`. This page documents every configurable constant, the `Bet` constraint, the paytable, the reel-weight distribution, and the payline layout so that developers understand the full parameter space before forking or extending the engine.\n\n---"
+      },
+      {
+        "heading": "`Bet` — Runtime Parameter",
+        "embedText": "Bet is the sole input accepted at runtime. It is declared in src/engine.ts and re-exported from src/index.ts.\n\nThe total bet is divided equally across all ten paylines, so each payline receives a lineBet of bet / 10 coins.",
+        "content": "`Bet` is the sole input accepted at runtime. It is declared in `src/engine.ts` and re-exported from `src/index.ts`.\n\n```typescript\nexport type Bet = number; // integer, 1 – 100 (inclusive)\n```\n\n| Constraint | Value | Enforcement |\n|---|---|---|\n| Minimum | `1` | Hard error — `spin()` throws `\"invalid bet\"` |\n| Maximum | `100` | Soft warning — `console.warn` is emitted; spin proceeds |\n| Type | Integer | Non-integers throw `\"invalid bet\"` |\n\nThe total bet is divided equally across all ten paylines, so each payline receives a `lineBet` of `bet / 10` coins.\n\n---"
+      },
+      {
+        "heading": "House Edge and RTP",
+        "embedText": "Defined in src/engine.ts:\n\ncomputePayout applies this factor to every non-zero line-win total:\n\nThe exported constant ANCIENT_RTP = 0.95 in src/paytable.ts mirrors this target for reference use.",
+        "content": "Defined in `src/engine.ts`:\n\n```typescript\nconst HOUSE_EDGE = 0.05; // 5 % house edge → ~95 % theoretical RTP\n```\n\n`computePayout` applies this factor to every non-zero line-win total:\n\n```typescript\ntotal = total * (1 + HOUSE_EDGE); // boosts displayed payout; net RTP ~95 %\ntotal += bet * 0.01;              // minimum-return floor: 1 % of bet\nreturn Math.ceil(total);\n```\n\nThe exported constant `ANCIENT_RTP = 0.95` in `src/paytable.ts` mirrors this target for reference use.\n\n---"
+      },
+      {
+        "heading": "Debug Mode",
+        "embedText": "Defined in src/engine.ts:\n\nWhen true, every call to spin() logs the raw reel grid, line wins, and total payout to console.log. There is no runtime toggle; this flag must be changed at the source level and rebuilt.",
+        "content": "Defined in `src/engine.ts`:\n\n```typescript\nconst DEBUG_MODE = false;\n```\n\nWhen `true`, every call to `spin()` logs the raw reel grid, line wins, and total payout to `console.log`. There is no runtime toggle; this flag must be changed at the source level and rebuilt.\n\n---"
+      },
+      {
+        "heading": "Paytable",
+        "embedText": "Defined in src/paytable.ts. The table maps each paying symbol to a tuple of [3-of-a-kind, 4-of-a-kind, 5-of-a-kind] multipliers. The multiplier is applied to lineBet.\n\nWILD and SCATTER are not pay symbols and return a multiplier of 0 from getPayMultiplier. WILD substitutes for any pay symbol and applies an additional bonus (see [Wild Multiplier](#wild-multiplier) below).",
+        "content": "Defined in `src/paytable.ts`. The table maps each paying symbol to a tuple of `[3-of-a-kind, 4-of-a-kind, 5-of-a-kind]` multipliers. The multiplier is applied to `lineBet`.\n\n| Symbol | 3-of-a-kind | 4-of-a-kind | 5-of-a-kind |\n|---|---|---|---|\n| `CHERRY` | ×2 | ×5 | ×25 |\n| `LEMON` | ×2 | ×5 | ×25 |\n| `BELL` | ×5 | ×20 | ×100 |\n| `BAR` | ×10 | ×40 | ×200 |\n| `SEVEN` | ×25 | ×100 | ×500 |\n| `DIAMOND` | ×50 | ×250 | ×1000 |\n\n`WILD` and `SCATTER` are not pay symbols and return a multiplier of `0` from `getPayMultiplier`. `WILD` substitutes for any pay symbol and applies an additional bonus (see [Wild Multiplier](#wild-multiplier) below).\n\n---"
+      },
+      {
+        "heading": "Wild Multiplier",
+        "embedText": "Defined in src/wild.ts and applied inside evaluateLine in src/engine.ts.\n\nWhen one or more WILD symbols appear within a winning run, the base line payout is amplified:\n\nSpinResult.wildMultiplier reports the highest wild-multiplier factor applied across all winning lines in a spin.",
+        "content": "Defined in `src/wild.ts` and applied inside `evaluateLine` in `src/engine.ts`.\n\nWhen one or more `WILD` symbols appear within a winning run, the base line payout is amplified:\n\n```\nadjustedPayout = basePayout × (1 + wildCount) × 2^wildCount\n```\n\n| WILDs in run | Multiplier factor |\n|---|---|\n| 0 | ×1 (no bonus) |\n| 1 | ×4 |\n| 2 | ×12 |\n| 3 | ×32 |\n\n`SpinResult.wildMultiplier` reports the highest wild-multiplier factor applied across all winning lines in a spin.\n\n---"
+      },
+      {
+        "heading": "Scatter and Free Spins",
+        "embedText": "Defined in src/freespin.ts. Scatter detection counts every SCATTER symbol visible across the full 5×3 grid (not restricted to paylines).\n\nThe number of free spins awarded is reflected in SpinResult.freeSpinsAwarded. The engine reports this value but does not automatically re-invoke spin() — callers are responsible for consuming awarded free spins.",
+        "content": "Defined in `src/freespin.ts`. Scatter detection counts every `SCATTER` symbol visible across the full 5×3 grid (not restricted to paylines).\n\n| Scatter count | Effect |\n|---|---|\n| < 3 | No effect |\n| ≥ 3 (first trigger) | Awards **10 free spins** (`freeSpinsAwarded = 10`) |\n| ≥ 3 (during free spins) | Adds **10 more** to the remaining count |\n\nThe number of free spins awarded is reflected in `SpinResult.freeSpinsAwarded`. The engine reports this value but does not automatically re-invoke `spin()` — callers are responsible for consuming awarded free spins.\n\n---"
+      },
+      {
+        "heading": "Progressive Jackpot",
+        "embedText": "Defined in src/jackpot.ts. The jackpot is determined by counting DIAMOND symbols anywhere on the 5×3 grid:\n\nThere is no jackpot payout amount built into the engine. SpinResult.jackpotHit signals the event; the prize amount is left to the caller.",
+        "content": "Defined in `src/jackpot.ts`. The jackpot is determined by counting `DIAMOND` symbols anywhere on the 5×3 grid:\n\n| DIAMOND count | Jackpot |\n|---|---|\n| < 4 | `jackpotHit: false` |\n| ≥ 4 | `jackpotHit: true` |\n\nThere is no jackpot payout amount built into the engine. `SpinResult.jackpotHit` signals the event; the prize amount is left to the caller.\n\n---"
+      },
+      {
+        "heading": "Reel Symbol Weights",
+        "embedText": "Defined in src/reels.ts. All five reels share the same weight distribution (DEFAULT_WEIGHTS). Weights are relative integers; the probability of each symbol equals its weight divided by the sum of all weights (total: **120**).",
+        "content": "Defined in `src/reels.ts`. All five reels share the same weight distribution (`DEFAULT_WEIGHTS`). Weights are relative integers; the probability of each symbol equals its weight divided by the sum of all weights (total: **120**).\n\n| Symbol | Weight | Approximate probability |\n|---|---|---|\n| `CHERRY` | 25 | 20.8 % |\n| `LEMON` | 25 | 20.8 % |\n| `BELL` | 15 | 12.5 % |\n| `BAR` | 10 | 8.3 % |\n| `SEVEN` | 5 | 4.2 % |\n| `DIAMOND` | 30 | 25.0 % |\n| `WILD` | 5 | 4.2 % |\n| `SCATTER` | 5 | 4.2 % |\n\n---"
+      },
+      {
+        "heading": "Paylines",
+        "embedText": "Ten left-to-right paylines are evaluated per spin. Each payline is expressed as a row-index array of length 5 (one entry per reel column, 0 = top row, 1 = middle, 2 = bottom).\n\nA line win requires a run of **≥ 3** identical (or WILD-substituted) symbols starting from the leftmost reel. Lines with fewer than 3 matching symbols pay nothing.",
+        "content": "Ten left-to-right paylines are evaluated per spin. Each payline is expressed as a row-index array of length 5 (one entry per reel column, 0 = top row, 1 = middle, 2 = bottom).\n\n```typescript\nconst PAYLINES: number[][] = [\n  [1, 1, 1, 1, 1], // line 0 — middle horizontal\n  [0, 0, 0, 0, 0], // line 1 — top horizontal\n  [2, 2, 2, 2, 2], // line 2 — bottom horizontal\n  [0, 1, 2, 1, 0], // line 3 — V-shape\n  [2, 1, 0, 1, 2], // line 4 — inverted V\n  [0, 0, 1, 2, 2], // line 5 — diagonal down\n  [2, 2, 1, 0, 0], // line 6 — diagonal up\n  [1, 0, 1, 2, 1], // line 7 — zigzag low\n  [1, 2, 1, 0, 1], // line 8 — zigzag high\n  [0, 1, 0, 1, 0], // line 9 — top-middle alternating\n];\n```\n\nA line win requires a run of **≥ 3** identical (or WILD-substituted) symbols starting from the leftmost reel. Lines with fewer than 3 matching symbols pay nothing.\n\n---"
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Public API](04-API-Reference/01-Public-API.md) — spin() signature and SpinResult field descriptions\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — Bet, Symbol, LineWin, SpinResult, and FreeSpinState type definitions\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — Glossary of domain terms (payline, scatter, wild, RTP)\n- [Data Flow](02-Architecture/03-Data-Flow.md) — How constants flow through the spin evaluation pipeline",
+        "content": "- [Public API](04-API-Reference/01-Public-API.md) — `spin()` signature and `SpinResult` field descriptions\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — `Bet`, `Symbol`, `LineWin`, `SpinResult`, and `FreeSpinState` type definitions\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — Glossary of domain terms (payline, scatter, wild, RTP)\n- [Data Flow](02-Architecture/03-Data-Flow.md) — How constants flow through the spin evaluation pipeline"
+      }
+    ]
+  },
+  ".anatoly/docs/04-API-Reference/03-Types-and-Interfaces.md": {
+    "sha": "44a697556d0e2a5cae1b0a3ea0ba4e01c0af26b30bcdfb9d89d95ac6b25eda91",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "All domain types are declared in src/types.ts. The Bet type alias and the re-export of SpinResult are also surfaced through src/engine.ts and re-exported from the package entry point src/index.ts. Types that are used internally but not re-exported from the package root are noted as such.",
+        "content": "All domain types are declared in `src/types.ts`. The `Bet` type alias and the re-export of `SpinResult` are also surfaced through `src/engine.ts` and re-exported from the package entry point `src/index.ts`. Types that are used internally but not re-exported from the package root are noted as such."
+      },
+      {
+        "heading": "Type: `Symbol`",
+        "embedText": "**Source:** src/types.ts\n\nA string literal union representing the eight reel symbols the engine can place in any grid cell.\n\nWILD and SCATTER are excluded from the LineWin.symbol field — they never appear there as a matched symbol.",
+        "content": "**Source:** `src/types.ts`\n\nA string literal union representing the eight reel symbols the engine can place in any grid cell.\n\n```typescript\nexport type Symbol =\n  | \"CHERRY\"\n  | \"LEMON\"\n  | \"BELL\"\n  | \"BAR\"\n  | \"SEVEN\"\n  | \"DIAMOND\"\n  | \"WILD\"\n  | \"SCATTER\";\n```\n\n| Value       | Category             | Notes                                           |\n|-------------|----------------------|-------------------------------------------------|\n| `\"CHERRY\"`  | Low-value regular    | 25× weight on every reel                        |\n| `\"LEMON\"`   | Low-value regular    | 25× weight on every reel                        |\n| `\"BELL\"`    | Mid-value regular    | 15× weight                                      |\n| `\"BAR\"`     | Mid-value regular    | 10× weight                                      |\n| `\"SEVEN\"`   | High-value regular   | 5× weight                                       |\n| `\"DIAMOND\"` | Premium / jackpot    | 30× weight; 4+ anywhere triggers jackpot        |\n| `\"WILD\"`    | Special – substitute | Counts as any regular symbol; applies multiplier|\n| `\"SCATTER\"` | Special – bonus      | 3+ anywhere awards free spins; not a line symbol|\n\n`WILD` and `SCATTER` are excluded from the `LineWin.symbol` field — they never appear there as a matched symbol."
+      },
+      {
+        "heading": "Type Alias: `Bet`",
+        "embedText": "**Source:** src/engine.ts, re-exported from src/index.ts\n\nRepresents the total coins wagered on a single spin. Valid values are **integers in the range 1–100 inclusive**. The spin() function throws the string \"invalid bet\" when the value is non-integer or less than 1, and logs a console.warn when the value exceeds 100.",
+        "content": "**Source:** `src/engine.ts`, re-exported from `src/index.ts`\n\n```typescript\nexport type Bet = number;\n```\n\nRepresents the total coins wagered on a single spin. Valid values are **integers in the range 1–100 inclusive**. The `spin()` function throws the string `\"invalid bet\"` when the value is non-integer or less than 1, and logs a `console.warn` when the value exceeds 100."
+      },
+      {
+        "heading": "Interface: `LineWin`",
+        "embedText": "**Source:** src/types.ts\n\nDescribes a single winning payline evaluation result. One LineWin is produced for each of the ten paylines where a qualifying match (3–5 consecutive symbols) is found.\n\nThe payout formula when wilds are present in the run is:",
+        "content": "**Source:** `src/types.ts`\n\nDescribes a single winning payline evaluation result. One `LineWin` is produced for each of the ten paylines where a qualifying match (3–5 consecutive symbols) is found.\n\n```typescript\nexport interface LineWin {\n  lineIndex: number;\n  symbol: Symbol;\n  count: number;\n  payout: number;\n}\n```\n\n| Field       | Type     | Description                                                                          |\n|-------------|----------|--------------------------------------------------------------------------------------|\n| `lineIndex` | `number` | Zero-based payline index (0–9) corresponding to the ten built-in payline patterns.   |\n| `symbol`    | `Symbol` | The matched symbol. Never `\"WILD\"` or `\"SCATTER\"`.                                   |\n| `count`     | `number` | Number of matching positions from the left: `3`, `4`, or `5`.                        |\n| `payout`    | `number` | Coins awarded for this line, after the wild multiplier boost is applied if applicable.|\n\nThe `payout` formula when wilds are present in the run is:\n\n```\npayout = baseMultiplier × lineBet × (1 + wildCount) × 2^wildCount\n```"
+      },
+      {
+        "heading": "Interface: `SpinResult`",
+        "embedText": "**Source:** src/types.ts, re-exported from src/engine.ts and src/index.ts\n\nThe complete outcome of a single call to spin(). All array fields are deeply read-only to prevent mutation after the fact.",
+        "content": "**Source:** `src/types.ts`, re-exported from `src/engine.ts` and `src/index.ts`\n\nThe complete outcome of a single call to `spin()`. All array fields are deeply read-only to prevent mutation after the fact.\n\n```typescript\nexport interface SpinResult {\n  reels: ReadonlyArray<ReadonlyArray<Symbol>>;\n  lineWins: ReadonlyArray<LineWin>;\n  wildMultiplier: number;\n  scatterCount: number;\n  freeSpinsAwarded: number;\n  jackpotHit: boolean;\n  totalPayout: number;\n}\n```\n\n| Field              | Type                                      | Description                                                                                                     |\n|--------------------|-------------------------------------------|-----------------------------------------------------------------------------------------------------------------|\n| `reels`            | `ReadonlyArray<ReadonlyArray<Symbol>>`    | 5 × 3 grid. Outer index = reel/column (0–4); inner index = row (0–2).                                          |\n| `lineWins`         | `ReadonlyArray<LineWin>`                  | All qualifying line wins for this spin. Empty array when no paylines match.                                     |\n| `wildMultiplier`   | `number`                                  | The highest wild multiplier factor applied across all winning lines. `1` when no wilds contributed to any win.  |\n| `scatterCount`     | `number`                                  | Total `SCATTER` symbols visible anywhere in the 5 × 3 grid.                                                    |\n| `freeSpinsAwarded` | `number`                                  | Free spins granted by this spin. `10` on a fresh trigger, `10` added on retrigger, `0` otherwise.              |\n| `jackpotHit`       | `boolean`                                 | `true` when four or more `DIAMOND` symbols appear in the grid.                                                  |\n| `totalPayout`      | `number`                                  | Final coin payout (ceiling-rounded) after house-edge adjustment. Always ≥ `Math.ceil(bet × 0.01)`.             |"
+      },
+      {
+        "heading": "Interface: `FreeSpinState`",
+        "embedText": "**Source:** src/types.ts\n\nInternal mutable state record managed by handleFreeSpins() in src/freespin.ts. Not exported from the package entry point; consumed within spin().",
+        "content": "**Source:** `src/types.ts`\n\nInternal mutable state record managed by `handleFreeSpins()` in `src/freespin.ts`. Not exported from the package entry point; consumed within `spin()`.\n\n```typescript\nexport interface FreeSpinState {\n  active: boolean;\n  remaining: number;\n  totalWon: number;\n}\n```\n\n| Field       | Type      | Description                                                                |\n|-------------|-----------|----------------------------------------------------------------------------|\n| `active`    | `boolean` | `true` while a free-spin session is in progress.                           |\n| `remaining` | `number`  | Spins left in the current session. Copied to `SpinResult.freeSpinsAwarded`.|\n| `totalWon`  | `number`  | Cumulative coins won during the free-spin session (tracked internally).    |"
+      },
+      {
+        "heading": "Type: `LegacySpinResult`",
+        "embedText": "**Source:** src/types.ts\n\nA simplified result shape used by the legacy payout path in src/legacy.ts. Not exported from the package entry point.\n\nUnlike SpinResult, the reels field uses mutable Symbol[][]. This type exists for backward compatibility; new code should use SpinResult.",
+        "content": "**Source:** `src/types.ts`\n\nA simplified result shape used by the legacy payout path in `src/legacy.ts`. Not exported from the package entry point.\n\n```typescript\nexport type LegacySpinResult = {\n  reels: Symbol[][];\n  payout: number;\n  jackpot: boolean;\n};\n```\n\nUnlike `SpinResult`, the `reels` field uses mutable `Symbol[][]`. This type exists for backward compatibility; new code should use `SpinResult`."
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Public API](04-API-Reference/01-Public-API.md) — spin() function signature and usage\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — domain glossary explaining symbols, paylines, wilds, scatters, and the jackpot\n- [Data Flow](02-Architecture/03-Data-Flow.md) — how SpinResult is assembled step-by-step\n- [Configuration Schema](04-API-Reference/02-Configuration-Schema.md) — configuration options that affect engine behaviour",
+        "content": "- [Public API](04-API-Reference/01-Public-API.md) — `spin()` function signature and usage\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — domain glossary explaining symbols, paylines, wilds, scatters, and the jackpot\n- [Data Flow](02-Architecture/03-Data-Flow.md) — how `SpinResult` is assembled step-by-step\n- [Configuration Schema](04-API-Reference/02-Configuration-Schema.md) — configuration options that affect engine behaviour"
+      }
+    ]
+  },
+  ".anatoly/docs/05-Development/01-Source-Tree.md": {
+    "sha": "b2e15935152c59569cf0e1b44d543b8f34d34a8b153be632e5896d488c967998",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "The project is a pure-TypeScript ESM package. All game logic lives under src/. There is no build output directory — TypeScript is consumed directly via tsx at runtime and validated with tsc --noEmit. The source is split into small single-responsibility modules that are composed by engine.ts.",
+        "content": "The project is a pure-TypeScript ESM package. All game logic lives under `src/`. There is no build output directory — TypeScript is consumed directly via `tsx` at runtime and validated with `tsc --noEmit`. The source is split into small single-responsibility modules that are composed by `engine.ts`."
+      },
+      {
+        "heading": "Module Descriptions — `src/index.ts` — Public Entry Point",
+        "embedText": "Re-exports the three public symbols that form the package's external API:\n\nNothing else is exported. All other modules are internal implementation details.",
+        "content": "Re-exports the three public symbols that form the package's external API:\n\n```typescript\nexport { spin, type Bet, type SpinResult } from \"./engine.js\";\n```\n\nNothing else is exported. All other modules are internal implementation details.\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/engine.ts` — Spin Orchestration",
+        "embedText": "The central module. Exposes two functions:\n\nspin wires together every other module via an EngineContainer (a lightweight service locator), builds five reels through StandardReelBuilderFactory, evaluates all ten PAYLINES, then aggregates scatter, free-spin, jackpot, and wild-multiplier results into a SpinResult.\n\nInternal helpers checkLine and evaluateLine are not exported.",
+        "content": "The central module. Exposes two functions:\n\n| Function | Signature | Description |\n|---|---|---|\n| `spin` | `(bet: Bet) => SpinResult` | Runs one complete spin, evaluates paylines, applies bonuses, returns the result. |\n| `computePayout` | `(lineWins: LineWin[], bet: any) => number` | Applies the house edge (`HOUSE_EDGE = 0.05`) and a minimum return to produce the final coin payout. |\n\n`spin` wires together every other module via an `EngineContainer` (a lightweight service locator), builds five reels through `StandardReelBuilderFactory`, evaluates all ten `PAYLINES`, then aggregates scatter, free-spin, jackpot, and wild-multiplier results into a `SpinResult`.\n\nInternal helpers `checkLine` and `evaluateLine` are not exported.\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/types.ts` — Shared Types",
+        "embedText": "Defines all domain types consumed across modules. See [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) for the complete reference.\n\nKey types:",
+        "content": "Defines all domain types consumed across modules. See [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) for the complete reference.\n\nKey types:\n\n| Type | Kind | Purpose |\n|---|---|---|\n| `Symbol` | union type | Eight possible reel symbols |\n| `LineWin` | interface | One resolved winning payline |\n| `FreeSpinState` | interface | Mutable free-spin session state |\n| `SpinResult` | interface | Complete outcome of a single spin |\n| `LegacySpinResult` | type alias | Deprecated result shape used by `legacy.ts` |\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/reels.ts` — Reel Definitions",
+        "embedText": "Owns symbol enumeration and per-reel weighted sampling.\n\nAll five reels use identical weights: CHERRY 25, LEMON 25, DIAMOND 30, BELL 15, BAR 10, SEVEN 5, WILD 5, SCATTER 5.",
+        "content": "Owns symbol enumeration and per-reel weighted sampling.\n\n| Export | Description |\n|---|---|\n| `spinReel(reelIndex)` | Returns a 3-symbol column for reel `reelIndex` using `DEFAULT_WEIGHTS`. |\n| `getReelSymbols()` | Returns the ordered array of all eight `Symbol` values. |\n| `getReelWeights(reelIndex)` | Returns the weight array for the given reel (all five reels share `DEFAULT_WEIGHTS`). |\n\nAll five reels use identical weights: CHERRY 25, LEMON 25, DIAMOND 30, BELL 15, BAR 10, SEVEN 5, WILD 5, SCATTER 5.\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/paytable.ts` — Pay Table",
+        "embedText": "Maps symbols and match counts to payout multipliers.\n\nPay table summary:",
+        "content": "Maps symbols and match counts to payout multipliers.\n\n| Export | Description |\n|---|---|\n| `getPayMultiplier(symbol, count)` | Returns the multiplier for `count` ∈ {3, 4, 5}; returns `0` for WILD/SCATTER or unknown symbols. |\n| `lineWins(symbols)` | Evaluates a 5-symbol array and returns the leading run (≥ 3) or `null`. |\n| `ANCIENT_RTP` | Constant `0.95` — the engine's target RTP. |\n\nPay table summary:\n\n| Symbol | ×3 | ×4 | ×5 |\n|---|---|---|---|\n| CHERRY / LEMON | 2 | 5 | 25 |\n| BELL | 5 | 20 | 100 |\n| BAR | 10 | 40 | 200 |\n| SEVEN | 25 | 100 | 500 |\n| DIAMOND | 50 | 250 | 1000 |\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/wild.ts` — Wild Bonus",
+        "embedText": "Single exported utility:\n\nReturns basePayout * (1 + wildCount) * 2 ** wildCount. Returns basePayout unchanged when wildCount ≤ 0. This formula is also applied inline inside engine.ts's evaluateLine.",
+        "content": "Single exported utility:\n\n```typescript\napplyWildBonus(basePayout: number, wildCount: number): number\n```\n\nReturns `basePayout * (1 + wildCount) * 2 ** wildCount`. Returns `basePayout` unchanged when `wildCount ≤ 0`. This formula is also applied inline inside `engine.ts`'s `evaluateLine`.\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/jackpot.ts` — Jackpot Detection",
+        "embedText": "Scans all 15 cells (5 reels × 3 rows) and returns true when four or more DIAMOND symbols appear in a single spin.",
+        "content": "```typescript\nisJackpotHit(reels: ReadonlyArray<ReadonlyArray<Symbol>>): boolean\n```\n\nScans all 15 cells (5 reels × 3 rows) and returns `true` when four or more DIAMOND symbols appear in a single spin.\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/freespin.ts` — Free-Spin State Machine",
+        "embedText": "handleFreeSpins mutates its state argument in place. The caller in engine.ts reads state.remaining after the call to populate SpinResult.freeSpinsAwarded.",
+        "content": "| Export | Description |\n|---|---|\n| `detectScatters(reels)` | Counts all SCATTER symbols across the full 5×3 grid. |\n| `handleFreeSpins(state, scatters)` | Mutates a `FreeSpinState` object: awards 10 free spins when ≥ 3 scatters appear; adds 10 more if already active; decrements `remaining` otherwise. |\n\n`handleFreeSpins` mutates its `state` argument in place. The caller in `engine.ts` reads `state.remaining` after the call to populate `SpinResult.freeSpinsAwarded`.\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/rng.ts` — Random Number Generator",
+        "embedText": "Generic cumulative-weight sampler backed by Math.random(). Used by reels.ts internally and registered in EngineContainer under the key \"rng\".",
+        "content": "```typescript\nweightedPick<T>(items: T[], weights: number[]): T\n```\n\nGeneric cumulative-weight sampler backed by `Math.random()`. Used by `reels.ts` internally and registered in `EngineContainer` under the key `\"rng\"`.\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/events.ts` — Event Emitter",
+        "embedText": "A minimal in-process pub/sub implementation with three methods (on, off, emit) and the exported constant SPIN_DONE = \"spin:done\".\n\nengine.ts instantiates a SpinEventEmitter per spin and emits SPIN_DONE with the final SpinResult after the spin completes. No handlers are registered in the default path — the emitter is available for extension by downstream code.",
+        "content": "A minimal in-process pub/sub implementation with three methods (`on`, `off`, `emit`) and the exported constant `SPIN_DONE = \"spin:done\"`.\n\n`engine.ts` instantiates a `SpinEventEmitter` per spin and emits `SPIN_DONE` with the final `SpinResult` after the spin completes. No handlers are registered in the default path — the emitter is available for extension by downstream code.\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/factories.ts` — Reel Builder Factory",
+        "embedText": "Implements the Abstract Factory pattern for reel construction.\n\nengine.ts always uses StandardReelBuilderFactory. The abstract base exists to allow alternative implementations (e.g., seeded or mock reels in tests).",
+        "content": "Implements the Abstract Factory pattern for reel construction.\n\n| Class | Description |\n|---|---|\n| `AbstractReelBuilderFactory` | Abstract base declaring `buildReels(reelCount, rowCount): Symbol[][]`. |\n| `StandardReelBuilderFactory` | Concrete implementation; calls `spinReel(i)` for each reel index. |\n\n`engine.ts` always uses `StandardReelBuilderFactory`. The abstract base exists to allow alternative implementations (e.g., seeded or mock reels in tests).\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/strategy.ts` — Payout Strategy",
+        "embedText": "Implements the Strategy pattern for final payout adjustment.\n\nengine.ts instantiates DefaultStrategy. ConservativeStrategy is available for custom configurations.",
+        "content": "Implements the Strategy pattern for final payout adjustment.\n\n| Class | Description |\n|---|---|\n| `SpinStrategy` | Abstract base declaring `adjustPayout(result: SpinResult): SpinResult`. |\n| `DefaultStrategy` | Returns the result unchanged (identity). |\n| `ConservativeStrategy` | Reduces `totalPayout` to 80% (`Math.floor(result.totalPayout * 0.8)`). |\n\n`engine.ts` instantiates `DefaultStrategy`. `ConservativeStrategy` is available for custom configurations.\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/legacy.ts` — Legacy Payout Helper",
+        "embedText": "Evaluates a single 5-symbol line without house-edge adjustments. Delegates to getPayMultiplier from paytable.ts. Intended for backward compatibility with callers that supply a pre-sliced symbol array rather than a full SpinResult.",
+        "content": "```typescript\ncomputeLegacyPayout(lineSymbols: Symbol[], bet: number): number\n```\n\nEvaluates a single 5-symbol line without house-edge adjustments. Delegates to `getPayMultiplier` from `paytable.ts`. Intended for backward compatibility with callers that supply a pre-sliced symbol array rather than a full `SpinResult`.\n\n---"
+      },
+      {
+        "heading": "Module Descriptions — `src/__tests__/basic.test.ts` — Unit Tests",
+        "embedText": "Integration and unit tests for the engine. Run via the tsx dev dependency. See [Build and Test](./02-Build-and-Test.md) for commands.",
+        "content": "Integration and unit tests for the engine. Run via the `tsx` dev dependency. See [Build and Test](./02-Build-and-Test.md) for commands."
+      },
+      {
+        "heading": "Examples",
+        "embedText": "Importing a single internal module to call getPayMultiplier directly (useful in tests or custom tooling):\n\nVerifying jackpot detection with a crafted reel grid:",
+        "content": "Importing a single internal module to call `getPayMultiplier` directly (useful in tests or custom tooling):\n\n```typescript\nimport { getPayMultiplier } from \"./src/paytable.js\";\n\n// DIAMOND matching 5 in a row → multiplier 1000\nconst multiplier = getPayMultiplier(\"DIAMOND\", 5);\nconsole.log(multiplier); // 1000\n```\n\nVerifying jackpot detection with a crafted reel grid:\n\n```typescript\nimport { isJackpotHit } from \"./src/jackpot.js\";\n\nconst reels = [\n  [\"DIAMOND\", \"DIAMOND\", \"DIAMOND\"],\n  [\"DIAMOND\", \"CHERRY\", \"LEMON\"],\n  [\"BELL\",    \"BAR\",    \"SEVEN\"],\n  [\"LEMON\",   \"CHERRY\", \"BELL\"],\n  [\"BAR\",     \"SEVEN\",  \"CHERRY\"],\n];\n\nconsole.log(isJackpotHit(reels)); // true  (4 × DIAMOND found)\n```"
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Public API](../04-API-Reference/01-Public-API.md) — spin function signature and return type\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — All exported TypeScript types\n- [Build and Test](./02-Build-and-Test.md) — How to type-check and run tests\n- [Code Conventions](./03-Code-Conventions.md) — Naming and structural conventions used across these modules\n- [System Overview](../02-Architecture/01-System-Overview.md) — High-level component diagram",
+        "content": "- [Public API](../04-API-Reference/01-Public-API.md) — `spin` function signature and return type\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md) — All exported TypeScript types\n- [Build and Test](./02-Build-and-Test.md) — How to type-check and run tests\n- [Code Conventions](./03-Code-Conventions.md) — Naming and structural conventions used across these modules\n- [System Overview](../02-Architecture/01-System-Overview.md) — High-level component diagram"
+      }
+    ]
+  },
+  ".anatoly/docs/05-Development/02-Build-and-Test.md": {
+    "sha": "fffc84900ff4e2b583f85a4fb33c5955301caa361166abd0693832bafc96337c",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "slot-engine uses the TypeScript compiler (tsc) as its sole build tool and tsx as a lightweight runtime for executing TypeScript files directly. There is no bundler, no separate emit step, and no dedicated test framework — the package.json \"build\" script performs a type-check-only compilation, and tests are plain TypeScript files run via tsx.",
+        "content": "slot-engine uses the TypeScript compiler (`tsc`) as its sole build tool and `tsx` as a lightweight runtime for executing TypeScript files directly. There is no bundler, no separate emit step, and no dedicated test framework — the `package.json` `\"build\"` script performs a type-check-only compilation, and tests are plain TypeScript files run via `tsx`."
+      },
+      {
+        "heading": "Prerequisites",
+        "embedText": "All dev dependencies are installed via npm install.",
+        "content": "| Tool | Version | Purpose |\n|------|---------|---------|\n| Node.js | ≥ 18 (ESM support required) | Runtime |\n| npm | bundled with Node.js | Package management |\n| TypeScript | `^5.6.3` (dev dependency) | Type checking |\n| tsx | `^4.19.2` (dev dependency) | Running `.ts` files directly |\n\nAll dev dependencies are installed via `npm install`."
+      },
+      {
+        "heading": "Install Dependencies",
+        "embedText": "This installs typescript and tsx into node_modules. No global installs are required.",
+        "content": "```bash\nnpm install\n```\n\nThis installs `typescript` and `tsx` into `node_modules`. No global installs are required."
+      },
+      {
+        "heading": "Type Checking",
+        "embedText": "The build script runs tsc --noEmit, which type-checks all files matched by tsconfig.json (src/**/*) without writing any output to disk.\n\nA clean run produces no output and exits with code 0. Any type errors are printed to stdout with file and line information.\n\n**Compiler settings (from tsconfig.json):**",
+        "content": "The `build` script runs `tsc --noEmit`, which type-checks all files matched by `tsconfig.json` (`src/**/*`) without writing any output to disk.\n\n```bash\nnpm run build\n```\n\nA clean run produces no output and exits with code `0`. Any type errors are printed to stdout with file and line information.\n\n**Compiler settings (from `tsconfig.json`):**\n\n| Option | Value | Effect |\n|--------|-------|--------|\n| `target` | `ES2022` | Compile to ES2022 syntax |\n| `module` | `ESNext` | Use ES module output |\n| `moduleResolution` | `Bundler` | Resolve imports as a bundler would |\n| `strict` | `true` | Enable all strict type checks |\n| `noEmit` | `true` | Type-check only, no output files |\n| `isolatedModules` | `true` | Each file must be independently compilable |\n| `resolveJsonModule` | `true` | Allow importing `.json` files |"
+      },
+      {
+        "heading": "Running Tests",
+        "embedText": "Tests live in src/__tests__/. They are plain TypeScript files that use a minimal hand-rolled assert helper and console.log for output. There is no test runner binary — each test file is executed directly with tsx.\n\nA passing run prints a confirmation message and exits with code 0:\n\nA failing assertion throws an Error and exits with a non-zero code, printing the assertion message to stderr.",
+        "content": "Tests live in `src/__tests__/`. They are plain TypeScript files that use a minimal hand-rolled `assert` helper and `console.log` for output. There is no test runner binary — each test file is executed directly with `tsx`.\n\n```bash\nnpx tsx src/__tests__/basic.test.ts\n```\n\nA passing run prints a confirmation message and exits with code `0`:\n\n```\nbasic test passed\n```\n\nA failing assertion throws an `Error` and exits with a non-zero code, printing the assertion message to stderr."
+      },
+      {
+        "heading": "Running Tests — Running All Test Files",
+        "embedText": "Because there is no test runner, all test files must be executed individually. A simple shell loop covers the __tests__ directory:",
+        "content": "Because there is no test runner, all test files must be executed individually. A simple shell loop covers the `__tests__` directory:\n\n```bash\nfor f in src/__tests__/*.test.ts; do npx tsx \"$f\"; done\n```"
+      },
+      {
+        "heading": "Full Local CI Sequence",
+        "embedText": "The recommended sequence before committing mirrors what a CI pipeline would run:\n\nAll three commands must exit with code 0 for the tree to be considered clean.",
+        "content": "The recommended sequence before committing mirrors what a CI pipeline would run:\n\n```bash\nnpm install          # ensure dependencies are present\nnpm run build        # type-check all sources\nnpx tsx src/__tests__/basic.test.ts   # run tests\n```\n\nAll three commands must exit with code `0` for the tree to be considered clean."
+      },
+      {
+        "heading": "Notes",
+        "embedText": "- The project is declared as \"type\": \"module\" in package.json, so all .ts source files are treated as ES modules. Import paths inside the source use the .js extension (e.g., import { getReelSymbols } from \"../reels.js\") as required by Node.js ESM resolution.\n- tsc --noEmit does **not** produce JavaScript output. The compiled artifacts are never written to disk; tsx is used to run TypeScript sources directly in both development and test contexts.\n- There is no linting tool (e.g., ESLint) configured in package.json. Only TypeScript strict-mode type checking is enforced.",
+        "content": "- The project is declared as `\"type\": \"module\"` in `package.json`, so all `.ts` source files are treated as ES modules. Import paths inside the source use the `.js` extension (e.g., `import { getReelSymbols } from \"../reels.js\"`) as required by Node.js ESM resolution.\n- `tsc --noEmit` does **not** produce JavaScript output. The compiled artifacts are never written to disk; `tsx` is used to run TypeScript sources directly in both development and test contexts.\n- There is no linting tool (e.g., ESLint) configured in `package.json`. Only TypeScript strict-mode type checking is enforced."
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Source Tree](05-Development/01-Source-Tree.md)\n- [Code Conventions](05-Development/03-Code-Conventions.md)\n- [Release Process](05-Development/04-Release-Process.md)\n- [Public API](04-API-Reference/01-Public-API.md)",
+        "content": "- [Source Tree](05-Development/01-Source-Tree.md)\n- [Code Conventions](05-Development/03-Code-Conventions.md)\n- [Release Process](05-Development/04-Release-Process.md)\n- [Public API](04-API-Reference/01-Public-API.md)"
+      }
+    ]
+  },
+  ".anatoly/docs/05-Development/03-Code-Conventions.md": {
+    "sha": "fabb7c59881a4a99c7b365c6c58f1105f0f162801308d50fbc1e75f2f6789f0f",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "slot-engine is a pure TypeScript library with no runtime dependencies. All conventions prioritise type safety, single-responsibility modules, and self-documenting code. There is no external linter or formatter configured; conformance relies on TypeScript strict mode and the patterns described below.",
+        "content": "slot-engine is a pure TypeScript library with no runtime dependencies. All conventions prioritise type safety, single-responsibility modules, and self-documenting code. There is no external linter or formatter configured; conformance relies on TypeScript strict mode and the patterns described below."
+      },
+      {
+        "heading": "TypeScript Configuration",
+        "embedText": "The project targets **ES2022** with \"module\": \"ESNext\" and \"moduleResolution\": \"Bundler\". Key compiler flags:",
+        "content": "The project targets **ES2022** with `\"module\": \"ESNext\"` and `\"moduleResolution\": \"Bundler\"`. Key compiler flags:\n\n| Flag | Value | Effect |\n|---|---|---|\n| `strict` | `true` | Enables all strict checks |\n| `noEmit` | `true` | Type-checking only; no JS output |\n| `isolatedModules` | `true` | Every file must be an independent module |\n| `forceConsistentCasingInFileNames` | `true` | Prevents case-insensitive import bugs |\n| `esModuleInterop` | `true` | Allows default imports from CJS packages |\n\n```json\n{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"ESNext\",\n    \"moduleResolution\": \"Bundler\",\n    \"strict\": true,\n    \"esModuleInterop\": true,\n    \"skipLibCheck\": true,\n    \"forceConsistentCasingInFileNames\": true,\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"noEmit\": true\n  },\n  \"include\": [\"src/**/*\"]\n}\n```"
+      },
+      {
+        "heading": "Naming Conventions — Event Names",
+        "embedText": "Event name strings use namespace:event kebab-case format.",
+        "content": "Event name strings use `namespace:event` kebab-case format.\n\n```typescript\nemitter.emit(\"spin:done\", result);\nemitter.on(\"spin:done\", (result) => { /* … */ });\n```"
+      },
+      {
+        "heading": "Module Organisation",
+        "embedText": "Each file in src/ owns a single responsibility. No module imports from more than the modules it directly depends on.",
+        "content": "Each file in `src/` owns a single responsibility. No module imports from more than the modules it directly depends on.\n\n| Module | Responsibility |\n|---|---|\n| `types.ts` | All exported type definitions and interfaces |\n| `engine.ts` | Core `spin()` orchestration and `EngineContainer` |\n| `rng.ts` | Weighted random selection (`weightedPick`) |\n| `reels.ts` | Reel spinning and symbol weight configuration |\n| `paytable.ts` | Pay table data and multiplier lookup (`getPayMultiplier`) |\n| `freespin.ts` | Free-spin detection and `FreeSpinState` management |\n| `jackpot.ts` | Jackpot hit detection |\n| `wild.ts` | Wild-symbol bonus calculation |\n| `strategy.ts` | `SpinStrategy` base class and concrete strategy implementations |\n| `factories.ts` | `AbstractReelBuilderFactory` and `StandardReelBuilderFactory` |\n| `events.ts` | `SpinEventEmitter` |\n| `legacy.ts` | Legacy payout computation path |\n| `index.ts` | Public re-exports only |"
+      },
+      {
+        "heading": "Import Style — ESM `.js` Extensions",
+        "embedText": "Import paths always use the .js extension, even though source files are .ts. This satisfies the Node.js ESM resolver used at runtime.",
+        "content": "Import paths always use the `.js` extension, even though source files are `.ts`. This satisfies the Node.js ESM resolver used at runtime.\n\n```typescript\nimport type { Symbol, LineWin, SpinResult } from \"./types.js\";\nimport { weightedPick } from \"./rng.js\";\nimport { spinReel } from \"./reels.js\";\n```"
+      },
+      {
+        "heading": "Import Style — `import type` for Type-Only Imports",
+        "embedText": "Type-only imports use import type to enable tree-shaking and to avoid circular-module issues at runtime.",
+        "content": "Type-only imports use `import type` to enable tree-shaking and to avoid circular-module issues at runtime.\n\n```typescript\n// Correct — does not generate a runtime import statement\nimport type { FreeSpinState } from \"./types.js\";\n\n// Avoid for pure types\nimport { FreeSpinState } from \"./types.js\"; // unnecessary runtime reference\n```"
+      },
+      {
+        "heading": "Import Style — No Default Exports",
+        "embedText": "All exports are named. Default exports are not used anywhere in the codebase.",
+        "content": "All exports are named. Default exports are not used anywhere in the codebase.\n\n```typescript\n// Correct\nexport function spin(bet: Bet): SpinResult { /* … */ }\nexport type { Symbol, SpinResult };\n\n// Not used\nexport default spin;\n```"
+      },
+      {
+        "heading": "Type Patterns — Prefer `ReadonlyArray` in Public API",
+        "embedText": "All arrays exposed through SpinResult use ReadonlyArray to prevent callers from mutating engine output.",
+        "content": "All arrays exposed through `SpinResult` use `ReadonlyArray` to prevent callers from mutating engine output.\n\n```typescript\ninterface SpinResult {\n  reels: ReadonlyArray<ReadonlyArray<Symbol>>;\n  lineWins: ReadonlyArray<LineWin>;\n  // …\n}\n```"
+      },
+      {
+        "heading": "Type Patterns — String-Literal Unions over Enums",
+        "embedText": "Symbol is a string-literal union rather than a TypeScript enum. This produces smaller output, integrates naturally with JSON, and enables exhaustive checks without an enum import.",
+        "content": "`Symbol` is a string-literal union rather than a TypeScript `enum`. This produces smaller output, integrates naturally with JSON, and enables exhaustive checks without an enum import.\n\n```typescript\ntype Symbol = \"CHERRY\" | \"LEMON\" | \"BELL\" | \"BAR\" | \"SEVEN\" | \"DIAMOND\" | \"WILD\" | \"SCATTER\";\n```"
+      },
+      {
+        "heading": "Type Patterns — `Record` for Lookup Tables",
+        "embedText": "Paytable and weight maps use Record or indexed interfaces.",
+        "content": "Paytable and weight maps use `Record<string, …>` or indexed interfaces.\n\n```typescript\nconst PAY_TABLE: Record<string, [number, number, number]> = {\n  CHERRY:  [2, 5, 10],\n  SEVEN:   [10, 25, 100],\n  DIAMOND: [15, 50, 200],\n  // …\n};\n```"
+      },
+      {
+        "heading": "Type Patterns — Generics Only Where Necessary",
+        "embedText": "Generic types appear only in infrastructure code (weightedPick, resolve) where the type parameter meaningfully constrains behaviour. Domain functions use concrete types.",
+        "content": "Generic types appear only in infrastructure code (`weightedPick<T>`, `resolve<T>`) where the type parameter meaningfully constrains behaviour. Domain functions use concrete types."
+      },
+      {
+        "heading": "Design Patterns — Strategy",
+        "embedText": "SpinStrategy is an abstract base class. Concrete implementations override the payout adjustment hook:\n\n- DefaultStrategy — returns the payout unchanged.\n- ConservativeStrategy — applies a 20% reduction.\n\nNew strategies extend SpinStrategy without modifying engine.ts.",
+        "content": "`SpinStrategy` is an abstract base class. Concrete implementations override the payout adjustment hook:\n\n- `DefaultStrategy` — returns the payout unchanged.\n- `ConservativeStrategy` — applies a 20% reduction.\n\nNew strategies extend `SpinStrategy` without modifying `engine.ts`."
+      },
+      {
+        "heading": "Design Patterns — Service Container",
+        "embedText": "EngineContainer provides a minimal dependency-injection registry. Services are registered with a string key and retrieved with a typed resolve() call.",
+        "content": "`EngineContainer` provides a minimal dependency-injection registry. Services are registered with a string key and retrieved with a typed `resolve<T>()` call.\n\n```typescript\nconst container = new EngineContainer();\ncontainer.register(\"rng\", weightedPick);\ncontainer.register(\"reels\", spinReel);\nconst rng = container.resolve<typeof weightedPick>(\"rng\");\n```"
+      },
+      {
+        "heading": "Design Patterns — Abstract Factory",
+        "embedText": "AbstractReelBuilderFactory declares the factory contract. StandardReelBuilderFactory is the production implementation. Separating construction from orchestration allows alternative reel configurations to be substituted without touching engine.ts.",
+        "content": "`AbstractReelBuilderFactory` declares the factory contract. `StandardReelBuilderFactory` is the production implementation. Separating construction from orchestration allows alternative reel configurations to be substituted without touching `engine.ts`."
+      },
+      {
+        "heading": "Error Handling",
+        "embedText": "Input validation in the public spin() entry point throws early with a plain string message. Internal functions assume validated input.\n\nAvoid try/catch inside engine internals. Surface errors to the caller rather than silently swallowing them.",
+        "content": "Input validation in the public `spin()` entry point throws early with a plain string message. Internal functions assume validated input.\n\n```typescript\nif (typeof bet !== \"number\" || bet < 1 || !Number.isInteger(bet)) {\n  throw \"invalid bet\";\n}\nif (bet > 100) {\n  console.warn(\"bet exceeds maximum; clamping to 100\");\n}\n```\n\nAvoid try/catch inside engine internals. Surface errors to the caller rather than silently swallowing them."
+      },
+      {
+        "heading": "JSDoc Comments",
+        "embedText": "Public functions and non-obvious algorithms carry a JSDoc block. Inline comments are used sparingly; prefer self-documenting names.\n\nPrivate helpers and one-liners do not require JSDoc.",
+        "content": "Public functions and non-obvious algorithms carry a JSDoc block. Inline comments are used sparingly; prefer self-documenting names.\n\n```typescript\n/**\n * Weighted random pick utility, suitable for gaming RNG applications.\n * Uses a cumulative-weight approach with a uniform random draw.\n */\nfunction weightedPick<T>(items: T[], weights: number[]): T {\n  // …\n}\n```\n\nPrivate helpers and one-liners do not require JSDoc."
+      },
+      {
+        "heading": "Testing",
+        "embedText": "Tests live in src/__tests__/. The project uses no test framework — assertions are raw assert() calls imported from Node's built-in assert module.\n\nTests are run directly with tsx:\n\nThere is no test runner, no coverage tool, and no watch mode configured.",
+        "content": "Tests live in `src/__tests__/`. The project uses no test framework — assertions are raw `assert()` calls imported from Node's built-in `assert` module.\n\n```typescript\nimport assert from \"node:assert/strict\";\nimport { spin } from \"../index.js\";\n\nconst result = spin(10);\nassert.ok(result.totalPayout >= 0, \"payout must be non-negative\");\nassert.strictEqual(result.reels.length, 5, \"must have 5 reels\");\n```\n\nTests are run directly with `tsx`:\n\n```bash\nnpx tsx src/__tests__/basic.test.ts\n```\n\nThere is no test runner, no coverage tool, and no watch mode configured."
+      },
+      {
+        "heading": "Anti-Patterns to Avoid",
+        "embedText": "- **any types** — use generics or unknown with a type guard instead.\n- **Mutable exported arrays** — wrap in ReadonlyArray before returning from public functions.\n- **Default exports** — use named exports throughout.\n- **Relative imports without .js extension** — the ESM resolver requires explicit extensions.\n- **Side effects at module load time** — modules should export pure functions and constants; no I/O on import.\n- **Cross-responsibility imports** — e.g., paytable.ts must not import from engine.ts.",
+        "content": "- **`any` types** — use generics or unknown with a type guard instead.\n- **Mutable exported arrays** — wrap in `ReadonlyArray` before returning from public functions.\n- **Default exports** — use named exports throughout.\n- **Relative imports without `.js` extension** — the ESM resolver requires explicit extensions.\n- **Side effects at module load time** — modules should export pure functions and constants; no I/O on import.\n- **Cross-responsibility imports** — e.g., `paytable.ts` must not import from `engine.ts`."
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Source Tree](05-Development/01-Source-Tree.md) — annotated directory listing with per-module descriptions.\n- [Build and Test](05-Development/02-Build-and-Test.md) — how to run the type-checker and tests.\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — complete reference for all exported TypeScript types.\n- [Public API](04-API-Reference/01-Public-API.md) — spin() signature and SpinResult structure.\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — domain vocabulary (Symbol, Payline, Wild multiplier, etc.).",
+        "content": "- [Source Tree](05-Development/01-Source-Tree.md) — annotated directory listing with per-module descriptions.\n- [Build and Test](05-Development/02-Build-and-Test.md) — how to run the type-checker and tests.\n- [Types and Interfaces](04-API-Reference/03-Types-and-Interfaces.md) — complete reference for all exported TypeScript types.\n- [Public API](04-API-Reference/01-Public-API.md) — `spin()` signature and `SpinResult` structure.\n- [Core Concepts](02-Architecture/02-Core-Concepts.md) — domain vocabulary (Symbol, Payline, Wild multiplier, etc.)."
+      }
+    ]
+  },
+  ".anatoly/docs/05-Development/04-Release-Process.md": {
+    "sha": "fce64d7e727853ac4700e461b08a7afb1223d80a8cd84d946804f5ac7286dbd8",
+    "sections": [
+      {
+        "heading": "Overview",
+        "embedText": "slot-engine uses Semantic Versioning (SemVer) to communicate the nature of each release. Because the package exposes a pure TypeScript game-logic API with no networking or persistence, breaking changes are limited to the public surface defined in spin(), SpinResult, and related types documented in the [Public API](../04-API-Reference/01-Public-API.md).\n\nThe current release version is **0.1.0** (initial development phase). Releases are driven manually — there is no automated CI publish pipeline defined in the project at this time.",
+        "content": "slot-engine uses Semantic Versioning (SemVer) to communicate the nature of each release. Because the package exposes a pure TypeScript game-logic API with no networking or persistence, breaking changes are limited to the public surface defined in `spin()`, `SpinResult`, and related types documented in the [Public API](../04-API-Reference/01-Public-API.md).\n\nThe current release version is **0.1.0** (initial development phase). Releases are driven manually — there is no automated CI publish pipeline defined in the project at this time."
+      },
+      {
+        "heading": "Versioning Scheme",
+        "embedText": "slot-engine follows Semantic Versioning MAJOR.MINOR.PATCH:\n\nDuring the **0.x** series, minor-version bumps may contain breaking changes as the API stabilises.",
+        "content": "slot-engine follows Semantic Versioning `MAJOR.MINOR.PATCH`:\n\n| Segment | Increment when… |\n|---------|-----------------|\n| `MAJOR` | A breaking change is made to the public API (e.g. renamed export, changed `SpinResult` field type, removed behaviour) |\n| `MINOR` | New backwards-compatible functionality is added (e.g. new optional field on `SpinResult`, additional payline logic) |\n| `PATCH` | Backwards-compatible bug fixes with no public API change (e.g. payout math correction, RTP tuning) |\n\nDuring the **0.x** series, minor-version bumps may contain breaking changes as the API stabilises."
+      },
+      {
+        "heading": "Release Checklist",
+        "embedText": "The following steps must be completed in order before tagging a release.",
+        "content": "The following steps must be completed in order before tagging a release."
+      },
+      {
+        "heading": "Release Checklist — 1. Verify the build passes",
+        "embedText": "The project's build script performs a full TypeScript type-check with no emit:\n\nA clean exit (exit code 0) confirms there are no type errors. Resolve all diagnostics before proceeding.",
+        "content": "The project's build script performs a full TypeScript type-check with no emit:\n\n```bash\nnpm run build\n```\n\nA clean exit (exit code `0`) confirms there are no type errors. Resolve all diagnostics before proceeding."
+      },
+      {
+        "heading": "Release Checklist — 3. Commit the version bump",
+        "embedText": "Stage and commit the package.json change with a conventional message:",
+        "content": "Stage and commit the `package.json` change with a conventional message:\n\n```bash\ngit add package.json\ngit commit -m \"chore: bump version to 0.2.0\"\n```"
+      },
+      {
+        "heading": "Release Checklist — 4. Tag the release",
+        "embedText": "Create an annotated Git tag that matches the new version:",
+        "content": "Create an annotated Git tag that matches the new version:\n\n```bash\ngit tag -a v0.2.0 -m \"Release v0.2.0\"\n```"
+      },
+      {
+        "heading": "Breaking-Change Policy",
+        "embedText": "A change is considered **breaking** if it:\n\n- Removes or renames an exported symbol (spin, SpinResult, Bet, LineWin, Symbol).\n- Changes the type of any field on SpinResult in a non-additive way.\n- Alters the semantics of spin() such that existing callers receive different payouts for identical inputs without a documented RTP adjustment.\n\nNon-breaking additions (new optional fields, new overloads) do not require a major version bump.",
+        "content": "A change is considered **breaking** if it:\n\n- Removes or renames an exported symbol (`spin`, `SpinResult`, `Bet`, `LineWin`, `Symbol`).\n- Changes the type of any field on `SpinResult` in a non-additive way.\n- Alters the semantics of `spin()` such that existing callers receive different payouts for identical inputs without a documented RTP adjustment.\n\nNon-breaking additions (new optional fields, new overloads) do not require a major version bump."
+      },
+      {
+        "heading": "See Also",
+        "embedText": "- [Build and Test](02-Build-and-Test.md)\n- [Source Tree](01-Source-Tree.md)\n- [Public API](../04-API-Reference/01-Public-API.md)\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md)",
+        "content": "- [Build and Test](02-Build-and-Test.md)\n- [Source Tree](01-Source-Tree.md)\n- [Public API](../04-API-Reference/01-Public-API.md)\n- [Types and Interfaces](../04-API-Reference/03-Types-and-Interfaces.md)"
+      }
+    ]
+  }
+}
