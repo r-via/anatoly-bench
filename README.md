@@ -98,12 +98,17 @@ A perfect audit scores `1.0`. In practice, the target is movement over time — 
 | v9  | 2026-04-27 | 61.0%     | 46.2%      | 85.7%   | 66.7%       | 66.7%           | 40.0%          |
 | v10 | 2026-04-28 | 65.0%     | 53.3%      | 85.7%   | 66.7%       | 75.0%           | 44.4%          |
 | v11 | 2026-04-28 | 57.8%     | 44.4%      | 85.7%   | 66.7%       | 33.3%§          | 58.8%          |
-| **v12** | 2026-04-28 | **67.8%** | 53.3%   | 85.7%   | 66.7%       | **66.7%**       | **66.7%**      |
+| v12 | 2026-04-28 | 67.8%     | 53.3%   | 85.7%   | 66.7%       | 66.7%           | 66.7%          |
+| v13 | 2026-05-06 | 63.8%     | 42.9%   | 85.7%   | 66.7%       | 57.1%           | 66.7%          |
+| **v14**¶ | 2026-05-06 | **72.9%** | **71.4%** | 85.7% | 66.7%      | 57.1%           | **83.3%**      |
+| v15 | 2026-05-06 | 64.2%     | 50.0%   | 85.7%   | 66.7%       | 57.1%           | 61.5%          |
+| **v16** | 2026-05-07 | **69.9%** | 53.3%   | 85.7%   | 66.7%       | **66.7%**       | 76.9%          |
 
 \* v1 used a different scoring scope (7 axes vs 5). Comparisons are meaningful from v2 onwards.
 † v7 re-scored against the v8 catalog (DEAD-WILD-HELPER + DEAD-LINE-WIN added) for an apples-to-apples delta against v8.
 ‡ v8 lost three findings vs v7 to LLM variance (INV-WEIGHTS, INV-BETCAP on correction; BP-STRING-THROW on best-practices). The structural improvement is the **+19pp on utility** (DEAD-TYPE, DEAD-WILD-HELPER, DEAD-LINE-WIN all caught after the triage fix).
 § v11 saw an OE collapse where the LLM agglomerated three over-engineered patterns into a single finding on `engine.ts::spin` instead of flagging each at its source file. The next commit added an explicit "flag the source, not the consumer" rule to the correction, OE, and best-practices prompts; v12 restored OE to 66.7% with 100% precision.
+¶ v14 is the historical best — same Anatoly state as v13/v15, but the LLM converged on INV-FREESPIN, INV-WEIGHTS, and BP-STRING-THROW that the sister runs missed. The 9pp spread across v13–v15 (63.8% → 72.9% → 64.2%) is pure run-to-run LLM variance on a fixed code state, which sets the noise floor for any single-run comparison.
 
 Six Anatoly fixes have landed during the lifetime of this benchmark:
 
@@ -113,17 +118,35 @@ Six Anatoly fixes have landed during the lifetime of this benchmark:
 - **v10 — internal-docs injection into business-logic axes**. Anatoly's existing `.anatoly/docs/` scaffolder produces high-quality, agent-curated business context that previously only fed the `documentation` axis. The fix injects it into `correction`, `best_practices`, and `overengineering` user messages, with a prompt rule instructing the model to treat documented invariants as authoritative ground truth. correction 46.2% → 53.3%; INV-ROUND now detected.
 - **v11 — industry-knowledge prompting** ([r-via/anatoly@d0068a2](https://github.com/r-via/anatoly/commit/d0068a2)). The LLM had pretrained knowledge of industry-specific correctness rules (gaming RNG must be certifiable; monetary code must use exact arithmetic; deprecated cryptographic primitives) but did not volunteer it without prompting. Added a rule to the correction and best-practices system prompts inviting the model to apply such rules when it can confidently infer the project's domain, with a discipline clause requiring citation of both the inferred domain and the rule. best-practices recall hit 100% (5/5) for the first time; BP-RNG (`Math.random()` for gaming) detected.
 - **v12 — anti-collapse rules + temperature pin** ([r-via/anatoly@d8fd931](https://github.com/r-via/anatoly/commit/d8fd931), [r-via/anatoly@ebb8505](https://github.com/r-via/anatoly/commit/ebb8505)). Two changes: (1) added a "flag the source of a defect, not its consumer" rule to the correction, overengineering, and best-practices prompts — the LLM was previously free to choose between flagging one consumer-side finding or N source-side findings, producing run-to-run-flapping verdicts. (2) Pinned `temperature: 0` in the Vercel SDK transport (Anthropic Claude Agent SDK and Gemini CLI do not expose temperature, so subscription-mode calls remain at the SDK default). overengineering 33.3% → 66.7% with 100% precision; global F1 jumped from 57.8% (v11) to 67.8% (v12).
+- **v13 / v14 / v15 — variance triplet (no Anatoly change)**. Three back-to-back runs on the same code and same Anatoly state, scored on the new score-output metadata (commit/duration/cost/tokens surfaced via [r-via/anatoly-bench@e743a53](https://github.com/r-via/anatoly-bench/commit/e743a53)). The 9-point spread (63.8% / 72.9% / 64.2%) is the run-to-run LLM noise floor: same prompts, same code, different convergence on INV-FREESPIN, INV-WEIGHTS, BP-STRING-THROW from one run to the next. Treat any single-run delta below this band as noise.
+- **v16 — local sidecar architectural cleanup + per-axis bench metrics** ([r-via/anatoly@f8e52e8](https://github.com/r-via/anatoly/commit/f8e52e8), [r-via/anatoly@a515eb2](https://github.com/r-via/anatoly/commit/a515eb2), [r-via/anatoly@c58fae8](https://github.com/r-via/anatoly/commit/c58fae8), [r-via/anatoly-bench@f892b0d](https://github.com/r-via/anatoly-bench/commit/f892b0d)). Three Anatoly fixes plus one bench feature: (1) unified the `local-advanced` config-facing name with the `anatoly-local` runtime registry entry — the v3 config path was forwarding the user's placeholder `base_url: http://localhost:8082/v1` into the connectivity probe and the SDK call, both of which were supposed to use the per-axis URLs (`:11437` code / `:11438` NLP) hardcoded in `KNOWN_EMBEDDING_PROVIDERS`. (2) Propagated input/output/cache tokens from the agentic SDK call through `Tier3 QueryResult → ShardResult → Tier3Result → RefinementResult → recordLlmCost`, so `phaseStats.refinement` now reports real token counts instead of zeros. (3) Skipped the GGUF connectivity probe at run start (saves a 30–120 s container swap that was reduplicating the warm-up the indexer would do anyway). On the bench side, `score` now surfaces per-axis Time / Cost / Output tokens columns next to F1 — see the v16 baseline below for the new layout. F1 settled at 69.9%, inside the v13–v15 variance band; the run is qualitatively similar to v12 with INV-WEIGHTS recovered and INV-FREESPIN lost (net-zero on correction, +10pp on best-practices vs v12 from a clean refinement pass).
 
 Per-run JSON + Markdown baselines are in [`baselines/`](./baselines/).
 
-### Remaining misses on v12
+### Per-axis execution profile (v16)
 
-Eight defects from the catalog that Anatoly does not yet detect on this fixture:
+Surfaced for the first time in v16 thanks to the new bench columns. On
+slot-engine, where best-practices and correction account for ~80% of the run.
+
+| Axis | F1 | Time | Cost | Out tokens |
+|------|---:|-----:|-----:|-----------:|
+| correction | 53.3% | 8m 43s | $1.44 | 35K |
+| utility | 85.7% | 41s | $0.09 | 6K |
+| duplication | 66.7% | 1m 13s | $0.11 | 11K |
+| overengineering | 66.7% | 3m 3s | $0.87 | 10K |
+| best-practices | 76.9% | 17m 16s | $2.20 | 72K |
+| _refinement_ (cross-axis) | — | 2m 36s | $0.55 | 8K |
+
+best-practices alone consumes ~17 minutes and $2.20 — about 25× the cost of utility for an F1 nine points lower. Correction takes 8 minutes for a 53% F1, the worst time-per-F1-point ratio of the scored axes. These are the axes worth optimising first if cost / latency become a target.
+
+### Remaining misses on v16
+
+Eight defects from the catalog that Anatoly does not yet detect on this fixture (same count as v12 but with INV-WEIGHTS recovered and INV-FREESPIN newly lost — net-zero on correction):
 
 | Axis | ID | Difficulty | Defect |
 |------|----|----|--------|
-| correction | INV-WEIGHTS | medium | DIAMOND symbol weight 30 instead of ~3 across all reels |
 | correction | INV-WILD | hard | wild multiplier stacks `(1+wc)·2^wc` instead of `2^wc` (wild.ts) |
+| correction | INV-FREESPIN | medium | free-spin retrigger does not decrement remaining count (newly missed in v16; was caught in v12 / v14) |
 | correction | INV-JACKPOT | medium | jackpot triggers on 4 diamonds anywhere instead of 5 on middle row |
 | utility | DEAD-DEBUG-BRANCH | medium | `if (DEBUG_MODE)` branch with `DEBUG_MODE = false` const — statically unreachable |
 | duplication | DUP-PAYOUT | medium | `legacy.ts::computeLegacyPayout` duplicates `engine.ts::computePayout` — duplication axis never runs on legacy.ts (`fileHasSimilarityCandidates` short-circuits before the LLM can vote) |
