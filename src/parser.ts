@@ -1,6 +1,6 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
-import type { Axis, Finding, RunMeta, Verdict } from "./types.js";
+import type { Axis, AxisStats, Finding, RunMeta, Verdict } from "./types.js";
 
 // Directory name under axes/ → our canonical Axis.
 // Anatoly's layout uses hyphenated names that already match our Axis union
@@ -49,6 +49,33 @@ async function readJsonSilent(path: string): Promise<Record<string, unknown>> {
   }
 }
 
+// Anatoly's axisStats keys mirror the axis directory names but use snake_case
+// for best-practices ("best_practices"). Normalise to our canonical Axis type.
+const AXIS_STATS_KEY_TO_AXIS: Record<string, Axis> = {
+  correction: "correction",
+  utility: "utility",
+  duplication: "duplication",
+  overengineering: "overengineering",
+  tests: "tests",
+  best_practices: "best-practices",
+  "best-practices": "best-practices",
+  documentation: "documentation",
+};
+
+function parseAxisStatsEntry(raw: unknown): AxisStats | undefined {
+  if (!raw || typeof raw !== "object") return undefined;
+  const o = raw as Record<string, unknown>;
+  return {
+    calls: Number(o["calls"] ?? 0),
+    durationMs: Number(o["totalDurationMs"] ?? 0),
+    costUsd: Number(o["totalCostUsd"] ?? 0),
+    inputTokens: Number(o["totalInputTokens"] ?? 0),
+    outputTokens: Number(o["totalOutputTokens"] ?? 0),
+    cacheReadTokens: Number(o["totalCacheReadTokens"] ?? 0),
+    cacheCreationTokens: Number(o["totalCacheCreationTokens"] ?? 0),
+  };
+}
+
 export async function parseRunMeta(reportDir: string): Promise<RunMeta> {
   const runDir = await resolveRunDir(reportDir);
   const [cfg, status, metrics] = await Promise.all([
@@ -57,6 +84,27 @@ export async function parseRunMeta(reportDir: string): Promise<RunMeta> {
     readJsonSilent(join(runDir, "run-metrics.json")),
   ]);
   const conversations = metrics["conversations"] as Record<string, unknown> | undefined;
+
+  // Per-axis execution metrics. Anatoly emits these under axisStats with one
+  // entry per axis the run actually exercised (axes filtered out via config
+  // or --axes are absent rather than zero-filled).
+  const axisStatsRaw = metrics["axisStats"] as Record<string, unknown> | undefined;
+  const axisStats: Partial<Record<Axis, AxisStats>> = {};
+  if (axisStatsRaw) {
+    for (const [k, v] of Object.entries(axisStatsRaw)) {
+      const axis = AXIS_STATS_KEY_TO_AXIS[k];
+      if (!axis) continue;
+      const parsed = parseAxisStatsEntry(v);
+      if (parsed) axisStats[axis] = parsed;
+    }
+  }
+
+  // Refinement (tier 3) phase stats live under phaseStats.refinement and
+  // are cross-axis. Surfaced separately so consumers can sum them in if
+  // they want a true total, or display them on their own row.
+  const phaseStats = metrics["phaseStats"] as Record<string, unknown> | undefined;
+  const refinementStats = parseAxisStatsEntry(phaseStats?.["refinement"]);
+
   return {
     runId: (cfg["runId"] ?? status["runId"] ?? metrics["runId"] ?? "") as string,
     anatolyVersion: cfg["anatolyVersion"] as string | undefined,
@@ -67,6 +115,8 @@ export async function parseRunMeta(reportDir: string): Promise<RunMeta> {
     costUsd: metrics["costUsd"] as number | undefined,
     totalInputTokens: conversations?.["totalInputTokens"] as number | undefined,
     totalOutputTokens: conversations?.["totalOutputTokens"] as number | undefined,
+    ...(Object.keys(axisStats).length > 0 ? { axisStats } : {}),
+    ...(refinementStats ? { refinementStats } : {}),
   };
 }
 

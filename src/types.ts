@@ -87,6 +87,16 @@ export interface AxisScore {
   f1: number;
 }
 
+export interface AxisStats {
+  calls: number;
+  durationMs: number;
+  costUsd: number;
+  inputTokens: number;
+  outputTokens: number;
+  cacheReadTokens: number;
+  cacheCreationTokens: number;
+}
+
 export interface RunMeta {
   runId: string;
   anatolyVersion?: string;
@@ -97,6 +107,13 @@ export interface RunMeta {
   costUsd?: number;
   totalInputTokens?: number;
   totalOutputTokens?: number;
+  // Per-axis execution metrics from run-metrics.json axisStats. Keyed by
+  // canonical Axis (best_practices is normalised to best-practices). Absent
+  // when the run did not exercise the axis.
+  axisStats?: Partial<Record<Axis, AxisStats>>;
+  // Refinement (deliberation tier 3) phase metrics, surfaced separately
+  // from per-axis data because they are cross-axis by construction.
+  refinementStats?: AxisStats;
 }
 
 export interface ScoreReport {

@@ -233,18 +233,38 @@ export function renderMarkdown(report: ScoreReport): string {
   lines.push("");
   lines.push("## Per-axis scores");
   lines.push("");
-  lines.push("| Axis | Scored | F1 | Recall | Precision | TP | FP | FN |");
-  lines.push("|------|:------:|---:|------:|----------:|---:|---:|---:|");
+  // The execution columns (Time/Cost/Tokens out) come from Anatoly's
+  // run-metrics.json axisStats and surface where the run spent its budget.
+  // best-practices and correction routinely dwarf the others on slot-engine,
+  // so seeing per-axis costs alongside F1 makes regressions in the cheap
+  // axes much easier to spot.
+  const axisStats = report.meta?.axisStats;
+  lines.push("| Axis | Scored | F1 | Recall | Precision | TP | FP | FN | Time | Cost | Out tokens |");
+  lines.push("|------|:------:|---:|------:|----------:|---:|---:|---:|-----:|-----:|-----------:|");
   const scoredSet = new Set(report.scored_axes);
   for (const axis of ALL_AXES) {
     const s = report.per_axis[axis];
+    const stats = axisStats?.[axis];
     const inScope = scoredSet.has(axis);
+    const timeCell = stats ? formatDuration(stats.durationMs) : "—";
+    const costCell = stats ? `$${stats.costUsd.toFixed(2)}` : "—";
+    const tokensCell = stats ? formatTokens(stats.outputTokens) : "—";
     if (!s) {
-      lines.push(`| ${axis} | ${inScope ? "✓" : "—"} | — | — | — | 0 | 0 | 0 |`);
+      lines.push(
+        `| ${axis} | ${inScope ? "✓" : "—"} | — | — | — | 0 | 0 | 0 | ${timeCell} | ${costCell} | ${tokensCell} |`,
+      );
       continue;
     }
     lines.push(
-      `| ${axis} | ✓ | ${(s.f1 * 100).toFixed(1)}% | ${(s.recall * 100).toFixed(1)}% | ${(s.precision * 100).toFixed(1)}% | ${s.tp} | ${s.fp} | ${s.fn} |`,
+      `| ${axis} | ✓ | ${(s.f1 * 100).toFixed(1)}% | ${(s.recall * 100).toFixed(1)}% | ${(s.precision * 100).toFixed(1)}% | ${s.tp} | ${s.fp} | ${s.fn} | ${timeCell} | ${costCell} | ${tokensCell} |`,
+    );
+  }
+  // Refinement (deliberation tier 3) is cross-axis — surface it on its own
+  // row so its Opus cost is visible without inflating any single axis.
+  const ref = report.meta?.refinementStats;
+  if (ref && (ref.durationMs > 0 || ref.costUsd > 0)) {
+    lines.push(
+      `| _refinement_ | — | — | — | — | — | — | — | ${formatDuration(ref.durationMs)} | $${ref.costUsd.toFixed(2)} | ${formatTokens(ref.outputTokens)} |`,
     );
   }
   lines.push("");
