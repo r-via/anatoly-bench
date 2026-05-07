@@ -1,0 +1,40 @@
+{
+  "investigated": {
+    "src/reels.ts::pickFromWeighted::correction": {
+      "original": {
+        "correction": "NEEDS_FIX",
+        "confidence": 60
+      },
+      "deliberated": {
+        "correction": "OK",
+        "confidence": 88
+      },
+      "reasoning": "Duplication confirmed: pickFromWeighted (src/reels.ts:30-41) and weightedPick (src/rng.ts:5-16) implement identical cumulative-weight algorithms — sum weights, draw Math.random()*total, accumulate until roll < cumulative, fallback to last item. However, pickFromWeighted is a private (non-exported) helper scoped to reels.ts; the code is functionally correct. This is a duplication/refactoring concern, not a correctness defect. Notably, weightedPick is imported in engine.ts:2, registered at engine.ts:30, and resolved at engine.ts:120 — but never actually called (grep for 'rng(' in engine.ts returns zero matches). The actual runtime path uses pickFromWeighted via spinReel. Reclassified to OK on correction axis because the code produces correct results despite the duplication.",
+      "timestamp": "2026-05-06T19:16:01.424Z"
+    },
+    "src/reels.ts::spinReel::correction": {
+      "original": {
+        "correction": "ERROR",
+        "confidence": 95
+      },
+      "deliberated": {
+        "correction": "ERROR",
+        "confidence": 92
+      },
+      "reasoning": "Missing bounds check confirmed. spinReel (src/reels.ts:43) accesses REEL_WEIGHTS[reelIndex] at line 44. REEL_WEIGHTS (lines 22-28) has exactly 5 entries (indices 0-4). Any reelIndex >= 5 or < 0 yields undefined, causing a TypeError crash inside pickFromWeighted at wts.reduce() (line 31). The function is exported and called from factories.ts:12 via spinReel(i) where i iterates 0..reelCount-1. Currently, engine.ts:128 hardcodes factory.buildReels(5, 3), so indices 0-4 are always valid in production. But since spinReel is a public export, external callers can trigger the crash. getReelWeights (line 56-58) has the same vulnerability. Confirmed as ERROR but lowered confidence slightly to 92 because the defect is not triggered in any current call site — it requires misuse of the public API.",
+      "timestamp": "2026-05-06T19:16:01.424Z"
+    },
+    "src/rng.ts::weightedPick::correction": {
+      "original": {
+        "correction": "NEEDS_FIX",
+        "confidence": 82
+      },
+      "deliberated": {
+        "correction": "OK",
+        "confidence": 90
+      },
+      "reasoning": "Duplication with pickFromWeighted (src/reels.ts:30-41) confirmed — identical algorithm. However, weightedPick (src/rng.ts:5-16) is never actually invoked at runtime: engine.ts imports it (line 2), registers it in the container (line 30), resolves it (line 120), but the resolved 'rng' variable is never called (grep 'rng\\(' in engine.ts: 0 matches). All reel generation flows through StandardReelBuilderFactory.buildReels → spinReel → pickFromWeighted. So weightedPick is dead code in practice, and the duplication is moot from a correctness standpoint. The code is not incorrect — it's unused and duplicated. Reclassified to OK on correction axis: either remove weightedPick and its import, or refactor spinReel to use it and delete pickFromWeighted.",
+      "timestamp": "2026-05-06T19:16:01.424Z"
+    }
+  }
+}

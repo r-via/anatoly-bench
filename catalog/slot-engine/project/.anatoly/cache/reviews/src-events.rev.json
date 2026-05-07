@@ -1,0 +1,277 @@
+{
+  "version": 2,
+  "file": "src/events.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "EventHandler",
+      "kind": "type",
+      "exported": false,
+      "line_start": 1,
+      "line_end": 1,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "GOOD",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Type alias used locally in Map<string, EventHandler[]> and method parameters of SpinEventEmitter | [UNIQUE] No RAG data available | [OK] Type alias is correct and sufficiently general for the pub-sub use case. | [LEAN] Minimal type alias; avoids repeating the signature at each `on`/`off` call site. | [GOOD] Type alias with no runtime behavior — no tests required. | [UNDOCUMENTED] No JSDoc comment. The variadic `unknown[]` signature is not self-evident; a brief description of its role as the listener callback shape would help consumers.",
+      "findings": []
+    },
+    {
+      "name": "SpinEventEmitter",
+      "kind": "class",
+      "exported": true,
+      "line_start": 3,
+      "line_end": 25,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 90,
+      "detail": "[USED] Exported class with 1 runtime importer in src/engine.ts | [UNIQUE] No RAG data available | [OK] on/off/emit logic is correct: handler registration, removal by reference equality, and ordered dispatch are all sound. | [LEAN] ADR-004 explicitly justifies the custom implementation over Node.js `EventEmitter` for environment-agnosticism (browser, Deno, edge). Implementation is ~20 lines covering exactly on/off/emit with no unnecessary generics or inheritance. Single importer is noted but the design decision is documented. | [NONE] No test file exists. Core event emitter used by src/engine.ts; on/off/emit methods and edge cases (duplicate handlers, removing non-existent handler, emitting with no listeners, multiple args) are entirely untested. | [UNDOCUMENTED] Class and all three public methods (on, off, emit) lack JSDoc. Parameters, return values, and the critical lifetime/scoping constraint (each instance is independent) are undocumented.",
+      "findings": []
+    },
+    {
+      "name": "SPIN_DONE",
+      "kind": "constant",
+      "exported": true,
+      "line_start": 27,
+      "line_end": 27,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 90,
+      "detail": "[USED] Exported constant with 1 runtime importer in src/engine.ts | [UNIQUE] No RAG data available | [OK] String constant exported correctly; matches documented usage in ADR-004. | [LEAN] Named constant prevents string-literal typos in consumer code; ADR-004 documents this intent explicitly. | [NONE] No test file exists. Constant used by src/engine.ts as an event key; its correct string value is never asserted in any test. | [UNDOCUMENTED] No JSDoc. The event name string and the shape of arguments passed when it is emitted (a SpinResult) are not documented for consumers.",
+      "findings": []
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Add JSDoc documentation for exported symbol: `SpinEventEmitter`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "SpinEventEmitter",
+      "target_lines": "L3-L25"
+    },
+    {
+      "id": 2,
+      "description": "Add JSDoc documentation for exported symbol: `SPIN_DONE`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "SPIN_DONE",
+      "target_lines": "L27-L27"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 8.5/10 (0 FAIL, 4 WARN, 13 PASS)"
+  },
+  "best_practices": {
+    "score": 8.5,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "tsconfig not visible from this file; code is strict-compatible — explicit return types, unknown[] instead of any[], no implicit any."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No any",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "Uses unknown[] throughout EventHandler and emit signatures. No explicit or implicit any."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No union types or type assertions present."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Simple event emitter; no applicable utility type opportunities missed."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "listeners field missing readonly modifier. readonly prevents accidental field reassignment while Map contents remain mutable as required.",
+        "lines": "L4"
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "type alias for a function signature is the correct convention over interface."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "27 lines, well under the 300-line limit."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No obvious violations. Consistent formatting, no unused variables, ?? used correctly."
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "SpinEventEmitter (with 3 public methods) and SPIN_DONE export no JSDoc. ADR-004 documents intent but does not substitute for in-code documentation.",
+        "lines": "L3-L25"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Uses ??, Map, for...of, unknown. No deprecated APIs."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Zero imports — zero-dependency by design per ADR-004."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "WARN",
+        "severity": "HIGH",
+        "detail": "emit() iterates handlers with no try-catch. A throwing handler aborts the loop, silently skipping all subsequent registered handlers — a reliability hazard in multi-listener scenarios.",
+        "lines": "L18-L23"
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No hardcoded secrets, eval, or injection vectors. Event string keys are developer-controlled named constants."
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "filter() in off() allocates a new array per call — acceptable for an event emitter. No N+1 or sync I/O."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Fully instantiable with new, no hidden globals, all methods directly exercisable in unit tests."
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No clear missed opportunities for satisfies or const type params. Symbol.dispose would be useful (see suggestions) but absence is not a violation."
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "on() returns void; the modern pub-sub convention returns an unsubscribe function. ADR-004 (.anatoly/docs/02-Architecture/04-Design-Decisions.md) explicitly flags listener lifetime management as a known pain point — returning () => this.off(event, handler) resolves it without requiring callers to retain handler references.",
+        "lines": "L6-L10"
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Add readonly to listeners to prevent field reassignment",
+        "before": "private listeners: Map<string, EventHandler[]> = new Map();",
+        "after": "private readonly listeners: Map<string, EventHandler[]> = new Map();"
+      },
+      {
+        "description": "Wrap each handler dispatch in try-catch so one throwing handler does not abort remaining handlers",
+        "before": "for (const handler of handlers) {\n  handler(...args);\n}",
+        "after": "for (const handler of handlers) {\n  try {\n    handler(...args);\n  } catch (err) {\n    // emit an 'error' event or rethrow after full iteration\n    console.error(`SpinEventEmitter: handler error on \"${event}\"`, err);\n  }\n}"
+      },
+      {
+        "description": "Return an unsubscribe function from on() — directly addresses the listener lifetime concern in ADR-004",
+        "before": "on(event: string, handler: EventHandler): void {\n  const handlers = this.listeners.get(event) ?? [];\n  handlers.push(handler);\n  this.listeners.set(event, handlers);\n}",
+        "after": "on(event: string, handler: EventHandler): () => void {\n  const handlers = this.listeners.get(event) ?? [];\n  handlers.push(handler);\n  this.listeners.set(event, handlers);\n  return () => this.off(event, handler);\n}"
+      },
+      {
+        "description": "Add JSDoc to exported symbols",
+        "before": "export class SpinEventEmitter {",
+        "after": "/**\n * Lightweight pub-sub emitter for spin lifecycle events.\n * Emit SPIN_DONE after each spin completes. See ADR-004.\n */\nexport class SpinEventEmitter {"
+      },
+      {
+        "description": "Implement Symbol.dispose to enable using-statement cleanup (TS 5.2+)",
+        "before": "// end of class body",
+        "after": "[Symbol.dispose](): void {\n  this.listeners.clear();\n}"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "claude-haiku-4-5-20251001",
+      "cost_usd": 0.005318,
+      "duration_ms": 5212
+    },
+    "duplication": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.023398,
+      "duration_ms": 4533
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.038762250000000005,
+      "duration_ms": 15875
+    },
+    "tests": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.0165235,
+      "duration_ms": 5266
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.21416324999999997,
+      "duration_ms": 96333
+    },
+    "documentation": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.02647,
+      "duration_ms": 6047
+    }
+  }
+}

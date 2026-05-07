@@ -1,0 +1,538 @@
+{
+  "version": 2,
+  "file": "src/engine.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "Bet",
+      "kind": "type",
+      "exported": true,
+      "line_start": 12,
+      "line_end": 12,
+      "correction": "OK",
+      "overengineering": "OVER",
+      "utility": "DEAD",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 90,
+      "detail": "[DEAD] Exported type alias not imported by any file. Zero runtime and zero type-only importers. | [UNIQUE] Simple type alias, no similar definitions found | [OK] Type alias for number; no correctness issues. | [OVER] Trivial alias `type Bet = number` with 0 importers. Adds no semantic constraint or nominal typing; callers just use `number` directly. | [GOOD] Type alias with no runtime behavior; no tests needed. | [UNDOCUMENTED] No JSDoc. Type alias for `number` with no description of valid range, units, or constraints.",
+      "findings": []
+    },
+    {
+      "name": "HOUSE_EDGE",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 14,
+      "line_end": 14,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "WEAK",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Internal constant referenced in computePayout function at line 105 in the multiplication formula. | [UNIQUE] Numeric constant (0.05), no duplicates found | [OK] Value 0.05 is correct; the defect is in how computePayout applies it. | [LEAN] Named constant for a single magic number. Appropriate. | [NONE] No test file exists. Constant affects computePayout output but is untested. | [UNDOCUMENTED] No JSDoc. Internal constant with no comment explaining its role in payout calculation.",
+      "findings": []
+    },
+    {
+      "name": "DEBUG_MODE",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 15,
+      "line_end": 15,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "WEAK",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Internal constant guarding debug log in spin function at line 159. | [UNIQUE] Boolean constant flag, no duplicates found | [OK] Boolean guard used correctly; no logic issues. | [LEAN] Simple boolean flag guarding a debug log block. Minimal. | [NONE] No test file exists. | [UNDOCUMENTED] No JSDoc. Flag with no description of what debug output it enables.",
+      "findings": []
+    },
+    {
+      "name": "EngineContainer",
+      "kind": "class",
+      "exported": false,
+      "line_start": 17,
+      "line_end": 27,
+      "correction": "NEEDS_FIX",
+      "overengineering": "OVER",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "WEAK",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Internal class instantiated at line 29 to create the container object. | [UNIQUE] Service locator container with Map-backed registry, no similar implementations found | [NEEDS_FIX] resolve() silently returns undefined cast to T for unregistered keys, masking the error as a valid typed value. | [OVER] Hand-rolled DI container (register/resolve with a `Map<string, unknown>`) used only to wrap three direct module imports (`weightedPick`, `getPayMultiplier`, `getReelSymbols/getReelWeights`). All three values are static, never swapped at runtime. Erases static types (returns `unknown` cast to `T`) without providing any benefit over a plain import. Classic premature-abstraction DI for a single, fixed configuration. | [NONE] No test file exists. register/resolve logic is untested. | [UNDOCUMENTED] No JSDoc on class or its `register`/`resolve` methods. Purpose as a service-locator container is not documented.",
+      "findings": [
+        {
+          "axis": "correction",
+          "line_start": 25,
+          "line_end": 25,
+          "detail": "Map.get() returns undefined for missing keys; `as T` cast hides the failure, producing a typed undefined that crashes at the call site with an opaque error rather than a meaningful missing-key message."
+        }
+      ]
+    },
+    {
+      "name": "container",
+      "kind": "variable",
+      "exported": false,
+      "line_start": 29,
+      "line_end": 29,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "WEAK",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Internal variable registered with services and resolved three times in spin function (lines 120-122). | [UNIQUE] Single module-scoped instance, no duplicates found | [OK] All three keys registered immediately after construction; resolve calls in spin will find them. | [LEAN] Straightforward instantiation of EngineContainer; over-engineering lives in the class definition above. | [NONE] No test file exists. Module-level DI container wiring is untested. | [UNDOCUMENTED] No JSDoc. Module-level singleton with no description of its registered services.",
+      "findings": []
+    },
+    {
+      "name": "PAYLINES",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 34,
+      "line_end": 45,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "WEAK",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Internal constant referenced in spin function at line 133 (.length check) and line 149 (line symbol lookup). | [UNIQUE] Game configuration array, no similar payline configs found | [OK] Ten paylines, each five row-indices in [0,2]; valid for a 5×3 reel grid. | [LEAN] Plain data array of ten payline row-index vectors. No abstraction. | [NONE] No test file exists. Payline definitions drive all win evaluations but are untested. | [UNDOCUMENTED] No JSDoc. The row-index encoding scheme (0=top, 1=middle, 2=bottom) and pattern semantics are undocumented.",
+      "findings": []
+    },
+    {
+      "name": "checkLine",
+      "kind": "function",
+      "exported": false,
+      "line_start": 47,
+      "line_end": 64,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "DUPLICATE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 80,
+      "detail": "[USED] Internal function called by evaluateLine at line 74 to validate symbol matches. | [DUPLICATE] Identical logic to lineWins() — detects lead symbol, excludes WILD/SCATTER, counts consecutive matches including WILD, requires 3+ run; differs only in field names (sym/run vs symbol/count) | [OK] Lead-symbol resolution and run-counting are correct; all-WILD and SCATTER-lead edge cases return null as designed. | [LEAN] Single-responsibility: finds the leading symbol and run length. Minimal, well-scoped. | [NONE] No test file exists. WILD substitution, SCATTER exclusion, and run-length logic all untested. | [UNDOCUMENTED] Internal helper, no JSDoc. WILD substitution logic and SCATTER exclusion behavior are non-obvious and undocumented.",
+      "duplicate_target": {
+        "file": "src/paytable.ts",
+        "symbol": "lineWins",
+        "similarity": "95% identical — same symbol detection, WILD substitution, and run-length logic; only return type field names differ"
+      },
+      "findings": []
+    },
+    {
+      "name": "evaluateLine",
+      "kind": "function",
+      "exported": false,
+      "line_start": 66,
+      "line_end": 95,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 80,
+      "detail": "[USED] Internal function called from spin loop at line 134 to evaluate each payline for wins. | [UNIQUE] Payline evaluation with multiplier and wild bonus calculation, no similar functions found | [OK] Wild multiplier formula basePayout × (1 + wildCount) × 2^wildCount matches the documented invariant [.anatoly/docs/04-API-Reference/03-Types-and-Interfaces.md] and the lookup table in [.anatoly/docs/04-API-Reference/02-Configuration-Schema.md]. | [LEAN] Maps a payline to symbols, delegates to checkLine, applies the documented wild-multiplier formula (`basePayout × (1 + wildCount) × 2^wildCount`). Straightforward. | [NONE] No test file exists. Wild multiplier compounding and payout calculation untested. | [UNDOCUMENTED] Internal helper with complex wild-multiplier formula. No JSDoc on parameters or the amplification logic.",
+      "findings": []
+    },
+    {
+      "name": "computePayout",
+      "kind": "function",
+      "exported": true,
+      "line_start": 101,
+      "line_end": 111,
+      "correction": "NEEDS_FIX",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "PARTIAL",
+      "confidence": 85,
+      "detail": "[USED] Exported function called by spin at line 138. Transitively used since spin is imported by src/index.ts. | [UNIQUE] House edge and bet bonus payout logic, no similar functions found | [NEEDS_FIX] Three independent defects: house edge applied in the wrong direction (boosts payout instead of reducing it), undocumented guaranteed return inflates RTP, and Math.ceil rounds payouts up instead of down. | [LEAN] Simple reduce + two arithmetic adjustments. No unnecessary abstraction. | [NONE] No test file exists. Exported function with house-edge application and base bet bonus untested. | [PARTIAL] JSDoc describes purpose and house-edge intent, but omits `@param` descriptions, `@returns` type/meaning, and the unconditional `bet * 0.01` floor addition is unexplained.",
+      "findings": [
+        {
+          "axis": "correction",
+          "line_start": 105,
+          "line_end": 105,
+          "detail": "total * (1 + HOUSE_EDGE) multiplies by 1.05, INCREASING payout by 5%. Forward: every winning spin pays out more than its raw value → implied RTP > 100%. Backward: 95% RTP target requires multiplier 0.95 = (1 − 0.05). Sanity: (1 − 0.05) × (1 / 0.95) ≈ 1 ✓. Must be total * (1 − HOUSE_EDGE). Violates the JSDoc claim of ~95% RTP."
+        },
+        {
+          "axis": "correction",
+          "line_start": 108,
+          "line_end": 108,
+          "detail": "total += bet * 0.01 adds a 1% unconditional return on every spin regardless of wins. Not documented anywhere; artificially inflates effective RTP above the target."
+        },
+        {
+          "axis": "correction",
+          "line_start": 110,
+          "line_end": 110,
+          "detail": "Math.ceil rounds payouts UP. Inferred slot-machine domain from reel/payline/scatter/jackpot/lineBet vocabulary. Casino industry convention requires Math.floor so the house retains fractional remainders; ceil systematically overpays, further inflating RTP."
+        }
+      ]
+    },
+    {
+      "name": "spin",
+      "kind": "function",
+      "exported": true,
+      "line_start": 113,
+      "line_end": 179,
+      "correction": "NEEDS_FIX",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 55,
+      "detail": "[USED] Exported function with runtime importer: src/index.ts. Main entry point for slot spin execution. | [UNIQUE] Main spin orchestration with reel generation and event emission, no similar functions found | [NEEDS_FIX] Registered rng and reelsModule are resolved then silently discarded; factory.buildReels bypasses the configured RNG entirely. | [LEAN] Sequential slot logic: validate bet, build reels, evaluate paylines, collect scatter/jackpot/wild state, return result. Abstractions consumed here (factory, strategy, emitter) are defined in external files and assessed there per Rule 9. The function's own code is direct. | [NONE] No test file exists. Primary export consumed by src/index.ts; invalid bet validation, scatter/free-spin integration, jackpot path, and payout aggregation all untested. | [UNDOCUMENTED] Primary exported function with no JSDoc. Bet validation rules, throw behavior, free-spin triggering, and jackpot logic are all undocumented.",
+      "findings": [
+        {
+          "axis": "correction",
+          "line_start": 120,
+          "line_end": 128,
+          "detail": "rng (weightedPick) and reelsModule (getReelSymbols/getReelWeights) are resolved from the container on L120–L122 but never passed to or used by factory.buildReels(5, 3) on L128. Reel outcomes are generated by an unregistered internal mechanism, making the registered RNG dead code. For a regulated slot machine this bypasses the certifiable RNG path (gambling/casino domain inferred from jackpot/scatter/payline vocabulary)."
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Change `total * (1 + HOUSE_EDGE)` to `total * (1 - HOUSE_EDGE)` so payout is reduced by 5%, targeting ~95% RTP as documented.",
+      "severity": "high",
+      "effort": "large",
+      "category": "refactor",
+      "target_symbol": null,
+      "target_lines": "L105",
+      "source": "correction"
+    },
+    {
+      "id": 2,
+      "description": "Remove `total += bet * 0.01`; this undocumented guaranteed return inflates RTP beyond the documented target.",
+      "severity": "medium",
+      "effort": "small",
+      "category": "quickwin",
+      "target_symbol": null,
+      "target_lines": "L108",
+      "source": "correction"
+    },
+    {
+      "id": 3,
+      "description": "Replace `Math.ceil` with `Math.floor` so fractional remainders stay with the house instead of being paid out.",
+      "severity": "medium",
+      "effort": "small",
+      "category": "quickwin",
+      "target_symbol": null,
+      "target_lines": "L110",
+      "source": "correction"
+    },
+    {
+      "id": 4,
+      "description": "Pass the resolved `rng` and `reelsModule` into `factory.buildReels` (or replace the factory call with direct weightedPick-based construction) so the registered RNG drives actual spin outcomes.",
+      "severity": "medium",
+      "effort": "small",
+      "category": "quickwin",
+      "target_symbol": null,
+      "target_lines": "L128",
+      "source": "correction"
+    },
+    {
+      "id": 5,
+      "description": "Add a missing-key guard in EngineContainer.resolve: throw a descriptive Error when the key is absent instead of silently returning undefined cast to T.",
+      "severity": "low",
+      "effort": "trivial",
+      "category": "hygiene",
+      "target_symbol": null,
+      "target_lines": "L25",
+      "source": "correction"
+    },
+    {
+      "id": 6,
+      "description": "Remove dead code: `Bet` is exported but unused",
+      "severity": "high",
+      "effort": "trivial",
+      "category": "quickwin",
+      "source": "utility",
+      "target_symbol": "Bet",
+      "target_lines": "L12-L12"
+    },
+    {
+      "id": 7,
+      "description": "Simplify: `Bet` is over-engineered",
+      "severity": "medium",
+      "effort": "small",
+      "category": "hygiene",
+      "source": "overengineering",
+      "target_symbol": "Bet",
+      "target_lines": "L12-L12"
+    },
+    {
+      "id": 8,
+      "description": "Simplify: `EngineContainer` is over-engineered",
+      "severity": "medium",
+      "effort": "small",
+      "category": "hygiene",
+      "source": "overengineering",
+      "target_symbol": "EngineContainer",
+      "target_lines": "L17-L27"
+    },
+    {
+      "id": 9,
+      "description": "Add JSDoc documentation for exported symbol: `Bet`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "Bet",
+      "target_lines": "L12-L12"
+    },
+    {
+      "id": 10,
+      "description": "Add JSDoc documentation for exported symbol: `spin`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "spin",
+      "target_lines": "L113-L179"
+    },
+    {
+      "id": 11,
+      "description": "Deduplicate: `checkLine` duplicates `lineWins` in `src/paytable.ts`",
+      "severity": "high",
+      "effort": "small",
+      "category": "refactor",
+      "source": "duplication",
+      "target_symbol": "checkLine",
+      "target_lines": "L47-L64"
+    },
+    {
+      "id": 12,
+      "description": "Complete JSDoc documentation for: `computePayout`",
+      "severity": "low",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "computePayout",
+      "target_lines": "L101-L111"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 3/10 (4 FAIL, 6 WARN, 7 PASS)"
+  },
+  "best_practices": {
+    "score": 3,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "Cannot verify tsconfig from this file. No implicit-any artifacts visible; explicit `any` is penalised under rule 2."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No any",
+        "status": "FAIL",
+        "severity": "CRITICAL",
+        "detail": "Explicit `any` on both public function signatures: `computePayout(lineWins: LineWin[], bet: any)` and `spin(bet: any)`. Both are demonstrably `number` — the runtime guard already enforces numeric constraints.",
+        "lines": "L101, L113"
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "`checkLine` returns `{ sym, run } | null` — a proper discriminated pattern. No forced type assertions on union branches."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No significant missed Utility-type opportunities in this file."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`PAYLINES` is typed `number[][]` but is a compile-time constant never mutated. Should be `as const` or typed `readonly (readonly number[])[]` to prevent accidental mutation and enable narrower inference.",
+        "lines": "L34"
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "`Bet` is a primitive alias via `type`, consistent with the project using `interface` for complex shapes. No inconsistency visible."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "179 lines — well under the 300-line threshold."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "FAIL",
+        "severity": "HIGH",
+        "detail": "Three violations: (1) `throw \"invalid bet\"` violates `no-throw-literal`; (2) `rng` resolved from container but never used (`no-unused-vars`) — `factory.buildReels` is called instead, making the registration dead code; (3) `reelsModule` resolved but never referenced anywhere in the function.",
+        "lines": "L115, L120, L122"
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`spin()` is a primary public export with no JSDoc. `computePayout` is documented. `Bet` type alias has no JSDoc.",
+        "lines": "L113"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`throw \"invalid bet\"` throws a string literal — modern TypeScript always throws `Error` instances for `instanceof` guards and error-tracking tool compatibility.",
+        "lines": "L115"
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Type imports grouped first, value imports from local modules follow. No circular or side-effect imports detected. File placement (`src/engine.ts`) is consistent with the documented project structure."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "FAIL",
+        "severity": "HIGH",
+        "detail": "Two issues: (1) `throw \"invalid bet\"` throws a primitive string — any catch clause checking `instanceof Error` silently swallows it. (2) `emitter.on(SPIN_DONE, () => {})` registers a new no-op listener on every `spin()` call with no corresponding `off()` — unbounded listener accumulation in long-running processes.",
+        "lines": "L115, L176"
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No hardcoded secrets, eval, or command injection in this file. RNG implementation is in `rng.js` — certifiability concerns must be evaluated at that source file, not here."
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`StandardReelBuilderFactory`, `DefaultStrategy`, and `SpinEventEmitter` are instantiated on every `spin()` call. These are stateless or resettable objects that should be module-level singletons. Combined with the growing listener list from `emitter.on` (L176), this creates unnecessary GC pressure per spin.",
+        "lines": "L125-L127, L176"
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`spin()` hard-codes `StandardReelBuilderFactory`, `DefaultStrategy`, and `SpinEventEmitter` with no injection point. The module-level `container` is populated at load time, yet the resolved `rng` is never passed to `factory.buildReels`, so registering a test RNG in the container has no effect on spin outcomes — the DI container provides false injection confidence.",
+        "lines": "L125-L127, L120"
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`PAYLINES` could use `satisfies readonly (readonly number[])[]` for structural validation while preserving literal types. `EngineContainer` could leverage `using` for deterministic lifecycle management if it ever holds disposable resources.",
+        "lines": "L34"
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "FAIL",
+        "severity": "MEDIUM",
+        "detail": "Slot-machine domain confirmed by `.anatoly/docs/02-Architecture/02-Core-Concepts.md` and `.anatoly/docs/04-API-Reference/02-Configuration-Schema.md`. `computePayout` applies `total * (1 + HOUSE_EDGE)` which INCREASES payout by 5% — the inverse of a house edge. The JSDoc comment claims 'target RTP of approximately 95%' but the formula produces RTP > 100%. Correct formula: `total * (1 - HOUSE_EDGE)`. Additionally, `total += bet * 0.01` silently adds a 1%-of-bet bonus on every payout with no design reference or documentation.",
+        "lines": "L104-L108"
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Replace `any` with `number` on both public function signatures",
+        "before": "export function computePayout(lineWins: LineWin[], bet: any): number\nexport function spin(bet: any): SpinResult",
+        "after": "export function computePayout(lineWins: LineWin[], bet: number): number\nexport function spin(bet: number): SpinResult"
+      },
+      {
+        "description": "Fix inverted HOUSE_EDGE formula — multiply by (1 − edge) to reduce payout toward 95% RTP",
+        "before": "total = total * (1 + HOUSE_EDGE);",
+        "after": "total = total * (1 - HOUSE_EDGE);"
+      },
+      {
+        "description": "Throw Error instances instead of string literals",
+        "before": "throw \"invalid bet\";",
+        "after": "throw new Error(\"invalid bet\");"
+      },
+      {
+        "description": "Mark PAYLINES as deeply readonly to prevent mutation and enable narrower inference",
+        "before": "const PAYLINES: number[][] = [",
+        "after": "const PAYLINES = [\n  // same values\n] as const satisfies readonly (readonly number[])[];"
+      },
+      {
+        "description": "Hoist emitter to module level and drop the per-spin no-op listener to prevent unbounded growth",
+        "before": "const emitter = new SpinEventEmitter();\n// ...\nemitter.on(SPIN_DONE, () => {});\nemitter.emit(SPIN_DONE, finalResult);",
+        "after": "// module level\nconst emitter = new SpinEventEmitter();\n// inside spin() — emit only, no new listener\nemitter.emit(SPIN_DONE, finalResult);"
+      },
+      {
+        "description": "Either use the resolved `rng` in factory construction or remove the dead container registrations",
+        "before": "const rng = container.resolve<typeof weightedPick>(\"rng\");\n// rng never used — factory ignores it\nconst reelsModule = container.resolve<...>(\"reels\"); // also unused",
+        "after": "const rng = container.resolve<typeof weightedPick>(\"rng\");\nconst reels = factory.buildReels(5, 3, rng); // pass rng so container registration has effect"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "claude-haiku-4-5-20251001",
+      "cost_usd": 0.102131,
+      "duration_ms": 103917
+    },
+    "duplication": {
+      "model": "claude-haiku-4-5-20251001",
+      "cost_usd": 0.038828350000000005,
+      "duration_ms": 42465
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.3565105,
+      "duration_ms": 161184
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.100681,
+      "duration_ms": 48745
+    },
+    "tests": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.022592499999999998,
+      "duration_ms": 8212
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.38438825,
+      "duration_ms": 179963
+    },
+    "documentation": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.0723075,
+      "duration_ms": 20430
+    }
+  }
+}

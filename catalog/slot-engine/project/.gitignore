@@ -5,6 +5,7 @@ dist/
 !.anatoly/runs/
 !.anatoly/docs/
 !.anatoly/rag/
+!.anatoly/cache/
 .anatoly/docs/.cache.json
 .anatoly/runs/*/conversations/
 .anatoly/runs/*/logs/

@@ -1,0 +1,250 @@
+{
+  "version": 2,
+  "file": "src/freespin.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "detectScatters",
+      "kind": "function",
+      "exported": true,
+      "line_start": 3,
+      "line_end": 11,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 90,
+      "detail": "[USED] Runtime-imported by 1 file: src/engine.ts | [UNIQUE] No similar functions found in codebase | [OK] Correctly counts all SCATTER symbols across every reel cell, consistent with documented 5×3 full-grid scatter counting. | [LEAN] Simple nested loop counting SCATTER symbols across the grid. Exactly what the docs specify, no unnecessary abstraction. | [NONE] No test file exists. Function is used in engine.ts for core game logic but has zero test coverage across all paths: empty reels, no scatters, multiple scatters, scatter in multiple columns. | [UNDOCUMENTED] No JSDoc comment. Missing description of purpose, parameter shape (2D readonly array), and return semantics (total SCATTER count across all reels).",
+      "findings": []
+    },
+    {
+      "name": "handleFreeSpins",
+      "kind": "function",
+      "exported": true,
+      "line_start": 13,
+      "line_end": 25,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 90,
+      "detail": "[USED] Runtime-imported by 1 file: src/engine.ts | [UNIQUE] No similar functions found in codebase | [OK] All three branches (initial trigger, retrigger, decrement/deactivate) match documented invariants: first trigger sets remaining=10, retrigger adds 10, normal spin decrements; deactivation fires correctly at remaining≤0. | [LEAN] Flat if/else chain implementing the three documented state transitions (trigger, retrigger, decrement). No abstraction beyond what the logic requires. | [NONE] No test file exists. Six distinct branches (initial activation, re-trigger, decrement, deactivation, inactive+<3 scatters, active+<3 scatters approaching zero) are all untested despite being critical game state mutations. | [UNDOCUMENTED] No JSDoc comment. Non-trivial state-mutation logic with three distinct branches (trigger, retrigger, decrement/deactivate) warrants documentation of parameters, side effects on FreeSpinState, and the threshold/award constants.",
+      "findings": []
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Add JSDoc documentation for exported symbol: `detectScatters`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "detectScatters",
+      "target_lines": "L3-L11"
+    },
+    {
+      "id": 2,
+      "description": "Add JSDoc documentation for exported symbol: `handleFreeSpins`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "handleFreeSpins",
+      "target_lines": "L13-L25"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 8.75/10 (1 FAIL, 2 WARN, 14 PASS)"
+  },
+  "best_practices": {
+    "score": 8.75,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No implicit-any, no implicit-return, no loose assignments visible. Cannot verify tsconfig from this file, but the code itself is consistent with strict mode."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No `any`",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No explicit or implicit `any`. All parameters and return types are fully annotated."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No type assertions. Boolean guards on `state.active` are appropriate for this two-state machine."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "`ReadonlyArray<ReadonlyArray<Symbol>>` used correctly in `detectScatters`. No obvious missed opportunities for Pick/Omit/Partial."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "`detectScatters` input is `ReadonlyArray<ReadonlyArray<Symbol>>`. `handleFreeSpins` intentionally mutates its `FreeSpinState` argument — this is the documented design per `.anatoly/docs/02-Architecture/02-Core-Concepts.md`."
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Imports use `import type` consistently. `FreeSpinState` is an `interface` per internal docs, aligning with project convention."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "25 lines, well under the 300-line threshold."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "WARN",
+        "severity": "HIGH",
+        "detail": "Magic number literals `3` and `10` appear inline in `handleFreeSpins` (L14, L16, L17). ESLint `no-magic-numbers` would flag these. The values are documented in `.anatoly/docs/03-Guides/02-Advanced-Configuration.md` but named constants would be safer against accidental drift.",
+        "lines": "L14-L17"
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "FAIL",
+        "severity": "MEDIUM",
+        "detail": "Both exported functions `detectScatters` and `handleFreeSpins` lack JSDoc. Both are public API surface (referenced in internal docs). Param types and return semantics should be documented.",
+        "lines": "L3-L23"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No deprecated APIs. `for...of` over index loops, `import type` used. No issues."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Single grouped `import type` from a local module. No side-effect or circular imports."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "Both functions are fully synchronous. No async paths, no unhandled rejections."
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "Slot-machine domain confirmed by SCATTER/free-spin vocabulary and rng.ts/jackpot.ts in project structure. No `Math.random()` in this file (isolated to `rng.ts`). No hardcoded secrets, no eval, no command injection."
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "`detectScatters` is O(reels × rows) — appropriate for a fixed 5×3 grid. No unnecessary allocations."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`detectScatters` is a pure function. `handleFreeSpins` mutates its argument and returns `void`, requiring callers to set up mutable state objects and assert side effects. A variant returning a new `FreeSpinState` would allow pure unit tests.",
+        "lines": "L12-L23"
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "File is simple enough that `satisfies`, const type params, or `using` add no value here. No missed opportunities."
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Slot-engine utility file. No React, no HTTP, no streaming. Free-spin logic matches documented invariants in `.anatoly/docs/04-API-Reference/02-Configuration-Schema.md` and `.anatoly/docs/02-Architecture/02-Core-Concepts.md`."
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Extract magic numbers into named constants to prevent drift and satisfy no-magic-numbers lint rule",
+        "before": "if (!state.active && scatters >= 3) {\n    state.remaining = 10;\n  } else if (state.active && scatters >= 3) {\n    state.remaining += 10;",
+        "after": "const SCATTER_TRIGGER = 3;\nconst FREE_SPINS_AWARD = 10;\n\nif (!state.active && scatters >= SCATTER_TRIGGER) {\n    state.remaining = FREE_SPINS_AWARD;\n  } else if (state.active && scatters >= SCATTER_TRIGGER) {\n    state.remaining += FREE_SPINS_AWARD;"
+      },
+      {
+        "description": "Add JSDoc to both public exports",
+        "before": "export function detectScatters(reels: ReadonlyArray<ReadonlyArray<Symbol>>): number {",
+        "after": "/**\n * Counts all SCATTER symbols visible across the full grid.\n * @param reels - 5×3 reel window (columns of symbols)\n * @returns total number of SCATTER symbols found\n */\nexport function detectScatters(reels: ReadonlyArray<ReadonlyArray<Symbol>>): number {"
+      },
+      {
+        "description": "Consider a pure variant of handleFreeSpins that returns a new state for easier unit testing",
+        "before": "export function handleFreeSpins(state: FreeSpinState, scatters: number): void {\n  // mutates state in place\n}",
+        "after": "export function applyFreeSpins(state: Readonly<FreeSpinState>, scatters: number): FreeSpinState {\n  if (!state.active && scatters >= SCATTER_TRIGGER) {\n    return { ...state, active: true, remaining: FREE_SPINS_AWARD };\n  }\n  if (state.active && scatters >= SCATTER_TRIGGER) {\n    return { ...state, remaining: state.remaining + FREE_SPINS_AWARD };\n  }\n  if (state.active) {\n    const remaining = state.remaining - 1;\n    return { ...state, remaining, active: remaining > 0 };\n  }\n  return state;\n}"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "duplication": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.11100425,
+      "duration_ms": 52759
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.027956,
+      "duration_ms": 6126
+    },
+    "tests": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.0135925,
+      "duration_ms": 5540
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.15327575,
+      "duration_ms": 71655
+    },
+    "documentation": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.02880125,
+      "duration_ms": 5246
+    }
+  }
+}

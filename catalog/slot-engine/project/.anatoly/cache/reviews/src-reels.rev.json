@@ -1,0 +1,442 @@
+{
+  "version": 2,
+  "file": "src/reels.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "CRITICAL",
+  "symbols": [
+    {
+      "name": "SYMBOLS",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 3,
+      "line_end": 5,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "WEAK",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Used at line 47 in pickFromWeighted call within spinReel | [UNIQUE] No similar symbol arrays found in semantic search | [OK] Eight symbols declared; order matches weightsToArray and DEFAULT_WEIGHTS. | [LEAN] Simple typed array of the 8 game symbols. No unnecessary abstraction. | [NONE] No test file exists. Array contents (order and membership) are never verified. | [UNDOCUMENTED] No JSDoc comment. Purpose (master list of reel symbols) is not obvious from the name alone.",
+      "findings": []
+    },
+    {
+      "name": "ReelWeightConfig",
+      "kind": "type",
+      "exported": false,
+      "line_start": 7,
+      "line_end": 10,
+      "correction": "OK",
+      "overengineering": "OVER",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "GOOD",
+      "documentation": "DOCUMENTED",
+      "confidence": 82,
+      "detail": "[USED] Type annotation for DEFAULT_WEIGHTS (line 12) and weightsToArray parameter (line 17) | [UNIQUE] No similar type definitions found in semantic search | [OK] All eight symbol fields present; structurally consistent with SYMBOLS array. | [OVER] Named interface mirroring SYMBOLS exactly, creating a parallel structure that must be kept in sync. Its sole consumer (DEFAULT_WEIGHTS) is immediately passed to weightsToArray which discards the named access and returns number[]. A plain number[] with a comment, or Record<Symbol, number>, achieves the same readability without the indirection layer. | [GOOD] Interface with no runtime behavior; no tests required. | [DOCUMENTED] Self-descriptive interface: field names map 1-to-1 with Symbol values and their type (number weight) is unambiguous.",
+      "findings": []
+    },
+    {
+      "name": "DEFAULT_WEIGHTS",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 12,
+      "line_end": 15,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "WEAK",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Passed to weightsToArray five times in REEL_WEIGHTS initialization (lines 23-27) | [UNIQUE] No similar weight configuration found in semantic search | [OK] Sum = 25+25+15+10+5+30+5+5 = 120; matches documented total in .anatoly/docs/04-API-Reference/02-Configuration-Schema.md. | [LEAN] Straightforward config constant. Readability is good; the named fields are its only value. | [NONE] No test file exists. Weight values are never asserted, though they directly affect payout distribution. | [UNDOCUMENTED] No JSDoc. Missing context: what unit the weights are in, that they sum to 120, or that all five reels share this config.",
+      "findings": []
+    },
+    {
+      "name": "weightsToArray",
+      "kind": "function",
+      "exported": false,
+      "line_start": 17,
+      "line_end": 20,
+      "correction": "OK",
+      "overengineering": "OVER",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "WEAK",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Called five times to populate REEL_WEIGHTS array (lines 23-27) | [UNIQUE] No similar functions found in semantic search | [OK] Emits weights in the same order as SYMBOLS; no correctness issues. | [OVER] Exists solely to convert ReelWeightConfig back to number[]. It is an artifact of the ReelWeightConfig design decision: if weights were stored directly as number[], this function is unnecessary. The entire roundtrip (named object → array) adds a layer with no runtime benefit. | [NONE] No test file exists. Output order relative to SYMBOLS array is untested; a mismatch would silently corrupt all probability calculations. | [UNDOCUMENTED] No JSDoc. Internal helper but its ordering contract (must match SYMBOLS order) is a non-obvious invariant worth documenting.",
+      "findings": []
+    },
+    {
+      "name": "REEL_WEIGHTS",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 22,
+      "line_end": 28,
+      "correction": "OK",
+      "overengineering": "OVER",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "WEAK",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Accessed at line 44 in spinReel function to retrieve weights by reelIndex | [UNIQUE] No similar weight matrices found in semantic search | [OK] Five reels each initialized with DEFAULT_WEIGHTS; consistent with documentation. | [OVER] Five identical arrays allocated by calling weightsToArray(DEFAULT_WEIGHTS) five times. Per .anatoly/docs/04-API-Reference/02-Configuration-Schema.md and .anatoly/docs/01-Getting-Started/03-Configuration.md, all five reels share the same weight distribution. A single shared array (or Array(5).fill(…)) would be semantically accurate; the current structure implies per-reel weight customization that is neither used nor documented. | [NONE] No test file exists. Shape (5 reels × 8 weights) and correct delegation to weightsToArray are never verified. | [UNDOCUMENTED] No JSDoc. The fact that all five reels share identical weights is a significant design decision not conveyed by the name.",
+      "findings": []
+    },
+    {
+      "name": "pickFromWeighted",
+      "kind": "function",
+      "exported": false,
+      "line_start": 30,
+      "line_end": 41,
+      "correction": "NEEDS_FIX",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "DUPLICATE",
+      "tests": "WEAK",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Called at line 47 within spinReel to select symbols with weighted probabilities | [DUPLICATE] Identical weighted random selection algorithm as weightedPick in src/rng.ts (RAG score 0.826). Both compute weight sum, generate random roll, accumulate weights in loop, return matching item with identical fallback logic. | [NEEDS_FIX] Uses Math.random(), which is not a certifiable PRNG for regulated casino/slot-machine gaming. | [LEAN] Standard O(n) weighted random selection. Clean, generic, does one thing. | [NONE] No test file exists. Critical probability logic (boundary at r==acc, zero-weight items, single-item list, total-weight edge) is entirely untested. | [UNDOCUMENTED] No JSDoc. Missing: description of the weighted-random algorithm, parameter semantics (items and wts must be same length), and return behavior when weights sum to zero.",
+      "duplicate_target": {
+        "file": "src/rng.ts",
+        "symbol": "weightedPick",
+        "similarity": "92% identical algorithm — weighted random selection via accumulation loop, matching logic flow and behavior"
+      },
+      "findings": [
+        {
+          "axis": "correction",
+          "line_start": 32,
+          "line_end": 32,
+          "detail": "Inferred slot-machine domain from reel/payline/jackpot vocabulary in .anatoly/docs/. Math.random() is a non-cryptographically-secure PRNG that cannot be audited or certified for regulated gambling RNG (industry convention). Must be replaced with a certified, seedable, auditable RNG."
+        }
+      ]
+    },
+    {
+      "name": "spinReel",
+      "kind": "function",
+      "exported": true,
+      "line_start": 43,
+      "line_end": 50,
+      "correction": "ERROR",
+      "overengineering": "ACCEPTABLE",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 95,
+      "detail": "[USED] Exported and runtime-imported by src/factories.ts | [UNIQUE] No similar functions found in semantic search | [ERROR] No bounds check on reelIndex; out-of-range index yields undefined weights, crashing inside pickFromWeighted at wts.reduce. | [LEAN] Simple loop calling pickFromWeighted three times. Minimal and correct. | [NONE] No test file exists. Used by src/factories.ts; return shape (3-element Symbol array), valid reelIndex bounds, and out-of-range index behavior are all untested. | [UNDOCUMENTED] No JSDoc on exported function. Missing: what reelIndex valid range is (0–4), that it returns exactly 3 symbols (one per row), and that results are independent per call.",
+      "findings": [
+        {
+          "axis": "correction",
+          "line_start": 44,
+          "line_end": 44,
+          "detail": "REEL_WEIGHTS[reelIndex] returns undefined for any reelIndex outside [0, 4]. That undefined is forwarded to pickFromWeighted as wts, causing a TypeError at wts.reduce(). Valid indices are 0–4; no guard exists."
+        }
+      ]
+    },
+    {
+      "name": "getReelSymbols",
+      "kind": "function",
+      "exported": true,
+      "line_start": 52,
+      "line_end": 54,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 90,
+      "detail": "[USED] Exported and runtime-imported by src/engine.ts | [UNIQUE] Trivial getter — no similar functions found | [OK] Returns the SYMBOLS array reference; no correctness bug in context of evaluation. | [LEAN] Trivial accessor. No abstraction overhead. | [NONE] No test file exists. Used by src/engine.ts; return value identity and immutability are untested. | [UNDOCUMENTED] No JSDoc on exported function. Missing: clarification that it returns the shared master symbol list and whether the array is mutable.",
+      "findings": []
+    },
+    {
+      "name": "getReelWeights",
+      "kind": "function",
+      "exported": true,
+      "line_start": 56,
+      "line_end": 58,
+      "correction": "NEEDS_FIX",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 90,
+      "detail": "[USED] Exported and runtime-imported by src/engine.ts | [UNIQUE] Trivial getter — no similar functions found | [NEEDS_FIX] No bounds check on reelIndex; returns undefined for out-of-range indices despite number[] return type, creating a silent type lie for callers. | [LEAN] Trivial accessor returning the precomputed weight array for a reel index. | [NONE] No test file exists. Used by src/engine.ts; correct indexing and out-of-bounds behavior are untested. | [UNDOCUMENTED] No JSDoc on exported function. Missing: valid range of reelIndex, that returned array is a direct reference (mutable), and weight semantics.",
+      "findings": [
+        {
+          "axis": "correction",
+          "line_start": 57,
+          "line_end": 57,
+          "detail": "REEL_WEIGHTS[reelIndex] is undefined for reelIndex outside [0, 4]. TypeScript types the return as number[], so callers get undefined without a compile-time or runtime signal. Needs a bounds guard (throw or return undefined explicitly with a typed signature)."
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Replace Math.random() in pickFromWeighted with a certifiable, auditable RNG suitable for regulated slot-machine play (e.g., a CSPRNG or a certified gaming-grade PRNG).",
+      "severity": "high",
+      "effort": "large",
+      "category": "refactor",
+      "target_symbol": null,
+      "target_lines": "L32",
+      "source": "correction"
+    },
+    {
+      "id": 2,
+      "description": "Add a bounds check in spinReel: validate reelIndex is in [0, REEL_WEIGHTS.length - 1] and throw a RangeError (or return a typed error) before accessing REEL_WEIGHTS[reelIndex].",
+      "severity": "high",
+      "effort": "large",
+      "category": "refactor",
+      "target_symbol": null,
+      "target_lines": "L44",
+      "source": "correction"
+    },
+    {
+      "id": 3,
+      "description": "Add a bounds check in getReelWeights or change the return type to number[] | undefined so callers are not silently handed undefined typed as number[].",
+      "severity": "medium",
+      "effort": "small",
+      "category": "quickwin",
+      "target_symbol": null,
+      "target_lines": "L57",
+      "source": "correction"
+    },
+    {
+      "id": 4,
+      "description": "Simplify: `ReelWeightConfig` is over-engineered `ReelWeightConfig`, `weightsToArray`, `REEL_WEIGHTS`",
+      "severity": "medium",
+      "effort": "small",
+      "category": "hygiene",
+      "source": "overengineering",
+      "target_symbol": "ReelWeightConfig, weightsToArray, REEL_WEIGHTS",
+      "target_lines": "L7-L10, L17-L20, L22-L28"
+    },
+    {
+      "id": 5,
+      "description": "Deduplicate: `pickFromWeighted` duplicates `weightedPick` in `src/rng.ts`",
+      "severity": "medium",
+      "effort": "small",
+      "category": "refactor",
+      "source": "duplication",
+      "target_symbol": "pickFromWeighted",
+      "target_lines": "L30-L41"
+    },
+    {
+      "id": 6,
+      "description": "Add JSDoc documentation for exported symbol:  `spinReel`, `getReelSymbols`, `getReelWeights`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "spinReel, getReelSymbols, getReelWeights",
+      "target_lines": "L43-L50, L52-L54, L56-L58"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 3/10 (1 FAIL, 6 WARN, 10 PASS)"
+  },
+  "best_practices": {
+    "score": 3,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No implicit-any or other strict-mode violations visible in file content. tsconfig cannot be verified here, but no evidence of violations."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No `any`",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No explicit or implicit `any` used."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No type assertions. `Symbol` is an imported type (string literal union inferred from usage)."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`ReelWeightConfig` manually duplicates all 8 symbol names. `Record<Symbol, number>` is more idiomatic and keeps the key set automatically in sync with the `Symbol` union.",
+        "lines": "L8-L12"
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`SYMBOLS`, `DEFAULT_WEIGHTS`, and `REEL_WEIGHTS` are module-level constants but typed as mutable arrays/objects. Callers (or `getReelWeights`) can mutate internal state through returned references.",
+        "lines": "L3-L26"
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Single `interface` declaration; consistent within file."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "58 lines — well under the 300-line threshold."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No obvious lint violations. The `wts[i]` unchecked index access is a minor concern but standard for this pattern."
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "All three exported functions (`spinReel`, `getReelSymbols`, `getReelWeights`) lack JSDoc. `spinReel` in particular has a non-obvious contract (reelIndex 0–4, returns 3-element column).",
+        "lines": "L44-L58"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No deprecated APIs. Standard array iteration patterns."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Single type-only import from `./types.js`, correctly using `import type`. File placement matches project structure documented in `.anatoly/docs/01-Getting-Started/03-Configuration.md`."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No async code or promises. `spinReel` silently returns a valid last-item fallback on float edge cases, which is acceptable."
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "FAIL",
+        "severity": "CRITICAL",
+        "detail": "Slot-machine/casino domain confirmed by reel/payline/jackpot/WILD/SCATTER/freespin vocabulary and dedicated `src/rng.ts` module (`.anatoly/docs/01-Getting-Started/03-Configuration.md`). `Math.random()` is a non-cryptographic, non-certifiable PRNG and is not acceptable for regulated gaming RNG. The project already ships `src/rng.ts` — `pickFromWeighted` must delegate to that module, not call `Math.random()` directly.",
+        "lines": "L34"
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Weighted selection is O(n); `weightsToArray` runs once at module init. No N+1 or redundant work."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`pickFromWeighted` is a pure function over its declared parameters, but `Math.random()` is hardcoded inside it, making deterministic unit testing impossible without monkey-patching globals. Injecting an RNG function parameter would decouple it.",
+        "lines": "L30-L42"
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`SYMBOLS` should use `as const` to narrow to a tuple of literals. `DEFAULT_WEIGHTS` should use `satisfies ReelWeightConfig` to retain literal types while still validating shape.",
+        "lines": "L3-L16"
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`getReelWeights` returns a direct mutable reference to the internal `REEL_WEIGHTS[reelIndex]` array, allowing callers to silently corrupt reel configuration. Should return a copy or `readonly number[]`. Additionally, `spinReel` performs no bounds check on `reelIndex` (valid range 0–4); an out-of-range index yields `undefined` weights, causing a runtime crash in `pickFromWeighted`.",
+        "lines": "L55-L57"
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Replace `Math.random()` with the project's own RNG module to satisfy regulated gaming compliance.",
+        "before": "const r = Math.random() * total;",
+        "after": "import { nextFloat } from './rng.js';\nconst r = nextFloat() * total;"
+      },
+      {
+        "description": "Use `Record<Symbol, number>` to avoid manually mirroring the Symbol union in ReelWeightConfig.",
+        "before": "interface ReelWeightConfig {\n  CHERRY: number; LEMON: number; BELL: number; BAR: number;\n  SEVEN: number; DIAMOND: number; WILD: number; SCATTER: number;\n}",
+        "after": "type ReelWeightConfig = Record<Symbol, number>;"
+      },
+      {
+        "description": "Mark module-level constants as deeply readonly and use `as const` / `satisfies` for stronger types.",
+        "before": "const SYMBOLS: Symbol[] = [\"CHERRY\", ...];\nconst DEFAULT_WEIGHTS: ReelWeightConfig = { CHERRY: 25, ... };\nconst REEL_WEIGHTS: number[][] = [...];",
+        "after": "const SYMBOLS = [\"CHERRY\", \"LEMON\", \"BELL\", \"BAR\", \"SEVEN\", \"DIAMOND\", \"WILD\", \"SCATTER\"] as const satisfies readonly Symbol[];\nconst DEFAULT_WEIGHTS = { CHERRY: 25, LEMON: 25, BELL: 15, BAR: 10, SEVEN: 5, DIAMOND: 30, WILD: 5, SCATTER: 5 } as const satisfies ReelWeightConfig;\nconst REEL_WEIGHTS: ReadonlyArray<readonly number[]> = [...];"
+      },
+      {
+        "description": "Inject RNG as a parameter to make `pickFromWeighted` purely deterministic for testing.",
+        "before": "function pickFromWeighted(items: Symbol[], wts: number[]): Symbol {\n  const r = Math.random() * total;",
+        "after": "function pickFromWeighted(items: readonly Symbol[], wts: readonly number[], rng: () => number): Symbol {\n  const r = rng() * total;"
+      },
+      {
+        "description": "Return a copy from `getReelWeights` to prevent external mutation of internal state.",
+        "before": "export function getReelWeights(reelIndex: number): number[] {\n  return REEL_WEIGHTS[reelIndex];\n}",
+        "after": "export function getReelWeights(reelIndex: number): readonly number[] {\n  return [...REEL_WEIGHTS[reelIndex]];\n}"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "claude-haiku-4-5-20251001",
+      "cost_usd": 0.0099396,
+      "duration_ms": 8916
+    },
+    "duplication": {
+      "model": "claude-haiku-4-5-20251001",
+      "cost_usd": 0.02414835,
+      "duration_ms": 21686
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.1113355,
+      "duration_ms": 45402
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.09948725,
+      "duration_ms": 53206
+    },
+    "tests": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.029258,
+      "duration_ms": 12050
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.15387574999999998,
+      "duration_ms": 84240
+    },
+    "documentation": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.0435575,
+      "duration_ms": 14465
+    }
+  }
+}

@@ -1,0 +1,197 @@
+{
+  "version": 1,
+  "started_at": "2026-05-06T17:57:07.480Z",
+  "files": {
+    "src/engine.ts": {
+      "file": "src/engine.ts",
+      "hash": "fff78ac4288a1bc01aacba12e3e172c6c034b668e6191809a99cac851a3b65ea",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:13:46.204Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/events.ts": {
+      "file": "src/events.ts",
+      "hash": "c95131239d29892576e88b4aa91db18f0159d67b0957c8b127dffb23ffc182b7",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:12:12.573Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/factories.ts": {
+      "file": "src/factories.ts",
+      "hash": "085c9bf559ced86ba36c2ced3744bc9da4f890edceb34f6becc0ef93cc96da7d",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:11:47.509Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/freespin.ts": {
+      "file": "src/freespin.ts",
+      "hash": "04b80090ad2d814a59b33494f329718131001c9f76d976e36bd14640c43471d8",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:11:52.754Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/index.ts": {
+      "file": "src/index.ts",
+      "hash": "6fdf4286821491597e40764d2dd68b1425ce673fae69e892e7301e903312d50a",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:10:29.465Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/jackpot.ts": {
+      "file": "src/jackpot.ts",
+      "hash": "5f85f76fefd64c68d9c77800357f4c344a1bf66b8615689bbcb3a957edf6b704",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:11:24.608Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/legacy.ts": {
+      "file": "src/legacy.ts",
+      "hash": "de4063959b6c0838a6ba2349121b8c340628026c93b88a172b89eeaae6cdefbd",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:11:53.069Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/paytable.ts": {
+      "file": "src/paytable.ts",
+      "hash": "bee090bccad331f715e1281e0126620dbeeedd030562d8130c4512e82178b97c",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:13:21.399Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/reels.ts": {
+      "file": "src/reels.ts",
+      "hash": "8a056d8f4c5f7772efc05ed4feb0bfee557b806548c7a5895c3e257be73aa161",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:12:21.611Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/rng.ts": {
+      "file": "src/rng.ts",
+      "hash": "d6093763e1acb8275ef32f503eced63ccfb70643f9887608eba6ea4b5df0a20e",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:12:33.291Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/strategy.ts": {
+      "file": "src/strategy.ts",
+      "hash": "bf29d389666809983c4c41db8c0b29cbc92a3c55d04ecbecea55bf5b2bf1c47b",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:14:02.899Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/types.ts": {
+      "file": "src/types.ts",
+      "hash": "1ebcbb7daa4a347ccfa4f3c670fdae55f34117d2e89f54795e15388809564423",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:11:52.755Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction",
+        "overengineering",
+        "tests",
+        "best_practices",
+        "documentation"
+      ]
+    },
+    "src/wild.ts": {
+      "file": "src/wild.ts",
+      "hash": "c04cf27cfbf1e304ab32b08ca78512e2eb25abbccf93b5c16fe8f51da6951e70",
+      "status": "DONE",
+      "updated_at": "2026-05-06T19:11:58.179Z",
+      "axes": [
+        "utility",
+        "duplication",
+        "correction"
+      ]
+    }
+  }
+}
