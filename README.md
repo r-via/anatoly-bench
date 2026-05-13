@@ -83,9 +83,9 @@ A perfect audit scores `1.0`. In practice, the target is movement over time — 
 ```mermaid
 xychart-beta
     title "slot-engine — global F1 (%) per run"
-    x-axis [v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22]
+    x-axis [v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23]
     y-axis "F1 (%)" 0 --> 100
-    line [40.7, 43.2, 46.8, 43.5, 56.8, 65.5, 62.7, 61.0, 65.0, 57.8, 67.8, 63.8, 72.9, 64.2, 69.9, 65.5, 71.4, 69.7, 67.0, 66.2, 69.4]
+    line [40.7, 43.2, 46.8, 43.5, 56.8, 65.5, 62.7, 61.0, 65.0, 57.8, 67.8, 63.8, 72.9, 64.2, 69.9, 65.5, 71.4, 69.7, 67.0, 66.2, 69.4, 68.8]
 ```
 
 Full per-axis curves, change-log of Anatoly fixes, per-axis execution profile, and remaining misses → [docs/02-slot-engine-results.md](./docs/02-slot-engine-results.md). Per-run baselines → [`baselines/`](./baselines/). Roadmap → [ROADMAP.md](./ROADMAP.md).

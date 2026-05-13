@@ -9,25 +9,25 @@ Each run is a single execution of `anatoly run` against `catalog/slot-engine/pro
 ```mermaid
 xychart-beta
     title "slot-engine — global F1 (%) per run"
-    x-axis [v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22]
+    x-axis [v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23]
     y-axis "F1 (%)" 0 --> 100
-    line [40.7, 43.2, 46.8, 43.5, 56.8, 65.5, 62.7, 61.0, 65.0, 57.8, 67.8, 63.8, 72.9, 64.2, 69.9, 65.5, 71.4, 69.7, 67.0, 66.2, 69.4]
+    line [40.7, 43.2, 46.8, 43.5, 56.8, 65.5, 62.7, 61.0, 65.0, 57.8, 67.8, 63.8, 72.9, 64.2, 69.9, 65.5, 71.4, 69.7, 67.0, 66.2, 69.4, 68.8]
 ```
 
-The 9pp spread across v13 → v15 (63.8% → 72.9% → 64.2%) on a fixed code state defines the **run-to-run LLM noise floor**. Treat any single-run delta below this band as noise. v18 → v22 trace the epic 55 (doc-conflicts arbitration loop) landing — see [Epic 55 detail](#epic-55--doc-conflicts-arbitration-loop-v18--v22) below.
+The 9pp spread across v13 → v15 (63.8% → 72.9% → 64.2%) on a fixed code state defines the **run-to-run LLM noise floor**. Treat any single-run delta below this band as noise. v18 → v22 trace the epic 55 (doc-conflicts arbitration loop) landing — see [Epic 55 detail](#epic-55--doc-conflicts-arbitration-loop-v18--v22) below. v23 is the first run post-epic-56 (unified phase + resource orchestration runtime, with `axes.correction` split into `pass1` + `verify` primitives and `doc-conflict-detection` split into `bootstrap` + `update`); global F1 lands within ±0.01 of v22 (68.8% vs 69.4%), confirming the refactor is F1-neutral.
 
 ## Per-axis F1 progression
 
 ```mermaid
 xychart-beta
     title "slot-engine — F1 per axis (%)"
-    x-axis [v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22]
+    x-axis [v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23]
     y-axis "F1 (%)" 0 --> 100
-    line "correction" [53.3, 61.5, 57.1, 54.5, 54.5, 61.5, 36.4, 46.2, 53.3, 44.4, 53.3, 42.9, 71.4, 50.0, 53.3, 47.1, 52.6, 53.3, 53.3, 50.0, 57.1]
-    line "utility" [60.0, 60.0, 60.0, 60.0, 60.0, 60.0, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7]
-    line "duplication" [0.0, 0.0, 0.0, 0.0, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7]
-    line "overengineering" [40.0, 40.0, 66.7, 66.7, 66.7, 66.7, 75.0, 66.7, 75.0, 33.3, 66.7, 57.1, 57.1, 57.1, 66.7, 66.7, 75.0, 85.7, 85.7, 85.7, 75.0]
-    line "best-practices" [50.0, 54.5, 50.0, 36.4, 36.4, 72.7, 50.0, 40.0, 44.4, 58.8, 66.7, 66.7, 83.3, 61.5, 76.9, 61.5, 76.9, 57.1, 43.5, 42.9, 62.5]
+    line "correction" [53.3, 61.5, 57.1, 54.5, 54.5, 61.5, 36.4, 46.2, 53.3, 44.4, 53.3, 42.9, 71.4, 50.0, 53.3, 47.1, 52.6, 53.3, 53.3, 50.0, 57.1, 52.6]
+    line "utility" [60.0, 60.0, 60.0, 60.0, 60.0, 60.0, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7, 85.7]
+    line "duplication" [0.0, 0.0, 0.0, 0.0, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7, 66.7]
+    line "overengineering" [40.0, 40.0, 66.7, 66.7, 66.7, 66.7, 75.0, 66.7, 75.0, 33.3, 66.7, 57.1, 57.1, 57.1, 66.7, 66.7, 75.0, 85.7, 85.7, 85.7, 75.0, 85.7]
+    line "best-practices" [50.0, 54.5, 50.0, 36.4, 36.4, 72.7, 50.0, 40.0, 44.4, 58.8, 66.7, 66.7, 83.3, 61.5, 76.9, 61.5, 76.9, 57.1, 43.5, 42.9, 62.5, 53.3]
 ```
 
 Five lines overlaid — Mermaid auto-assigns colors and shows the axis name as legend on each line. Crosswise patterns to note: **utility** is a step from 60% to 85.7% at v8 (per-axis triage fix). **duplication** is a step from 0 to 66.7% at v6 (tier-1 invariant fix), flat since. **correction** is the most volatile, peaking at v14 (71.4%) and dipping at v8 (36.4%), v17 (47.1%) — sensitive to prompt + context-rot defenses; v22 (57.1%) is the best post-context-rot-fix score. **overengineering** locked at 85.7% across v19–v21 (best-ever plateau, courtesy of epic 55 internal-doc pre-review timing) before regressing to 75% at v22 (variance). **best-practices** has the widest dynamic range (36.4% to 83.3%) — runs hot when industry-knowledge prompting triggers (v11+).
@@ -61,6 +61,7 @@ Kept for data extraction / regression diffs. Bold marks historical peaks.
 | v20  | 2026-05-12 | 67.0% | 53.3% | 85.7% | 66.7% | 85.7% | 43.5% |
 | v21  | 2026-05-12 | 66.2% | 50.0% | 85.7% | 66.7% | 85.7% | 42.9% |
 | v22  | 2026-05-12 | 69.4% | **57.1%**☆ | 85.7% | 66.7% | 75.0% | 62.5% |
+| v23  | 2026-05-13 | 68.8% | 52.6% | 85.7% | 66.7% | 85.7% | 53.3% |
 
 \* v1 used a different scoring scope (7 axes vs 5). Comparisons are meaningful from v2 onwards.
 † v7 re-scored against the v8 catalog (DEAD-WILD-HELPER + DEAD-LINE-WIN added) for an apples-to-apples delta against v8.
@@ -94,6 +95,12 @@ Epic 54 closed the context-rot loop at the cost of internal-doc no longer being 
 - **v20 — arbitrations applied, but injection broken.** All 4 conflicts arbitrated as `doc-wins` via the wizard between runs; v20 detector flipped them to `status: applied`. But `renderReferenceDocsContext` was returning `''` whenever `referenceDocs` was empty — and `ctx.referenceDocs` is *never populated* on this codebase (a Story 54 plumbing gap inherited from before epic 55). The arbitrated fragments loaded correctly into `ctx.arbitratedFragments`, the axes called the renderer with them, the renderer dropped them all on the floor. Correction misses unchanged (INV-JACKPOT / INV-WILD / INV-WEIGHTS still in red). F1 67.0%.
 - **v21 — injection fixed, prompt instruction wrong.** [r-via/anatoly@8833bd6](https://github.com/r-via/anatoly/commit/8833bd6) decouples the three independent authoritative sources (human-authored ref docs, lite-mode digest, arbitrated fragments) so each renders independently. v21 prompts now show the `### ARBITRATED INTENTS` section. The agent on `jackpot.ts` saw the contradiction and emitted a `doc_divergence` finding — exactly as the (stale) prompt instructed. But `doc_divergence` findings route under axis `documentation` (Story 54.9), and anatoly-bench's INV-JACKPOT catalog entry expects a `correction` finding. Net zero on misses. F1 66.2%.
 - **v22 — prompt clarified, loop closed.** [r-via/anatoly@2834cba](https://github.com/r-via/anatoly/commit/2834cba) updates the arbitrated-intents instruction to: *"these are the agreed-upon contract — if the code contradicts one of these, that is a regular correctness bug, emit it as a normal correction finding, not as `doc_divergence`"*. Correction climbs to 57.1% — best post-context-rot-fix score. F1 69.4%. **INV-WILD and INV-JACKPOT still missed**: the architecture works, but the arbitrated text is whatever the README literally says, and the slot-engine README mentions jackpot generically (*"detects scatter bonuses and the progressive jackpot"*) without specifying the catalog invariant (`= 5 DIAMOND on middle row`). The arbitration loop cannot create precision the human did not type. Two paths forward to catch them: enrich the README, or add a `verdict_note` step in the wizard that lets the human attach a specific invariant during arbitration.
+
+## Epic 56 — unified phase + resource orchestration runtime (v23)
+
+Epic 56 is a structural refactor — no new business-logic axis, no new prompt content, no new arbitration mechanic. It centralizes phase orchestration behind a single `runPhase(ctx, name, fn)` helper, formalizes the 18 LLM/agent call sites as a typed primitive + composer registry with declarative DAG plans, splits the cost dataplane (D.4) off from the execution log dataplane (D.3) via atomic dual-write, and absorbs nine `@deprecated` items in the same big-bang PR. Two structural splits affect the bench surface: `axes.correction` becomes two named primitives (`axes.correction-pass1` always runs, `axes.correction-verify` runs only when pass1 reports more than 3 findings — the same dynamic 2-pass logic as before, just declared in the registry instead of inlined in a closure) and `doc-conflict-detection` becomes two distinct phases (`doc-conflict-bootstrap` after `runDocBootstrap`, `doc-conflict-update` after pre-review `runDocUpdate`) so `phaseDurations` stops accumulating two executions into a single key.
+
+- **v23 — orchestration refactor lands.** F1 68.8% versus v22 69.4%, a delta of −0.006 — **10× smaller than the run-to-run noise floor** established by the v13 → v15 spread (9pp on a fixed code state). Within-noise: epic 56 is F1-neutral by construction (no prompt change, no axis logic change), and the bench confirms it. Per-axis: **overengineering recovers to 85.7%** (matching its v19–v21 plateau, gaining 10.7pp on v22's 75% variance dip); **utility, duplication unchanged**; **correction 52.6% (−4.5pp on v22's 57.1%)** and **best-practices 53.3% (−9.2pp on v22's 62.5%)** are both within the historical jitter band for those axes (correction has bounced between 47.1% and 57.1% on the last six runs against a stable code surface; best-practices has spanned 42.9% to 76.9% on the same period). Run wall time 9m 39s, cost $5.83 — both in line with v22 (9m 35s, $4.88). **One doc-conflict pending** in `doc-conflicts.yaml` at end of run — epic 55 detection still firing through the new registry plumbing. No bench regression attributable to the refactor; correction's pass1+verify split needs more runs to characterize, but the single-run delta is firmly inside noise.
 
 ## Per-axis execution profile (v22 — 9m 35s wall · $4.88 API)
 
