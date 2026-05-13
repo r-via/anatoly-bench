@@ -21,21 +21,21 @@ This is why it lives in `catalog/` but cannot be scored by the existing `anatoly
 ## What this directory contains today
 
 - [`golden_comments/`](./golden_comments/) — mirrored from upstream [offline/golden_comments/*.json](https://github.com/withmartian/code-review-benchmark/tree/main/offline/golden_comments). 5 files, 10 PRs each, 50 PRs total.
-- [`proto-analysis.md`](./proto-analysis.md) *(WIP)* — paper analysis on 5 selected PRs (one per repo / per language). For each golden comment we classify (a) the Anatoly axis it would fall under and (b) the detectability tier (local pattern / cross-file / requires domain knowledge / sub-symbol granularity). Output: a ceiling estimate for "what fraction of golden comments could Anatoly plausibly catch if a `--diff` mode existed."
+- [`proto-analysis.md`](./proto-analysis.md) — paper analysis on 5 selected PRs (one per repo / per language). For each golden comment we classify (a) the Anatoly axis the defect would fall under and (b) the detectability tier (local pattern / cross-file / requires domain knowledge / sub-symbol granularity). Output: a ceiling estimate for "what fraction of golden comments could Anatoly plausibly catch if a `--diff` mode existed."
 
 ## What this directory will contain if the proto signal is positive
 
-- An adapter that produces Anatoly findings in [Martian's expected output shape](https://github.com/withmartian/code-review-benchmark/blob/main/methodology/full.md) (`{file, line, description, severity}`) restricted to files touched by a PR.
+- An adapter that produces Anatoly findings in [Martian's expected output shape](https://github.com/withmartian/code-review-benchmark/blob/main/methodology/full.md) (`{file, line, description, severity}`), restricted to files touched by a PR.
 - A `score.ts` track that wraps Martian's [step3_judge_comments.py](https://github.com/withmartian/code-review-benchmark/blob/main/offline/code_review_benchmark/step3_judge_comments.py) LLM-judge as the matcher for this fixture only — the slot-engine bipartite scorer is **not** reused here.
 - Per-run baselines in `baselines/` namespaced to this fixture.
 
-If the proto signal is negative (< 10% of golden comments structurally reachable by Anatoly even with a `--diff` mode), this directory stays as a recorded "we looked at it, here's why we didn't pursue it."
+If the proto signal turns out negative (< 10% of golden comments structurally reachable by Anatoly even with a `--diff` mode), this directory stays as a recorded "we looked at it, here's why we didn't pursue it."
 
-## Decision pending
+## Pending decision
 
 Whether to invest in:
 
 1. An Anatoly `--diff` mode (a roadmap item against [Anatoly itself](https://github.com/r-via/anatoly), not against this bench).
 2. Mirroring Martian's LLM-judge pipeline as a second scorer track in anatoly-bench.
 
-Both are gated on the proto-analysis result.
+Both are gated on the proto-analysis result, summarized in [docs/03-martian-integration.md](../../docs/03-martian-integration.md).

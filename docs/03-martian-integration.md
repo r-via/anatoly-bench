@@ -1,65 +1,65 @@
-# Intégration Martian code-review-benchmark — raison d'être et état
+# Martian code-review-benchmark integration — rationale and state
 
-**Date :** 2026-05-13
-**Statut :** proto-analysis livré. Décision : attente epic Anatoly `--diff` avant industrialisation.
-**Fixture associé :** [catalog/martian-pr-review/](../catalog/martian-pr-review/)
+**Date:** 2026-05-13
+**Status:** proto-analysis delivered. Decision: wait for an Anatoly `--diff` mode before industrializing.
+**Associated fixture:** [catalog/martian-pr-review/](../catalog/martian-pr-review/)
 
 ---
 
-## 1. Pourquoi ce fixture existe
+## 1. Why this fixture exists
 
-[withmartian/code-review-benchmark](https://github.com/withmartian/code-review-benchmark) est en train de devenir le benchmark de référence pour les outils de PR-review IA. 9 outils déjà trackés (CodeRabbit, Cursor, Copilot, Qodo, Greptile, Codex, Augment, Sentry), [méthodologie publique](https://github.com/withmartian/code-review-benchmark/blob/main/methodology/summary.md), 50 PRs offline + une track online via signaux comportementaux OSS. Qodo le met en avant publiquement [comme preuve de leur #1](https://www.qodo.ai/blog/qodo-ranked-1-ai-code-review-tool-in-martians-code-review-benchmark/).
+[withmartian/code-review-benchmark](https://github.com/withmartian/code-review-benchmark) is becoming the de-facto benchmark for AI PR-review tools. 9 tools already tracked (CodeRabbit, Cursor, Copilot, Qodo, Greptile, Codex, Augment, Sentry), [public methodology](https://github.com/withmartian/code-review-benchmark/blob/main/methodology/summary.md), 50 PRs offline + an online track using behavioral signals on OSS repos. Qodo publicly leverages it [as evidence of their #1 ranking](https://www.qodo.ai/blog/qodo-ranked-1-ai-code-review-tool-in-martians-code-review-benchmark/).
 
-Le doc methodology invite explicitement les tool builders à s'engager sur leur "shared evaluation harness" : inputs `(diff, file context, repo context, config files)`, outputs `(comments with file, line, description, severity)`. C'est une porte ouverte qu'Anatoly devrait franchir avant que l'interface se fige (stage 3 de leur roadmap = devenir un standard à la SWE-Bench).
+The methodology doc explicitly invites tool builders to engage on their "shared evaluation harness": inputs `(diff, file context, repo context, config files)`, outputs `(comments with file, line, description, severity)`. That's an open door Anatoly should walk through before the interface ossifies (their stage-3 goal is to become a SWE-Bench-style standard).
 
-## 2. Le décalage de paradigme
+## 2. The paradigm gap
 
 | | anatoly-bench / slot-engine | martian-pr-review |
 |---|---|---|
-| Scope | projet entier | diff d'un PR |
+| Scope | full project | PR diff |
 | Ground truth | YAML `(axis, file, line, verdict, weight)` | free-text `{comment, severity}` |
-| Scorer | bipartite match déterministe | LLM-as-judge sémantique |
-| Langages | TS | TS, Python, Go, Java, Ruby |
+| Scorer | deterministic bipartite match | LLM-as-judge (semantic) |
+| Languages | TS | TS, Python, Go, Java, Ruby |
 
-Conséquence : le scorer existant d'anatoly-bench ne s'applique pas tel quel. Soit on annote file/line à la main sur 580 comments (coûteux), soit on intègre le LLM-judge de Martian comme track dédiée, soit on candidate directement chez eux.
+Consequence: the existing anatoly-bench scorer does not apply as-is. Either we annotate file/line manually on 580 comments (expensive), or we integrate Martian's LLM-judge as a dedicated track, or we apply directly to their benchmark.
 
-## 3. État actuel — proto-analysis 5 PRs
+## 3. Current state — 5-PR proto-analysis
 
-Détails complets : [catalog/martian-pr-review/proto-analysis.md](../catalog/martian-pr-review/proto-analysis.md).
+Full details: [catalog/martian-pr-review/proto-analysis.md](../catalog/martian-pr-review/proto-analysis.md).
 
-20 golden comments classifiés (axe Anatoly + tier de détectabilité) sur 5 PRs, 1 par langage. Résultat :
+20 golden comments classified (Anatoly axis fit + detectability tier) across 5 PRs, one per language. Result:
 
-- **Plafond structurel aujourd'hui : 75%** (15/20 comments dans le scope des axes scorés d'Anatoly, tier T1+T2 = local ou cross-file).
-- **Plafond après roadmap 5a + 5c shippés : 90%** (T3 = défauts domain-knowledge débloqués par industry-knowledge prompting et user-provided invariants).
-- **Miss permanent : 10%** (axe `n/a` : i18n translation correctness ; tier T5 : régression vs comportement antérieur, non détectable depuis un seul snapshot post-PR).
+- **Structural ceiling today: 75%** (15/20 comments fall within Anatoly's currently scored axes, at detectability tier T1+T2 = local or cross-file).
+- **Ceiling after roadmap items 5a + 5c shipped: 90%** (tier-T3 domain-knowledge defects unlocked by industry-knowledge prompting and user-provided invariants).
+- **Permanent miss: 10%** (axis `n/a`: i18n translation correctness; tier T5: regression-vs-prior-behavior, undetectable from a single post-PR snapshot).
 
-Distribution observée des comments : **60% `correction`**, **20% `best-practices`**, 5% duplication, 0% utility/overengineering/tests/documentation, 15% hors scope. C'est exactement l'axe le plus mature d'Anatoly (`correction` est le plus stable sur slot-engine).
+Observed comment distribution: **60% `correction`**, **20% `best-practices`**, 5% duplication, 0% utility/overengineering/tests/documentation, 15% out-of-scope. This is exactly Anatoly's most mature axis (`correction` is the most stable on slot-engine).
 
-**Estimation grossière Anatoly post-`--diff` mode : 50-60% F1.** Comparaison [leaderboard agentic-review-benchmarks](https://github.com/agentic-review-benchmarks/benchmark-pr-mapping) : Qodo Exhaustive 60.1%, Qodo Precise 55.4%, Augment 44.1%, Copilot 42.8%, le reste sous 40%. Podium plausible.
+**Rough estimate for Anatoly post-`--diff` mode: 50-60% F1.** Comparison with the [agentic-review-benchmarks leaderboard](https://github.com/agentic-review-benchmarks/benchmark-pr-mapping): Qodo Exhaustive 60.1%, Qodo Precise 55.4%, Augment 44.1%, Copilot 42.8%, the rest below 40%. Podium-credible.
 
-## 4. Bloqueur unique : Anatoly `--diff` mode
+## 4. Single blocker: Anatoly `--diff` mode
 
-Anatoly audite aujourd'hui des working trees entiers. Pour être éligible au format Martian, il faut un mode qui :
+Anatoly today audits full working trees. To be eligible for the Martian format, it needs a mode that:
 
-- consomme `(base ref, head ref)` au lieu d'un working dir
-- restreint les findings au scope du diff (fichiers touchés + symboles dont la signature ou les call-sites changent)
-- émet en format Martian : `{file, line, description, severity}` au lieu du shard markdown actuel
+- consumes `(base ref, head ref)` instead of a working dir
+- restricts findings to PR scope (touched files + symbols whose signature or call-sites change)
+- emits in Martian's format: `{file, line, description, severity}` rather than the current sharded markdown
 
-Effort estimé côté Anatoly : 1-2 semaines. C'est un **epic Anatoly**, pas un epic bench.
+Estimated effort on the Anatoly side: 1-2 weeks. This is an **Anatoly epic**, not a bench epic.
 
-## 5. Décision
+## 5. Decision
 
-**Ne pas mirroir le pipeline Martian en interne avant l'epic Anatoly `--diff`.** Sans ce mode, Anatoly en mode project-audit produirait un score trompeusement bas (la majorité des findings tomberait hors-scope du PR → FPs côté Martian) qui ne reflète pas son potentiel structurel à 75%+.
+**Do not mirror Martian's pipeline internally before the Anatoly `--diff` epic ships.** Without that mode, Anatoly running in project-audit mode would produce a misleadingly low score (most findings would fall outside the PR scope → FPs by Martian's framework) that does not reflect its structural potential of 75%+.
 
-**Plan séquencé :**
+**Sequenced plan:**
 
-1. **Ouvrir l'epic `--diff` dans Anatoly** ([r-via/anatoly](https://github.com/r-via/anatoly)). Référencer ce doc et la proto-analysis.
-2. **Pendant l'implémentation**, élargir le proto-analysis de 5 → 15-20 PRs pour valider que la distribution (60% correction, 20% best-practices, 10% n/a, 5% T5) tient sur un échantillon plus large. Si la part `n/a` ou T5 grimpe à >25%, le plafond chute et la priorité change.
-3. **Contacter Martian** pour confirmer leur "shared evaluation harness" et participer à sa définition pendant qu'elle est encore malléable.
-4. **Quand `--diff` est shippé** : refaire l'analyse en exécution réelle, porter le scorer Martian (step3_judge_comments.py) comme track dédiée dans anatoly-bench, publier les premiers baselines sous `baselines/martian-*`.
+1. **Open the `--diff` epic in Anatoly** ([r-via/anatoly](https://github.com/r-via/anatoly)). Reference this doc and the proto-analysis.
+2. **During implementation**, expand the proto-analysis from 5 to 15-20 PRs to validate that the distribution (60% correction, 20% best-practices, 10% n/a, 5% T5) holds on a larger sample. If `n/a` or T5 climbs above 25%, the ceiling drops and the priority changes.
+3. **Contact Martian** to confirm their "shared evaluation harness" and participate in its definition while it is still malleable.
+4. **Once `--diff` ships:** redo the analysis with real execution, port Martian's scorer (step3_judge_comments.py) as a dedicated track in anatoly-bench, publish the first baselines under `baselines/martian-*`.
 
 ---
 
-## Historique des décisions
+## Decision log
 
-- **2026-05-13** — proto-analysis 5 PRs livré. Reco : attente `--diff` côté Anatoly avant d'industrialiser. Fixture stub créé en [catalog/martian-pr-review/](../catalog/martian-pr-review/).
+- **2026-05-13** — 5-PR proto-analysis delivered. Recommendation: wait for `--diff` on Anatoly's side before industrializing. Fixture stub created at [catalog/martian-pr-review/](../catalog/martian-pr-review/).

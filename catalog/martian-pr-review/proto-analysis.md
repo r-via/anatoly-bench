@@ -1,11 +1,11 @@
-# Proto-analysis : Anatoly vs Martian golden comments
+# Proto-analysis: Anatoly vs Martian golden comments
 
-**Date :** 2026-05-13
-**Sample :** 5 PRs (1 par repo / 1 par langage) sur les 50 du dataset offline Martian
-**Comments analysés :** 20
-**Méthodo :** paper analysis. Pas d'exécution Anatoly. Pour chaque golden comment, classification (a) axe Anatoly qui couvrirait le défaut, (b) tier de détectabilité.
+**Date:** 2026-05-13
+**Sample:** 5 PRs (1 per repo / 1 per language) out of the 50 in Martian's offline dataset
+**Comments analyzed:** 20
+**Method:** paper analysis. No Anatoly execution. For each golden comment, classify (a) which Anatoly axis would cover the defect, (b) the detectability tier.
 
-## Échantillon
+## Sample
 
 | Repo | PR | Lang | Comments |
 |---|---|---|---|
@@ -15,110 +15,110 @@
 | Discourse | [discourse-graphite#1](https://github.com/ai-code-review-evaluation/discourse-graphite/pull/1) — automatically downsize large images | Ruby | 3 |
 | Keycloak | [keycloak/keycloak#37429](https://github.com/keycloak/keycloak/pull/37429) — Add HTML sanitizer for translated message resources | Java | 4 |
 
-## Grille de classification
+## Classification grid
 
-**Axes Anatoly :** `correction` · `utility` · `duplication` · `overengineering` · `best-practices` · `tests` · `documentation` · `n/a` (hors scope)
+**Anatoly axes:** `correction` · `utility` · `duplication` · `overengineering` · `best-practices` · `tests` · `documentation` · `n/a` (out of scope)
 
-**Tiers de détectabilité :**
+**Detectability tiers:**
 
-- **T1 / local** — défaut visible dans la diff d'un seul fichier, pattern langage ou null-check classique. Anatoly devrait catch.
-- **T2 / cross-file** — nécessite de suivre un symbole vers un autre fichier du projet. Anatoly's symbol graph couvre ça (axe correction notamment).
-- **T3 / domain** — requiert connaissance industrie ou du domaine projet (OAuth state, RNG sécurisé, conventions d'API). Couvert par roadmap items 5a (industry-knowledge prompting) et 5c (user-provided invariants).
-- **T4 / sub-symbol** — défaut dans un bloc sous-symbole. Couvert par roadmap item 6 (architecturalement coûteux).
-- **T5 / nope** — non détectable par analyse statique d'un seul snapshot (régression vs comportement antérieur, faute de traduction).
+- **T1 / local** — defect visible from a single file's diff; language-level rule or classic null-check pattern. Anatoly should catch.
+- **T2 / cross-file** — requires following a symbol to another file in the same project. Anatoly's symbol graph covers this (correction axis especially).
+- **T3 / domain** — requires industry knowledge or project-domain rules (OAuth state, secure RNG, API conventions). Covered by roadmap items 5a (industry-knowledge prompting) and 5c (user-provided invariants).
+- **T4 / sub-symbol** — defect lives inside a sub-symbol block. Covered by roadmap item 6 (architecturally expensive).
+- **T5 / nope** — not detectable by static analysis of a single snapshot (regression vs prior behavior, translation correctness).
 
-## Classification par comment
+## Per-comment classification
 
 ### Sentry #67876 — Python
 
-| # | Severity | Comment (résumé) | Axe | Tier | Notes |
+| # | Severity | Comment (summary) | Axis | Tier | Notes |
 |---|---|---|---|---|---|
-| 1 | Medium | Null reference si `github_authenticated_user` state absent | `correction` | T1 | Null-deref classique, accessible function-local |
-| 2 | Medium | OAuth state utilise `pipeline.signature` (statique) au lieu d'un random per-request | `best-practices` | T3 | Connaissance industrie OAuth — roadmap 5a applicable |
-| 3 | High | Accès `integration.metadata[sender][login]` sans guard `sender in metadata` | `correction` | T1 | Dict-access sans check, function-local |
+| 1 | Medium | Null reference if `github_authenticated_user` state is missing | `correction` | T1 | Classic null-deref, function-local |
+| 2 | Medium | OAuth state uses `pipeline.signature` (static) instead of a per-request random value | `best-practices` | T3 | OAuth industry knowledge — roadmap 5a applies |
+| 3 | High | Accesses `integration.metadata[sender][login]` without guarding for `sender` key | `correction` | T1 | Dict access without check, function-local |
 
 ### Grafana #79265 — Go
 
-| # | Severity | Comment (résumé) | Axe | Tier | Notes |
+| # | Severity | Comment (summary) | Axis | Tier | Notes |
 |---|---|---|---|---|---|
-| 1 | High | Race condition : check-then-create sans transaction | `correction` | T2 | TOCTOU concurrency — Anatoly peut catch via pattern recognition mais sensible |
-| 2 | Medium | Auth maintenant bloquée si `ErrDeviceLimitReached` — comportement précédent était async non-bloquant | `correction` | T5 | **Régression vs comportement antérieur — non détectable depuis snapshot post-PR seul** |
-| 3 | Medium | `dbSession.Exec(args...)` — type mismatch (compile error supposé) | `correction` | T1 | Type-level, function-local. Si le PR a mergé, comment est probablement nuancé/over-strict |
-| 4 | Low | Retourner `ErrDeviceLimitReached` quand 0 rows updated est misleading | `correction` | T1 | Error semantics, function-local |
-| 5 | Low | Incohérence fenêtre temporelle : `device.UpdatedAt` vs `time.Now().UTC()` | `correction` | T1 | Logique fine mais function-local |
+| 1 | High | Race condition: check-then-create without transaction | `correction` | T2 | TOCTOU concurrency — Anatoly may catch via pattern recognition, sensitive |
+| 2 | Medium | Anonymous auth now blocks on `ErrDeviceLimitReached` — previously async non-blocking | `correction` | T5 | **Regression vs prior behavior — not detectable from post-PR snapshot alone** |
+| 3 | Medium | `dbSession.Exec(args...)` — alleged compile-time type mismatch | `correction` | T1 | Type-level, function-local. If the PR merged, the comment is probably overstated/nuanced |
+| 4 | Low | Returning `ErrDeviceLimitReached` when 0 rows updated is misleading | `correction` | T1 | Error semantics, function-local |
+| 5 | Low | Time-window inconsistency: `device.UpdatedAt` vs `time.Now().UTC()` | `correction` | T1 | Subtle logic but function-local |
 
 ### Cal.com #10967 — TypeScript
 
-| # | Severity | Comment (résumé) | Axe | Tier | Notes |
+| # | Severity | Comment (summary) | Axis | Tier | Notes |
 |---|---|---|---|---|---|
-| 1 | High | Null deref `mainHostDestinationCalendar` si `evt.destinationCalendar` null/empty | `correction` | T1 | Null-flow classique |
-| 2 | Low | Optional chaining `?.integration` redondant après check ternaire | `best-practices` | T1 | Style — Anatoly best-practices doit être calibré pour ces nits |
-| 3 | High | `externalId === externalCalendarId` cherche un calendrier qui matche lui-même | `correction` | T2 | Logic error — accessible via data-flow local-ish |
-| 4 | Medium | Inversion `IS_TEAM_BILLING_ENABLED` : `slug` set quand `true` au lieu de `false` | `correction` | T2 | Pattern suspect des deux propriétés set en même temps visible localement |
-| 5 | Low | Interface `Calendar.createEvent(event, credentialId)` mais Lark/Office365 implémentent `createEvent(event)` | `correction` | T2 | Cross-file interface check — TS compiler aurait dû catch, donc probablement `any` quelque part |
+| 1 | High | Null deref `mainHostDestinationCalendar` if `evt.destinationCalendar` is null/empty | `correction` | T1 | Classic null-flow |
+| 2 | Low | Optional chaining `?.integration` redundant after the ternary's truthiness check | `best-practices` | T1 | Style — Anatoly best-practices must be calibrated for these nits |
+| 3 | High | `externalId === externalCalendarId` finds a calendar that matches itself | `correction` | T2 | Logic error — accessible via local-ish data flow |
+| 4 | Medium | `IS_TEAM_BILLING_ENABLED` inversion: `slug` set when `true` instead of `false` | `correction` | T2 | The "both properties set together" pattern is locally visible |
+| 5 | Low | `Calendar` interface now requires `createEvent(event, credentialId)` but Lark/Office365 implement `createEvent(event)` | `correction` | T2 | Cross-file interface check — TS compiler should have caught it, suggesting an `any` somewhere |
 
 ### Discourse-graphite #1 — Ruby
 
-| # | Severity | Comment (résumé) | Axe | Tier | Notes |
+| # | Severity | Comment (summary) | Axis | Tier | Notes |
 |---|---|---|---|---|---|
-| 1 | Medium | `downsize` défini deux fois — la seconde override la première qui devient unreachable | `duplication` + `utility` | T1 | **Slam dunk Anatoly** — duplication intra-fichier + dead code |
-| 2 | Low | `maxSizeKB = 10 * 1024` hardcodé ignore `Discourse.SiteSettings['max_..._size_kb']` | `best-practices` | T3 | Convention domain — internal-docs injection (roadmap shipped v10) pourrait surfacer |
-| 3 | Medium | Passing 80% comme dimensions casse pour animated GIFs (gifsicle attend WxH) | `correction` | T3 | Connaissance outil externe (gifsicle) — pretraining LLM peut couvrir |
+| 1 | Medium | `downsize` defined twice — second overrides first, which becomes unreachable | `duplication` + `utility` | T1 | **Slam dunk for Anatoly** — intra-file duplication + dead code |
+| 2 | Low | Hardcoded `maxSizeKB = 10 * 1024` ignores `Discourse.SiteSettings['max_..._size_kb']` | `best-practices` | T3 | Project convention — internal-docs injection (roadmap shipped v10) could surface it |
+| 3 | Medium | Passing 80% as dimensions breaks for animated GIFs (gifsicle expects WxH) | `correction` | T3 | External-tool knowledge (gifsicle) — LLM pretraining may cover it |
 
 ### Keycloak #37429 — Java
 
-| # | Severity | Comment (résumé) | Axe | Tier | Notes |
+| # | Severity | Comment (summary) | Axis | Tier | Notes |
 |---|---|---|---|---|---|
-| 1 | Medium | Traduction en italien au lieu de lituanien dans `messages_lt.properties` | `n/a` | — | **Hors scope Anatoly** — pas d'axe i18n |
-| 2 | Medium | `totpStep1` utilise chinois traditionnel dans fichier `zh_CN` (simplifié) | `n/a` | — | **Hors scope Anatoly** |
-| 3 | Low | Anchor sanitization consomme matcher groups sans validation | `correction` | T1 | Logic bug function-local |
-| 4 | Low | Typo nom de méthode `santizeAnchors` → `sanitizeAnchors` | `best-practices` | T1 | Naming — best-practices axis doit être calibré pour typos |
+| 1 | Medium | Translation is Italian instead of Lithuanian in `messages_lt.properties` | `n/a` | — | **Out of Anatoly scope** — no i18n axis |
+| 2 | Medium | `totpStep1` uses Traditional Chinese in the `zh_CN` (simplified) file | `n/a` | — | **Out of Anatoly scope** |
+| 3 | Low | Anchor sanitization consumes matcher groups without proper validation | `correction` | T1 | Function-local logic bug |
+| 4 | Low | Method name typo `santizeAnchors` → `sanitizeAnchors` | `best-practices` | T1 | Naming — best-practices axis must be calibrated for typos |
 
-## Agrégat
+## Aggregate
 
-**Distribution par axe :**
+**Distribution by axis:**
 
-| Axe | Count | % |
+| Axis | Count | % |
 |---|---:|---:|
 | `correction` | 12 | 60% |
 | `best-practices` | 4 | 20% |
 | `duplication` | 1 | 5% |
-| `utility` (combo avec duplication) | 1 | 5% |
-| `n/a` (hors scope) | 2 | 10% |
+| `utility` (combined with the duplication entry) | 1 | 5% |
+| `n/a` (out of scope) | 2 | 10% |
 
-Note : `tests`, `documentation`, `overengineering` = 0 sur l'échantillon. Les golden comments sont massivement orientés **bugs de logique** (correction) et **conventions sécuritaires/style** (best-practices). Très peu de dead code, presque pas de smell d'abstraction.
+Note: `tests`, `documentation`, `overengineering` = 0 on this sample. Golden comments are overwhelmingly **logic bugs** (correction) and **security/style conventions** (best-practices). Very little dead code, almost no abstraction smell.
 
-**Distribution par tier :**
+**Distribution by tier:**
 
 | Tier | Count | % |
 |---|---:|---:|
 | T1 local | 11 | 55% |
 | T2 cross-file | 4 | 20% |
 | T3 domain | 3 | 15% |
-| T5 nope (régression) | 1 | 5% |
-| N/A (hors scope axe) | 2 | 10% (1 Italian translation + 1 zh_CN/zh_TW) |
+| T5 nope (regression) | 1 | 5% |
+| N/A (out-of-scope axis) | 2 | 10% (1 Italian translation + 1 zh_CN/zh_TW) |
 
-Note: une entrée Keycloak est `n/a` axe (translation correctness) — comptée comme N/A axe ; comme tier sa détectabilité est non-applicable.
+Note: one Keycloak entry is `n/a` axis (translation correctness) — counted as N/A axis; tier-wise, detectability is not applicable.
 
-## Plafond structurel estimé
+## Estimated structural ceiling
 
 ```
-Plafond aujourd'hui (T1 + T2 sur axes scorés actuellement)        = 15/20 = 75%
-Plafond après roadmap 5a + 5c (industry-knowledge + invariants)   = 18/20 = 90%
-Miss permanent (axes hors scope + régression détection)           =  2/20 = 10%
+Ceiling today (T1 + T2 within currently scored axes)               = 15/20 = 75%
+Ceiling after roadmap 5a + 5c (industry-knowledge + invariants)    = 18/20 = 90%
+Permanent miss (out-of-scope axes + regression detection)          =  2/20 = 10%
 ```
 
-**Calibration vs slot-engine :** sur slot-engine où le matching est en notre faveur (axes parfaitement alignés, file/line précis), Anatoly atteint ~70% F1 global. Sur Martian, le matching est **plus lâche** (LLM-judge, pas de file/line requirement) — recall peut être plus haut, mais précision dépend de combien de findings additionnels Anatoly émet sur les fichiers du diff sans contrepartie golden.
+**Calibration vs slot-engine:** on slot-engine, where the matching is in our favor (axes perfectly aligned, file/line precise), Anatoly reaches ~70% global F1. On Martian, the matching is **looser** (LLM-judge, no file/line requirement) — recall may be higher, but precision depends on how many additional findings Anatoly emits on diff-touched files without a corresponding golden comment.
 
-**Estimation grossière pour Anatoly sur le leaderboard Martian :**
+**Rough estimate for Anatoly on the Martian leaderboard:**
 
-| Métrique | Estimation post-`--diff` mode + filtre fichiers PR |
+| Metric | Estimate post-`--diff` mode + PR-file filter |
 |---|---|
-| Recall | 50-60% (multiplier 75% structurel × ~70-80% efficacité réelle d'Anatoly sur slot-engine) |
-| Precision | 50-65% (dépend du bruit Anatoly sur fichiers touchés mais hors-scope du PR-intent) |
+| Recall | 50-60% (multiply 75% structural × ~70-80% real-world Anatoly efficiency observed on slot-engine) |
+| Precision | 50-65% (depends on Anatoly's noise on diff-touched-but-out-of-PR-intent files) |
 | F1 | **50-60%** |
 
-**Comparaison leaderboard actuel ([benchmark-pr-mapping](https://github.com/agentic-review-benchmarks/benchmark-pr-mapping)) :**
+**Comparison with the current leaderboard ([benchmark-pr-mapping](https://github.com/agentic-review-benchmarks/benchmark-pr-mapping)):**
 
 ```
 Qodo - Exhaustive  60.1% F1  (63.8% / 56.7%)
@@ -132,24 +132,24 @@ Coderabbit         28.0% F1
 Sentry             23.7% F1
 ```
 
-Anatoly à 50-60% F1 estimé → **podium plausible**, entre Qodo Exhaustive et Qodo Precise.
+Anatoly at 50-60% F1 estimated → **podium-plausible**, between Qodo Exhaustive and Qodo Precise.
 
 ## Caveats
 
-1. **Échantillon = 5/50 PRs** (10%). La distribution des golden comments sur les 50 complètes peut être différente — plus d'i18n (Keycloak biaise vers `n/a`), plus de régression-vs-prior (Grafana en a déjà 1/5).
-2. **"Plafond structurel" ≠ "performance réelle"**. Sur slot-engine, même sur défauts parfaitement fittés, Anatoly atteint ~70% recall — l'écart vient des bugs implémentation/prompt non encore corrigés.
-3. **`--diff` mode n'existe pas encore dans Anatoly**. Ce proto suppose que ce mode (a) restreindrait le scan aux fichiers de la diff, (b) garderait le scoring per-symbol mais filtré. Coût d'implémentation : 1-2 semaines côté Anatoly (epic à ouvrir).
-4. **Filtre fichiers = sur-restrictif**. Un défaut introduit par le PR peut surfacer une cassure dans un fichier non touché. Le filtre par fichiers de la diff manquerait ce cas. Filtre plus malin : symboles dont la signature ou les call-sites changent dans le diff.
-5. **Précision menacée par les findings out-of-PR-scope**. Anatoly peut flagger 10 vrais bugs préexistants dans `integration.py` (Sentry) qui ne sont pas dans les golden comments du PR — chacun = 1 FP côté Martian. Le filtre PR-scope mitige mais n'élimine pas (un bug préexistant *qu'un reviewer humain n'aurait pas commenté* peut quand même être réel).
+1. **Sample = 5/50 PRs** (10%). Golden-comment distribution on the full 50 may differ — more i18n (Keycloak biases toward `n/a`), more regression-vs-prior (Grafana already shows 1/5).
+2. **"Structural ceiling" ≠ "real performance"**. On slot-engine, even on perfectly-fitted defects, Anatoly reaches ~70% recall — the gap comes from yet-unfixed implementation/prompt bugs.
+3. **`--diff` mode does not yet exist in Anatoly**. This proto assumes that mode would (a) restrict scanning to diff-touched files, (b) keep per-symbol scoring but filtered. Implementation cost: 1-2 weeks on the Anatoly side (epic to open).
+4. **File-list filter is over-restrictive**. A defect introduced by the PR can surface a break in a non-touched file. The diff-file filter would miss that case. Smarter filter: symbols whose signature or call-sites change in the diff.
+5. **Precision threatened by out-of-PR-scope findings**. Anatoly may flag 10 real pre-existing bugs in `integration.py` (Sentry) that aren't in the PR's golden comments — each counts as 1 FP under Martian. The PR-scope filter mitigates but doesn't eliminate (a pre-existing bug a human reviewer wouldn't have commented on can still be a real bug).
 
 ## Conclusion
 
-**Signal : positif et solide.** 75% des golden comments sont structurellement dans le scope d'Anatoly aujourd'hui. 90% le seraient avec les items roadmap 5a et 5c shippés. Anatoly mappé sur ce benchmark serait plausiblement compétitif (~50-60% F1, entre Qodo Exhaustive et Qodo Precise).
+**Signal: positive and solid.** 75% of golden comments are structurally within Anatoly's scope today. 90% would be with roadmap items 5a and 5c shipped. Anatoly mapped onto this benchmark would plausibly be competitive (~50-60% F1, between Qodo Exhaustive and Qodo Precise).
 
-**Reco actualisée :**
+**Updated recommendation:**
 
-1. **Ouvrir un epic Anatoly `--diff` mode** — c'est le bloqueur structurel. Tant qu'Anatoly audite le projet entier, on est inéligible au format Martian.
-2. **Pendant le développement du `--diff` mode**, élargir le proto-analysis à 15-20 PRs (vs 5) pour valider que la distribution observée (60% correction, 20% best-practices, 10% n/a, 5% T5, 5% duplication) tient sur l'ensemble. Si la part `n/a` ou T5 grimpe à >25%, le plafond chute et la priorité change.
-3. **Reporter la décision d'intégration côté `anatoly-bench`** jusqu'à ce que `--diff` soit shippé. Refaire cette analyse en exécution réelle à ce moment-là.
+1. **Open an Anatoly `--diff` epic** — this is the structural blocker. While Anatoly audits whole projects, we are ineligible for the Martian format.
+2. **During the development of `--diff`**, expand the proto-analysis to 15-20 PRs (vs 5) to validate that the observed distribution (60% correction, 20% best-practices, 10% n/a, 5% T5, 5% duplication) holds on the full set. If `n/a` or T5 climbs above 25%, the ceiling drops and the priority changes.
+3. **Defer the integration decision on the `anatoly-bench` side** until `--diff` is shipped. Redo this analysis with real execution at that point.
 
-Cette analyse remplace l'option (2) de mes recommandations précédentes (mirroir interne sans changer Anatoly) : option (2) est désormais déconseillée — elle produirait un score trompeusement bas qui ne reflète pas le potentiel structurel d'Anatoly.
+This analysis supersedes option (2) from my earlier recommendations (internal mirroring without changing Anatoly): option (2) is now discouraged — it would produce a misleadingly low score that does not reflect Anatoly's structural potential.
