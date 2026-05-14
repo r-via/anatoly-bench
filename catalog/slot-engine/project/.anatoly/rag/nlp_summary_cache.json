@@ -1,0 +1,258 @@
+{
+  "entries": {
+    "c79ce7e040f99768": {
+      "bodyHash": "b932f305b4e585fd",
+      "summary": {
+        "summary": "Determines if a jackpot has been hit by counting DIAMOND symbols across all reels. Returns true if 4 or more diamonds are found, indicating a winning combination in a slot machine game.",
+        "docSummary": "The isJackpotHit function evaluates reel results to determine jackpot winning conditions. It scans a 2D array of slot machine reel symbols and returns true when at least 4 DIAMOND symbols are present, indicating a successful jackpot outcome. Use this function after spinning reels to check for jackpot wins.",
+        "keyConcepts": [
+          "jackpot-detection",
+          "symbol-counting",
+          "winning-condition",
+          "slot-machine",
+          "reel-analysis"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "1276568091596b05": {
+      "bodyHash": "c30fafcb89217508",
+      "summary": {
+        "summary": "Calculates payouts for a slot machine line by identifying the primary symbol, counting consecutive matching symbols with WILDs as wildcards, and returning the product of a symbol-specific multiplier and 1/10th of the bet. Returns 0 for non-winning combinations.",
+        "docSummary": "Computes line-based payouts for a legacy slot machine game. Identifies the primary symbol on a payline, treats WILDs as wildcards, requires at least 3 consecutive matches to trigger a win, and applies a symbol-specific multiplier to 1/10th of the total bet. Core component of game payout evaluation.",
+        "keyConcepts": [
+          "slot-machine-payout",
+          "symbol-matching",
+          "wildcard-mechanics",
+          "minimum-match-threshold",
+          "bet-calculation",
+          "payout-multiplier"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "bfd667923ab625cd": {
+      "bodyHash": "d27641e2057b1b56",
+      "summary": {
+        "summary": "Counts total SCATTER symbols in a 2D reel array by iterating through all columns and symbols",
+        "docSummary": "Provides scatter symbol counting across the reel grid. Essential for determining when free spin features should be triggered based on scatter count thresholds.",
+        "keyConcepts": [
+          "scatter-detection",
+          "symbol-counting",
+          "reel-analysis",
+          "pattern-matching"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "873fdd349cea2243": {
+      "bodyHash": "746e0c5b522f16e2",
+      "summary": {
+        "summary": "Manages free spin state lifecycle: activates on 3+ scatters, accumulates bonus spins, and counts down remaining spins until deactivation",
+        "docSummary": "Handles free spin feature state transitions based on scatter count. Activates spins at 3+ scatters, adds bonus rounds on additional scatters, and decrements remaining count, terminating when exhausted.",
+        "keyConcepts": [
+          "state-management",
+          "free-spins",
+          "scatter-handling",
+          "feature-lifecycle",
+          "spin-countdown"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "89bd2e581a9298b6": {
+      "bodyHash": "89beb357cf20a659",
+      "summary": {
+        "summary": "Detects consecutive matching symbols on a payline, counting wilds as wildcards. Returns symbol and consecutive count if 3+ match, null otherwise.",
+        "docSummary": "Checks for winning symbol runs on a payline by counting consecutive identical symbols or wilds. Returns the winning symbol and run length if at least 3 consecutive symbols match, null if no win is found. Core pattern-matching function for payline evaluation.",
+        "keyConcepts": [
+          "slot-machine-win-detection",
+          "consecutive-symbols",
+          "wild-card-matching",
+          "payline-evaluation",
+          "pattern-matching",
+          "run-detection"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "dbd3004e3fac0050": {
+      "bodyHash": "64978ebda35456c9",
+      "summary": {
+        "summary": "Evaluates a single payline for wins by extracting symbols, checking for matches, and calculating payout with wild card multipliers. Returns LineWin object with symbol, count, and payout, or null if no win.",
+        "docSummary": "Evaluates a single payline against the reel configuration to determine winning combinations. Applies the paytable function to calculate base multiplier, then applies wild card bonuses. Returns a LineWin object containing the winning symbol, count, and final payout amount, or null if the payline has no winning combination.",
+        "keyConcepts": [
+          "payline-evaluation",
+          "win-detection",
+          "payout-calculation",
+          "wild-multiplier",
+          "paytable-lookup",
+          "line-analysis"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "406d1f2064d4347a": {
+      "bodyHash": "704a32be8d65ed48",
+      "summary": {
+        "summary": "Sums all line win payouts, applies house edge multiplier if wins exist, adds bet percentage bonus, and returns ceiling value. Final payout calculation for a spin.",
+        "docSummary": "Aggregates payout from all winning paylines, applies the house edge multiplier to winning results, and adds a base bet percentage. Returns the final payout amount as an integer. Final step in payout calculation after all line evaluations are complete.",
+        "keyConcepts": [
+          "payout-aggregation",
+          "house-edge-calculation",
+          "final-payout",
+          "bet-bonus",
+          "rounding"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "a699c767d7333d3b": {
+      "bodyHash": "2fbb2acbbaf4bae2",
+      "summary": {
+        "summary": "Main slot machine spin orchestration. Validates bet, builds reels, evaluates all paylines for wins, computes payout with house edge, detects scatters and jackpots, applies strategy adjustments, and emits result. Entry point for slot game round.",
+        "docSummary": "Executes a complete slot machine spin, from bet validation through result emission. Builds a 5x3 reel grid, evaluates all paylines for winning combinations, aggregates payouts, detects bonus features (scatters, jackpot, free spins), and applies game strategy adjustments. Returns a SpinResult object containing reels, wins, payout, and bonus state. Primary game engine entry point.",
+        "keyConcepts": [
+          "game-orchestration",
+          "slot-machine-spin",
+          "dependency-injection",
+          "reel-evaluation",
+          "win-aggregation",
+          "bonus-feature-detection",
+          "event-emission"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "6b0e3e56a218b376": {
+      "bodyHash": "669b3c1af002ccb0",
+      "summary": {
+        "summary": "Selects a random item from an array using weighted probability distribution. Each item's likelihood of selection is proportional to its assigned weight value.",
+        "docSummary": "The weightedPick function implements weighted random selection, picking an item from a list where each element's probability is proportional to its assigned weight. Use this for biased random selection scenarios such as encounters with varying rarity levels or weighted decision-making systems.",
+        "keyConcepts": [
+          "weighted-selection",
+          "random-sampling",
+          "probability-distribution",
+          "rng",
+          "utility-function",
+          "weighted-random"
+        ],
+        "behavioralProfile": "utility"
+      }
+    },
+    "febb418db2615bb5": {
+      "bodyHash": "6d1fe9baabc9709c",
+      "summary": {
+        "summary": "Looks up the pay multiplier for a given symbol and matching count from the paytable. Returns 0 if symbol not found or count is not 3-5.",
+        "docSummary": "Retrieves the payout multiplier for a symbol based on the count of matching symbols on a payline. Used in slot game payout calculations; returns 0 if the symbol is not in the paytable or if the count falls outside the valid range (3-5).",
+        "keyConcepts": [
+          "paytable-lookup",
+          "payout-multiplier",
+          "slot-game",
+          "symbol-matching"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "e95e0ee3e483a0bc": {
+      "bodyHash": "6ff3110d8b00b1d6",
+      "summary": {
+        "summary": "Evaluates a payline for winning combinations by counting consecutive matching symbols (including wilds). Returns the winning symbol and count if 3+ consecutive matches found, null otherwise.",
+        "docSummary": "Checks a payline for winning symbol combinations. Treats WILD symbols as wildcards that match any symbol, skips SCATTER and pure WILD lines, and returns the winning symbol with count if there are 3+ consecutive matches. Used in line-by-line win detection for slot games.",
+        "keyConcepts": [
+          "payline-evaluation",
+          "win-detection",
+          "symbol-matching",
+          "wildcard-handling",
+          "slot-game"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "c2772fae0ab36918": {
+      "bodyHash": "bfcf7e93944433e2",
+      "summary": {
+        "summary": "Calculates a bonus payout multiplier based on wild symbol count. Returns the base payout unchanged if no wilds present, otherwise applies exponential multiplication: basePayout * (1 + wildCount) * 2^wildCount.",
+        "docSummary": "Applies a wild bonus multiplier to a base payout amount. When wild symbols are present, the payout is exponentially increased by (1 + wildCount) * 2^wildCount, creating escalating bonuses for multiple wilds. Returns the base payout unchanged when wildCount is zero or negative.",
+        "keyConcepts": [
+          "wild-bonus",
+          "payout-calculation",
+          "exponential-scaling",
+          "game-mechanics",
+          "bonus-multiplier"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "e3bc32d6fd899ef4": {
+      "bodyHash": "ea7b7c2dc29084d3",
+      "summary": {
+        "summary": "Converts a reel weight configuration object into an ordered numeric array of weights for probabilistic selection algorithms.",
+        "docSummary": "Helper function that extracts weight values from a ReelWeightConfig object into an ordered numeric array for use in weighted selection. Maps individual config properties to a standardized array format.",
+        "keyConcepts": [
+          "data-transformation",
+          "config-parsing",
+          "weight-extraction",
+          "utility-function"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "809d6021cedd75ac": {
+      "bodyHash": "8cfb0509801ef9ca",
+      "summary": {
+        "summary": "Selects a random symbol from an array using weighted probability distribution, implementing roulette wheel selection algorithm.",
+        "docSummary": "Implements weighted random selection (roulette wheel algorithm) to pick a symbol based on provided weights. Each symbol's likelihood is proportional to its weight value. Core utility for reel symbol generation.",
+        "keyConcepts": [
+          "weighted-selection",
+          "random-sampling",
+          "probability",
+          "roulette-wheel"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "a5273e7015b62a76": {
+      "bodyHash": "b33fbe3bbdc35d65",
+      "summary": {
+        "summary": "Generates a reel spin result as a column of 3 randomly selected symbols using reel-specific weighted distributions.",
+        "docSummary": "Performs a slot machine reel spin by generating three symbols using weighted random selection. Each symbol's probability is determined by the weight configuration for the given reel index.",
+        "keyConcepts": [
+          "reel-spinning",
+          "slot-machine",
+          "weighted-selection",
+          "game-mechanics"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "d9ff5e2e8174eca9": {
+      "bodyHash": "b9e4dd77ec4a38b2",
+      "summary": {
+        "summary": "Returns the complete list of available symbols used in reel spins and game logic.",
+        "docSummary": "Retrieves the array of all available symbols in the slot machine game. Used to configure weighted selection and provide the symbol inventory for spin operations.",
+        "keyConcepts": [
+          "symbol-inventory",
+          "game-constants",
+          "data-retrieval",
+          "accessor"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "0d90787b1403f8d9": {
+      "bodyHash": "dffa5fb6a1609a1b",
+      "summary": {
+        "summary": "Retrieves the weight distribution array for a specified reel index to determine symbol selection probabilities.",
+        "docSummary": "Returns the weight configuration for the given reel index. Provides the probability distribution used during reel spins to determine which symbols are more likely to appear.",
+        "keyConcepts": [
+          "weight-configuration",
+          "reel-settings",
+          "data-retrieval",
+          "accessor"
+        ],
+        "behavioralProfile": "pure"
+      }
+    }
+  }
+}

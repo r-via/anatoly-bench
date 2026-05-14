@@ -1,0 +1,319 @@
+{
+  "docEntries": {
+    ".anatoly/docs/index.md": {
+      "sha": "6d10591c63762e65de1cc435d548c4a22d1215503b7f8fbe11c777cde3b4ea0b",
+      "sectionIds": []
+    },
+    ".anatoly/docs/01-Getting-Started/01-Overview.md": {
+      "sha": "6987ca550921c04391c88330cdf332d25134c9480fc6c261ceee52ba2e599066",
+      "sectionIds": [
+        "5240f6789a4fdf46",
+        "71b76905897f0476",
+        "fe327c087998a8df",
+        "05bce804a4082425",
+        "19a4bf0dd48c4e01",
+        "6fbb62e3d6225278"
+      ]
+    },
+    ".anatoly/docs/01-Getting-Started/02-Installation.md": {
+      "sha": "c669952630c194fd6df6689ba0d2b6c1e4d3ba80efe5d24e7ce09826401cd499",
+      "sectionIds": [
+        "648dd3c5cfa8ee41",
+        "c9831f341b73d765",
+        "4b95c64056f002f4",
+        "4c9d2d6cd9dd9615",
+        "9583623a3e6db3aa",
+        "cb2fc2327b4e7ed6",
+        "09abe0f7de7efe25"
+      ]
+    },
+    ".anatoly/docs/01-Getting-Started/03-Configuration.md": {
+      "sha": "36a5401c17dc5c894c6ffc613815c179d2b6c56277ebaadc462916a447cc4c55",
+      "sectionIds": [
+        "469aea589ae7d57e",
+        "7e49a548105af2cc",
+        "969c7eb733a871fe",
+        "5e84969444d30ec3",
+        "a5690f11fc1150d0",
+        "cf00245f129a6eaa",
+        "4aa24ab3a35ae6ff",
+        "fcbc84adeb3bea8f",
+        "85c0d03cd5aa67be",
+        "7adcdfab5ec22b75"
+      ]
+    },
+    ".anatoly/docs/01-Getting-Started/04-Quick-Start.md": {
+      "sha": "9a78ccc67bb2c3acb9b2bdb46cbf0124f53969de864c1bca16e483ecbc7479e0",
+      "sectionIds": [
+        "0228902804fdda75",
+        "569371eace571d3e",
+        "43a5f0f034a90c15",
+        "1bc6447567060b46",
+        "0daca0700ef75f11",
+        "09c2dfbdda92fd65",
+        "0f544ae8baebf2ed"
+      ]
+    },
+    ".anatoly/docs/02-Architecture/01-System-Overview.md": {
+      "sha": "23633785a9de9dd5083112e4c662ea3be8188034ed8c53cdbc828880c84ca57c",
+      "sectionIds": [
+        "742443873160e353",
+        "d2a8cfc3ef852bd5",
+        "3d1267379d06718f",
+        "d3787de3f8b9c004",
+        "d05540d9971f36f7",
+        "bc6f2d61595727fc",
+        "9fe7e86c75cbc8b2",
+        "800b3ed50d28d6b0"
+      ]
+    },
+    ".anatoly/docs/02-Architecture/02-Core-Concepts.md": {
+      "sha": "e44730ef856b4ae9e036dd9533bb40357fd3f06a1117113c66d6f0d68a559707",
+      "sectionIds": [
+        "14fd67606e803114",
+        "3fbf293c46abb7fc",
+        "bf6a5265418db53e",
+        "b6afa0dca9cc578d",
+        "933dcbb009c84253",
+        "f1afef7d85d7182f",
+        "1060e9656b079958",
+        "0a80ea202ad91a57",
+        "fbe3570c896d71a6",
+        "0a9b31f1a1c08593",
+        "b51d843f9fa8ec81",
+        "98535e7d8a360a28"
+      ]
+    },
+    ".anatoly/docs/02-Architecture/03-Data-Flow.md": {
+      "sha": "531eef9722724c7e6e42250ce33f9e59e5735fbe88739d96bcf2c8fa39ee6695",
+      "sectionIds": [
+        "1f71483cc4bb3d92",
+        "fd7ce37f9a56b996",
+        "50946dc9154adfbf",
+        "89cb87a9b82d18b8",
+        "4044f56497c44be1",
+        "82c4a04b3337e082",
+        "b68eef5cffd8bc04",
+        "9eee6d44740b347a",
+        "ed995dbcb7636ccb",
+        "b15d99fe76af3fa3",
+        "03e2fb2226745620"
+      ]
+    },
+    ".anatoly/docs/02-Architecture/04-Design-Decisions.md": {
+      "sha": "f610fc1cbca58a01612a4abe56403e8054e2d291b3e52c5dc446c86acc650d09",
+      "sectionIds": [
+        "7d7394810ad4cd3c",
+        "5fa8221a69c81f86",
+        "1ee8ba37489b0fb2",
+        "f17c3a26ebc938ad",
+        "f7e50279df4ba7a2",
+        "2ec006ed659dd08f",
+        "fe7ce9545a136910",
+        "607f4e047d566c17",
+        "fdcdbb04c9e826a7",
+        "7070ab95ff1b73fb",
+        "5de407c09943b0ae",
+        "f6b285cbf46f103b",
+        "3685e150f1fc18e3",
+        "cc13375a1e5abfa9",
+        "e16a0977f87e55bc",
+        "41054f4aeaf8a5aa",
+        "76b5bf701322440d",
+        "185ef3de417fffc7",
+        "efd63e2a944c2631",
+        "e78ad435e2403d85",
+        "83f69c01a490c511",
+        "537961bf10bd0117",
+        "78db59714b4de502",
+        "a54b5bd2dbb0f9a9",
+        "f19e84f9dcbaa85a",
+        "eaf8e2496168e61f",
+        "6eccd6e1927576ad",
+        "cf5e0858468ce557",
+        "65985a8aa947d05a",
+        "3b26adef65c6e60c",
+        "b2288e25efb8ab5a",
+        "e822798b70b4fa6c",
+        "170617986878dc91",
+        "f5dc540b86ef335b",
+        "e90494cc7f935a22",
+        "1df9dc376d4b6740",
+        "1b7d5afb3a076ec8",
+        "d98314a280b47b11",
+        "a6231dd80edd4d21"
+      ]
+    },
+    ".anatoly/docs/03-Guides/01-Common-Workflows.md": {
+      "sha": "5e3824a98bcfcf2f1e8363100259fe96f4e9a606eb820e346cf57fa4bdb90e27",
+      "sectionIds": [
+        "1066b730b1135161",
+        "03bc590a45d26c41",
+        "1f78771792c5e400",
+        "014dee657e584691",
+        "f6f0dbced0c157dd",
+        "43f1c75ff39fe1f9",
+        "b905c2ef8cdad070",
+        "e951fd6cc1ecf52e",
+        "59f9d790274a90af",
+        "695a6f450fe8e245",
+        "3edf7ec3f4b937c3",
+        "6183fd41f24ac9b5",
+        "a64a75ffc73040b3",
+        "621a6315b954a73e"
+      ]
+    },
+    ".anatoly/docs/03-Guides/02-Advanced-Configuration.md": {
+      "sha": "b325ac920c894df8f9ef407fccfd75ed13bf386a3511ae04600789e6e9236f1a",
+      "sectionIds": [
+        "ef67192de4f810e5",
+        "58ec2a15a0e4f89d",
+        "5e243b1bacb870d8",
+        "a32d20887cb0e253",
+        "f0354d64369aaffb",
+        "0688079e83241a28",
+        "3922ae78deb804d9",
+        "506b159fc1184fcd",
+        "5980708e1e6a67cd",
+        "f19bf90e9b229892",
+        "25b4f2f80e63d048",
+        "fdd4f9032c7b393f",
+        "b3d06c7a4feb940f"
+      ]
+    },
+    ".anatoly/docs/03-Guides/03-Troubleshooting.md": {
+      "sha": "c206513045cb15f98e200c40dcaf5051f3fdb4941ae3a5a7d91968ef17b61754",
+      "sectionIds": [
+        "364e8fe3db803280",
+        "5f389750aec371c0",
+        "4688af0d0840b9d3",
+        "e2a57b9163fc4ee4",
+        "ef920a3be3659e1b",
+        "736ba3d905bdefa1",
+        "116d05cebb9f73d9",
+        "c2e047f7af4a14a0",
+        "d1829529871b8159",
+        "c4f447881bfe4770",
+        "e688c43460a44b60",
+        "3cfdcea3255fbfc1"
+      ]
+    },
+    ".anatoly/docs/04-API-Reference/01-Public-API.md": {
+      "sha": "38b24fe5d73905d017a538236c10ffb1b970e7ef84cc8e81be73ca92bd863705",
+      "sectionIds": [
+        "bf7d97e97507b155",
+        "af608994eaf0a63b",
+        "98d9068314466e1f",
+        "9b963444925132f5",
+        "d7b8d6f8411f8e3c",
+        "88a8d42a3132e5eb",
+        "915b44b60e699004",
+        "736a55a8d89d3aab",
+        "04c425b23cd8484d",
+        "aa0d4a8280c80d23"
+      ]
+    },
+    ".anatoly/docs/04-API-Reference/02-Configuration-Schema.md": {
+      "sha": "22993e03587187c4a490ab925ecb6bea3e88d3cf69b0afd17dd324646db55f8a",
+      "sectionIds": [
+        "d0262ad24df10c8a",
+        "6a7831d4a6f6cb70",
+        "52072c9f303cedbe",
+        "c7b595ab4aec5877",
+        "ba4983d124b85a17",
+        "a463f8e6874c8768",
+        "d7d5c721aa84496e",
+        "59f58da2fff82d29",
+        "c2d734a3cbfa7442",
+        "4223db9b4dea804f",
+        "dff4ccdc99352357"
+      ]
+    },
+    ".anatoly/docs/04-API-Reference/03-Types-and-Interfaces.md": {
+      "sha": "44a697556d0e2a5cae1b0a3ea0ba4e01c0af26b30bcdfb9d89d95ac6b25eda91",
+      "sectionIds": [
+        "569fa41823772f3e",
+        "4471450274337d96",
+        "5b2aeb423c020b0c",
+        "d1cb02ab207b475b",
+        "30afa8c9d699ffdb",
+        "75ffc6ffb19bbe8d",
+        "498dabb99cd36d97",
+        "0900187caad81e72"
+      ]
+    },
+    ".anatoly/docs/05-Development/01-Source-Tree.md": {
+      "sha": "b2e15935152c59569cf0e1b44d543b8f34d34a8b153be632e5896d488c967998",
+      "sectionIds": [
+        "4cdcd080ebb0c70a",
+        "6f6595e4b7c45d4d",
+        "6bbce43395c50ea3",
+        "c5a78c8ec627000e",
+        "72d8a1178a4245e6",
+        "9f8daeb3785328af",
+        "53de4d35e417494a",
+        "ac4258a280c79f22",
+        "72228e272ebf08df",
+        "f9dd2d9c4a69d840",
+        "681b3dd7e6fc7a75",
+        "b8f83a145ecb9af1",
+        "8db1271a1c440fc4",
+        "a5ff450b1e305e2d",
+        "a53315a7b8bffe75",
+        "aeee11e6493767f8",
+        "e0d50482a6a5b680"
+      ]
+    },
+    ".anatoly/docs/05-Development/02-Build-and-Test.md": {
+      "sha": "fffc84900ff4e2b583f85a4fb33c5955301caa361166abd0693832bafc96337c",
+      "sectionIds": [
+        "daba460b2ab6b95a",
+        "04a53b823b0c56e9",
+        "848ed5dbc1a90800",
+        "fc50a08eee10e11f",
+        "746bd99063f1ba32",
+        "6a790324f7ba22ed",
+        "8f5d87f048204b6e",
+        "6bc9fedaf7232b77",
+        "c8d48762246fa790"
+      ]
+    },
+    ".anatoly/docs/05-Development/03-Code-Conventions.md": {
+      "sha": "fabb7c59881a4a99c7b365c6c58f1105f0f162801308d50fbc1e75f2f6789f0f",
+      "sectionIds": [
+        "9043d055d4c27e86",
+        "416ba009896c5624",
+        "9908231a57141543",
+        "373e48652cbeb9fb",
+        "0b6c3fc63aeeb1fe",
+        "169aa218f39090ac",
+        "209701c1e22b1e1c",
+        "9e7c56c48d01513d",
+        "b60ab7f4bfac987a",
+        "c61e2fadd3fa7b37",
+        "542d018dc3810456",
+        "b815acadf30d568a",
+        "3d61c4e6dfb26b16",
+        "dc16d248498b08a8",
+        "45ba32e166fb996d",
+        "b599ab8d14f41a95",
+        "2b2d9970bab20fac",
+        "056f66844f0d13bf",
+        "c20c7bdd312475fc"
+      ]
+    },
+    ".anatoly/docs/05-Development/04-Release-Process.md": {
+      "sha": "fce64d7e727853ac4700e461b08a7afb1223d80a8cd84d946804f5ac7286dbd8",
+      "sectionIds": [
+        "09f6d8f4693b80c3",
+        "7dbf3a16bba8b9b7",
+        "74e9f22980d9522d",
+        "23108312ca36de21",
+        "e08545a3a673eaa9",
+        "c4dcad74adf56d1d",
+        "afd744820b6f9ff9",
+        "c6826dfd70df5e98"
+      ]
+    }
+  }
+}

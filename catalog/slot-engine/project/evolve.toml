@@ -1,0 +1,22 @@
+# evolve.toml — project-level configuration for evolve itself
+# See SPEC.md § Config resolution for the full list of supported fields.
+
+# verify.sh lives one level up (in catalog/slot-engine/) so it is never
+# exposed to the code audited by Anatoly.
+check = "../verify.sh"
+rounds = 100
+
+# Generous ceiling: verify.sh runs tsc + a 100 000-spin Monte-Carlo
+# simulation. 20s was not enough; 600s gives comfortable headroom.
+timeout = 600
+
+model = "claude-opus-4-6"
+allow_installs = true
+capture_frames = true
+
+# Evolve converges to SPEC.md, not README.md.
+# README.md is the user-facing documentation and is kept stable;
+# SPEC.md is the dense contract the agent validates claim-by-claim.
+# SPEC.md lives one level up so the benchmark ground truth never
+# enters the directory audited by Anatoly.
+spec = "../SPEC.md"
