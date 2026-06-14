@@ -1,0 +1,638 @@
+{
+  "fixture": "slot-engine",
+  "meta": {
+    "runId": "2026-05-20_135602",
+    "anatolyVersion": "0.9.6",
+    "anatolyCommit": "720c38d-dirty",
+    "projectBranch": "main",
+    "projectCommit": "7dc4cc6",
+    "durationMs": 559261,
+    "costUsd": 3.659019,
+    "totalInputTokens": 233,
+    "totalOutputTokens": 150628,
+    "axisStats": {
+      "utility": {
+        "calls": 11,
+        "durationMs": 103175,
+        "costUsd": 0.12881385,
+        "inputTokens": 40,
+        "outputTokens": 16620,
+        "cacheReadTokens": 62751,
+        "cacheCreationTokens": 31519
+      },
+      "duplication": {
+        "calls": 11,
+        "durationMs": 80885,
+        "costUsd": 0.1112176,
+        "inputTokens": 40,
+        "outputTokens": 12806,
+        "cacheReadTokens": 63201,
+        "cacheCreationTokens": 32662
+      },
+      "correction": {
+        "calls": 11,
+        "durationMs": 619083,
+        "costUsd": 0.8067624,
+        "inputTokens": 33,
+        "outputTokens": 37157,
+        "cacheReadTokens": 134453,
+        "cacheCreationTokens": 55726
+      },
+      "overengineering": {
+        "calls": 10,
+        "durationMs": 183634,
+        "costUsd": 0.34351425,
+        "inputTokens": 30,
+        "outputTokens": 8951,
+        "cacheReadTokens": 113510,
+        "cacheCreationTokens": 46695
+      },
+      "tests": {
+        "calls": 10,
+        "durationMs": 60076,
+        "costUsd": 0.16818734999999999,
+        "inputTokens": 30,
+        "outputTokens": 3096,
+        "cacheReadTokens": 114337,
+        "cacheCreationTokens": 23295
+      },
+      "best-practices": {
+        "calls": 10,
+        "durationMs": 1059379,
+        "costUsd": 1.1691094499999999,
+        "inputTokens": 30,
+        "outputTokens": 63563,
+        "cacheReadTokens": 127819,
+        "cacheCreationTokens": 47261
+      },
+      "documentation": {
+        "calls": 10,
+        "durationMs": 147575,
+        "costUsd": 0.27573614999999996,
+        "inputTokens": 30,
+        "outputTokens": 8435,
+        "cacheReadTokens": 114508,
+        "cacheCreationTokens": 30605
+      }
+    },
+    "refinementStats": {
+      "calls": 3,
+      "durationMs": 188853,
+      "costUsd": 0.56429225,
+      "inputTokens": 3193,
+      "outputTokens": 9489,
+      "cacheReadTokens": 148217,
+      "cacheCreationTokens": 37919
+    }
+  },
+  "global_f1": 0.7428571428571428,
+  "scored_axes": [
+    "correction",
+    "utility",
+    "duplication",
+    "overengineering",
+    "best-practices"
+  ],
+  "per_axis": {
+    "correction": {
+      "tp": 4,
+      "fp": 1,
+      "fn": 3,
+      "precision": 0.8,
+      "recall": 0.5714285714285714,
+      "f1": 0.6666666666666666
+    },
+    "utility": {
+      "tp": 6,
+      "fp": 1,
+      "fn": 1,
+      "precision": 0.8571428571428571,
+      "recall": 0.8571428571428571,
+      "f1": 0.8571428571428571
+    },
+    "duplication": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1,
+      "recall": 0.5,
+      "f1": 0.6666666666666666
+    },
+    "overengineering": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1,
+      "recall": 0.75,
+      "f1": 0.8571428571428571
+    },
+    "best-practices": {
+      "tp": 5,
+      "fp": 5,
+      "fn": 0,
+      "precision": 0.5,
+      "recall": 1,
+      "f1": 0.6666666666666666
+    }
+  },
+  "misses": [
+    {
+      "id": "INV-WILD",
+      "axis": "correction",
+      "file": "src/wild.ts",
+      "symbol": "applyWildBonus",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "hard",
+      "nature": "wild-multiplier-stacking",
+      "invariant": "wild multiplier replaces, does not accumulate",
+      "description": "applyWildBonus multiplies payout by both (1 + wildCount) and 2**wildCount\nso wilds compound. Intended behavior is payout * 2**wildCount.\n"
+    },
+    {
+      "id": "INV-FREESPIN",
+      "axis": "correction",
+      "file": "src/freespin.ts",
+      "symbol": "handleFreeSpins",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "freespin-retrigger-no-decrement",
+      "invariant": "every spin consumes exactly one remaining free spin",
+      "description": "On retrigger (scatters >= 3 during a free spin), remaining is incremented\nby 10 but the retriggering spin does not decrement it. Free-spin rounds\ncan chain without bound.\n"
+    },
+    {
+      "id": "INV-JACKPOT",
+      "axis": "correction",
+      "file": "src/jackpot.ts",
+      "symbol": "isJackpotHit",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "jackpot-threshold-too-low",
+      "invariant": "jackpot = 5 DIAMOND on middle row",
+      "description": "isJackpotHit returns true on 4-of-a-kind DIAMOND anywhere in the reel\nwindow. Intended behavior is 5 DIAMOND on the middle row only.\n"
+    },
+    {
+      "id": "DEAD-DEBUG-BRANCH",
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "symbol": "DEBUG_MODE",
+      "expected_verdict": "DEAD",
+      "difficulty": "medium",
+      "nature": "unreachable-branch",
+      "description": "An `if (DEBUG_MODE) { ... }` branch inside spin() is statically\nunreachable because DEBUG_MODE is a const false never reassigned.\n"
+    },
+    {
+      "id": "DUP-PAYOUT",
+      "axis": "duplication",
+      "members": [
+        {
+          "file": "src/legacy.ts",
+          "symbol": "computeLegacyPayout"
+        },
+        {
+          "file": "src/engine.ts",
+          "symbol": "computePayout"
+        },
+        {
+          "file": "src/engine.ts",
+          "symbol": "evaluateLine"
+        }
+      ],
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "medium",
+      "nature": "semantic-duplicate-function",
+      "description": "computeLegacyPayout in legacy.ts duplicates the per-line payout\ncomputation of computePayout / evaluateLine in engine.ts.\n"
+    },
+    {
+      "id": "DUP-WILD",
+      "axis": "duplication",
+      "members": [
+        {
+          "file": "src/engine.ts",
+          "symbol": "evaluateLine"
+        },
+        {
+          "file": "src/wild.ts",
+          "symbol": "applyWildBonus"
+        }
+      ],
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "hard",
+      "nature": "inline-duplicate-of-helper",
+      "description": "evaluateLine in engine.ts reimplements inline the wild multiplier\nformula that applyWildBonus in wild.ts already provides.\n"
+    },
+    {
+      "id": "OVER-STRATEGY",
+      "axis": "overengineering",
+      "file": "src/strategy.ts",
+      "symbols": [
+        "SpinStrategy",
+        "DefaultStrategy"
+      ],
+      "expected_verdict": "OVER",
+      "difficulty": "medium",
+      "nature": "strategy-pattern-single-used-strategy",
+      "description": "SpinStrategy abstraction exists for a single used strategy\n(DefaultStrategy); ConservativeStrategy is never instantiated.\n"
+    }
+  ],
+  "false_positives": [
+    {
+      "axis": "correction",
+      "file": "src/reels.ts",
+      "line": 57,
+      "verdict": "NEEDS_FIX",
+      "symbol": "getReelWeights",
+      "reason": "Reference docs state 'Weights are read-only at runtime — there is no setter.' Returning the live array allows callers to write getReelWeights(0)[0]=999 and silently corrupt all future spins on reel 0. Fix: return REEL_WEIGHTS[reelIndex].slice()."
+    },
+    {
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "line": 12,
+      "verdict": "DEAD",
+      "symbol": "Bet",
+      "reason": "Exported type not imported by any file. Zero runtime and type-only importers."
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/reels.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "Immutability"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/reels.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/reels.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "Security"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/reels.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "Testability"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/legacy.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "Security"
+    }
+  ],
+  "unscored_findings": [
+    {
+      "axis": "tests",
+      "file": "src/engine.ts",
+      "line": 14,
+      "verdict": "UNCOVERED",
+      "symbol": "HOUSE_EDGE",
+      "reason": "No test file exists. HOUSE_EDGE affects computePayout behavior but is never tested."
+    },
+    {
+      "axis": "tests",
+      "file": "src/engine.ts",
+      "line": 15,
+      "verdict": "UNCOVERED",
+      "symbol": "DEBUG_MODE",
+      "reason": "No test file exists."
+    },
+    {
+      "axis": "tests",
+      "file": "src/engine.ts",
+      "line": 17,
+      "verdict": "UNCOVERED",
+      "symbol": "EngineContainer",
+      "reason": "No test file exists. register/resolve contract and missing-key behavior are untested."
+    },
+    {
+      "axis": "tests",
+      "file": "src/engine.ts",
+      "line": 29,
+      "verdict": "UNCOVERED",
+      "symbol": "container",
+      "reason": "No test file exists."
+    },
+    {
+      "axis": "tests",
+      "file": "src/engine.ts",
+      "line": 34,
+      "verdict": "UNCOVERED",
+      "symbol": "PAYLINES",
+      "reason": "No test file exists. Payline layout correctness is never verified."
+    },
+    {
+      "axis": "tests",
+      "file": "src/engine.ts",
+      "line": 47,
+      "verdict": "UNCOVERED",
+      "symbol": "checkLine",
+      "reason": "No test file exists. WILD substitution logic, SCATTER early-exit, run-length threshold (<3), and all-WILD edge cases are untested."
+    },
+    {
+      "axis": "tests",
+      "file": "src/engine.ts",
+      "line": 66,
+      "verdict": "UNCOVERED",
+      "symbol": "evaluateLine",
+      "reason": "No test file exists. Wild-count multiplier compounding (basePayout * (1+wc) * 2^wc) is a critical financial calculation with no test coverage."
+    },
+    {
+      "axis": "tests",
+      "file": "src/engine.ts",
+      "line": 101,
+      "verdict": "UNCOVERED",
+      "symbol": "computePayout",
+      "reason": "No test file exists. The house-edge application (multiplies instead of reducing), the unconditional +bet*0.01 floor, and Math.ceil rounding are all untested despite being exported and financially significant."
+    },
+    {
+      "axis": "tests",
+      "file": "src/engine.ts",
+      "line": 113,
+      "verdict": "UNCOVERED",
+      "symbol": "spin",
+      "reason": "Auto-resolved: JSDoc block found before symbol"
+    },
+    {
+      "axis": "tests",
+      "file": "src/reels.ts",
+      "line": 3,
+      "verdict": "UNCOVERED",
+      "symbol": "SYMBOLS",
+      "reason": "No test file exists for this module."
+    },
+    {
+      "axis": "tests",
+      "file": "src/reels.ts",
+      "line": 12,
+      "verdict": "UNCOVERED",
+      "symbol": "DEFAULT_WEIGHTS",
+      "reason": "No test file exists for this module."
+    },
+    {
+      "axis": "tests",
+      "file": "src/reels.ts",
+      "line": 17,
+      "verdict": "UNCOVERED",
+      "symbol": "weightsToArray",
+      "reason": "Auto-resolved: function ≤ 5 lines"
+    },
+    {
+      "axis": "tests",
+      "file": "src/reels.ts",
+      "line": 22,
+      "verdict": "UNCOVERED",
+      "symbol": "REEL_WEIGHTS",
+      "reason": "No test file exists for this module."
+    },
+    {
+      "axis": "tests",
+      "file": "src/reels.ts",
+      "line": 30,
+      "verdict": "UNCOVERED",
+      "symbol": "pickFromWeighted",
+      "reason": "No test file exists. This function uses Math.random() and has boundary behavior (last-item fallback) that warrant dedicated tests."
+    },
+    {
+      "axis": "tests",
+      "file": "src/reels.ts",
+      "line": 43,
+      "verdict": "UNCOVERED",
+      "symbol": "spinReel",
+      "reason": "No test file exists. Imported by src/factories.ts — a critical path with no coverage."
+    },
+    {
+      "axis": "tests",
+      "file": "src/reels.ts",
+      "line": 52,
+      "verdict": "UNCOVERED",
+      "symbol": "getReelSymbols",
+      "reason": "No test file exists. Imported by src/engine.ts."
+    },
+    {
+      "axis": "tests",
+      "file": "src/reels.ts",
+      "line": 56,
+      "verdict": "UNCOVERED",
+      "symbol": "getReelWeights",
+      "reason": "No test file exists. Imported by src/engine.ts."
+    },
+    {
+      "axis": "tests",
+      "file": "src/paytable.ts",
+      "line": 5,
+      "verdict": "UNCOVERED",
+      "symbol": "PAY_TABLE",
+      "reason": "No test file exists for this module."
+    },
+    {
+      "axis": "tests",
+      "file": "src/paytable.ts",
+      "line": 14,
+      "verdict": "UNCOVERED",
+      "symbol": "getPayMultiplier",
+      "reason": "No test file exists. Function is imported by src/engine.ts and src/legacy.ts, making untested count/symbol boundary logic a risk. Cases like count<3, unknown symbol, and all six symbols across all three counts are uncovered."
+    },
+    {
+      "axis": "tests",
+      "file": "src/strategy.ts",
+      "line": 3,
+      "verdict": "UNCOVERED",
+      "symbol": "SpinStrategy",
+      "reason": "Auto-resolved: function ≤ 5 lines"
+    },
+    {
+      "axis": "tests",
+      "file": "src/strategy.ts",
+      "line": 7,
+      "verdict": "UNCOVERED",
+      "symbol": "DefaultStrategy",
+      "reason": "No test file found. Used by src/engine.ts — pass-through identity behavior is untested."
+    },
+    {
+      "axis": "tests",
+      "file": "src/events.ts",
+      "line": 3,
+      "verdict": "UNCOVERED",
+      "symbol": "SpinEventEmitter",
+      "reason": "No test file exists. Core event bus used by engine.ts — on/off/emit and edge cases (unknown event, duplicate handlers, handler removal) are all untested."
+    },
+    {
+      "axis": "tests",
+      "file": "src/events.ts",
+      "line": 27,
+      "verdict": "UNCOVERED",
+      "symbol": "SPIN_DONE",
+      "reason": "No test file exists. Constant used by engine.ts but never verified in any test."
+    },
+    {
+      "axis": "tests",
+      "file": "src/factories.ts",
+      "line": 4,
+      "verdict": "UNCOVERED",
+      "symbol": "AbstractReelBuilderFactory",
+      "reason": "Auto-resolved: function ≤ 5 lines"
+    },
+    {
+      "axis": "tests",
+      "file": "src/factories.ts",
+      "line": 8,
+      "verdict": "UNCOVERED",
+      "symbol": "StandardReelBuilderFactory",
+      "reason": "No test file exists. `buildReels` is used by `src/engine.ts` (critical game engine path) but has no tests for reel count, row count handling, or `spinReel` integration."
+    },
+    {
+      "axis": "tests",
+      "file": "src/freespin.ts",
+      "line": 3,
+      "verdict": "UNCOVERED",
+      "symbol": "detectScatters",
+      "reason": "No test file found. Used in src/engine.ts with no coverage for empty reels, single scatter, or multi-reel scatter counting."
+    },
+    {
+      "axis": "tests",
+      "file": "src/freespin.ts",
+      "line": 13,
+      "verdict": "UNCOVERED",
+      "symbol": "handleFreeSpins",
+      "reason": "No test file found. Critical state mutation logic with 4 branches (activation, retrigger, decrement, deactivation) has zero test coverage."
+    },
+    {
+      "axis": "tests",
+      "file": "src/jackpot.ts",
+      "line": 3,
+      "verdict": "UNCOVERED",
+      "symbol": "isJackpotHit",
+      "reason": "No test file exists. Critical game logic used by src/engine.ts has no coverage for happy path, edge cases (fewer than 4 diamonds, exactly 4, empty reels, mixed symbols), or boundary conditions."
+    },
+    {
+      "axis": "tests",
+      "file": "src/rng.ts",
+      "line": 5,
+      "verdict": "UNCOVERED",
+      "symbol": "weightedPick",
+      "reason": "No test file exists. Critical edge cases untested: empty arrays, mismatched array lengths, zero-weight items, single-item lists, and boundary roll exactly at cumulative threshold. Called by src/engine.ts, making this a production risk."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/engine.ts",
+      "line": 101,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "computePayout",
+      "reason": "JSDoc describes purpose and house-edge intent but omits @param for lineWins and bet, omits @returns, and does not document the unconditional floor addition (bet * 0.01) or the incorrect house-edge direction (multiplies by 1.05, which raises rather than reduces payout)."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/reels.ts",
+      "line": 43,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "spinReel",
+      "reason": "Exported public API with no JSDoc. Missing: valid range for reelIndex (0–4), explanation that it returns 3 independently sampled symbols, and what happens for an out-of-range index."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/reels.ts",
+      "line": 52,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "getReelSymbols",
+      "reason": "Exported public API with no JSDoc. While simple, a note that the returned array is ordered and matches the weight-array index positions would be useful."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/reels.ts",
+      "line": 56,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "getReelWeights",
+      "reason": "Exported public API with no JSDoc. Missing: valid range for reelIndex (0–4), return array ordering, and that the array is not a defensive copy."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/paytable.ts",
+      "line": 14,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "getPayMultiplier",
+      "reason": "No JSDoc. Missing: what `count` represents (consecutive matching symbols on a line), what the returned number is a multiplier of (line bet), and that WILD/SCATTER return 0."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/strategy.ts",
+      "line": 3,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "SpinStrategy",
+      "reason": "Auto-resolved: function ≤ 5 lines"
+    },
+    {
+      "axis": "documentation",
+      "file": "src/strategy.ts",
+      "line": 7,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "DefaultStrategy",
+      "reason": "No JSDoc comment. Identity behavior (pass-through) is not obvious from the class name alone and is undocumented."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/events.ts",
+      "line": 3,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "SpinEventEmitter",
+      "reason": "No JSDoc on the class or any of its public methods (on, off, emit). A public API class with three exported methods has no description of purpose, parameters, or behavior."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/events.ts",
+      "line": 27,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "SPIN_DONE",
+      "reason": "No JSDoc comment. The constant's value is visible but there is no documentation of when it is emitted, what args are passed, or how consumers should use it."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/factories.ts",
+      "line": 4,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "AbstractReelBuilderFactory",
+      "reason": "Auto-resolved: function ≤ 5 lines"
+    },
+    {
+      "axis": "documentation",
+      "file": "src/factories.ts",
+      "line": 8,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "StandardReelBuilderFactory",
+      "reason": "No JSDoc comment. The non-obvious behavior — that _rowCount is silently ignored and row count is fixed by spinReel() — is a critical omission; callers passing rowCount will receive no indication it has no effect."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/freespin.ts",
+      "line": 3,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "detectScatters",
+      "reason": "No JSDoc comment. Missing description of what constitutes a scatter count, the grid traversal approach, and return value semantics."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/freespin.ts",
+      "line": 13,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "handleFreeSpins",
+      "reason": "No JSDoc comment. The three-branch state machine (activate, retrigger, decrement/deactivate) and mutation-in-place behavior are non-obvious and warrant documentation. Missing @param descriptions and side-effect notice."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/jackpot.ts",
+      "line": 3,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "isJackpotHit",
+      "reason": "No JSDoc comment. Non-obvious behavior includes: the hardcoded threshold of 4 DIAMONDs, that counting spans the entire grid (not payline-restricted), and the meaning of the reels parameter shape — none of which are documented inline."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/rng.ts",
+      "line": 5,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "weightedPick",
+      "reason": "JSDoc describes purpose and algorithm but omits @param descriptions (no explanation of what `items` and `weights` represent, no constraint that arrays must be same length or weights non-negative), and no @returns tag explaining the selected item. (deliberated: reclassified: correction: NEEDS_FIX → OK — False positive on correction axis. Verified rng.ts:5-16: identical algorithm to pickFromWeighted, equally correct. Two claimed defects: (1) Non-certifiable RNG — security/compliance concern, not algorithmic correctness. Math.random() produces a valid uniform distribution for the weighted selection algorithm. (2) Silent undefined on empty input — calling weightedPick([], []) returns items[-1]=undefined typed as T (rng.ts:15). This IS a real edge case, but no caller in the codebase passes empty arrays: the only import is engine.ts:2, registered at engine.ts:30, resolved at engine.ts:120, and the resolved rng variable is never actually called at runtime (reels are built via factory.buildReels→spinReel→pickFromWeighted path at factories.ts:12). The function is effectively dead code in the current call graph. Defensive input validation is hardening, not correction of an existing defect. Per investigation rules: only actual defects (crashes, data loss, security breaches) warrant NEEDS_FIX — no current code path triggers the empty-input issue.)"
+    }
+  ]
+}
