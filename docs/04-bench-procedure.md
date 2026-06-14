@@ -42,31 +42,92 @@ anatoly local-embeddings status
 The GGUF Docker stack starts lazily on the first embed call. No need to
 pre-launch it.
 
+### VM clone and GitHub auth (one-time, verify each session)
+
+The VM has two anatoly clones. **Only `~/project/anatoly-enterprise` is
+canonical** (its `origin` is the private upstream). A legacy
+`~/project/anatoly` clone may also exist (historically pointed at the OSS
+mirror): ignore it, do not `make update` there.
+
+The VM has **no GitHub SSH key**. Auth to the private repo is via the `gh`
+CLI credential helper over HTTPS (the `gh` account is already logged in):
+
+```bash
+# one-time on the VM (idempotent): wire gh as git's github credential helper
+gh auth setup-git
+cd ~/project/anatoly-enterprise
+git remote -v   # must be https://github.com/r-via/anatoly-enterprise.git
+# if it is not, repoint it (never the OSS mirror):
+git remote set-url origin https://github.com/r-via/anatoly-enterprise.git
+```
+
+`git@github.com:...` (SSH) will fail with `Permission denied (publickey)`;
+use the HTTPS URL.
+
+After any `make update`, **verify the global `anatoly` bin resolves to the
+enterprise clone** (see the two-clone gotcha at the end):
+
+```bash
+readlink -f "$(which anatoly)"
+# expected: /home/rviau/project/anatoly-enterprise/dist/index.js
+```
+
+Anatoly refuses to run from `$HOME` (HOME-guard): run `anatoly --version`
+and all commands from a project directory, not `~`.
+
 ## Choosing the Anatoly version to bench
 
-The `Makefile` in `~/project/anatoly` on the VM supports three checkout modes:
+### Source repository (OSS vs upstream)
+
+Anatoly lives in two repos:
+
+- **`r-via/anatoly`** — public OSS mirror. **Never touched by the bench** (no
+  fetch, no push, no checkout).
+- **[`r-via/anatoly-enterprise`](https://github.com/r-via/anatoly-enterprise)**
+  — **private upstream**, source of truth for development and benching. Every
+  feature branch and the `main` the bench validates live here. (Formerly named
+  `anatoly-entreprise`; the canonical name is now `anatoly-enterprise`.)
+
+The canonical VM clone `~/project/anatoly-enterprise` tracks this private repo
+(`origin = https://github.com/r-via/anatoly-enterprise.git`, auth via the `gh`
+credential helper, see "VM clone and GitHub auth" above). A bench run is never
+driven by the OSS mirror.
+
+### Checkout modes
+
+The `Makefile` in `~/project/anatoly-enterprise` on the VM supports three
+checkout modes (`origin` = private `r-via/anatoly-enterprise`):
 
 | Command | Effect | When to use |
 |---|---|---|
-| `make update` | Pull `origin/main` (default `BRANCH=main`) | Bench a version already merged to main |
-| `make update BRANCH=feature/xyz` | Checkout + pull `origin/feature/xyz` | **Bench an in-progress feature** — recommended, keeps `main` clean of un-bench-validated commits |
+| `make update` | Pull `origin/main` (default `BRANCH=main`) | Bench a version already merged to the private `main` |
+| `make update BRANCH=feature/xyz` | Checkout + pull `origin/feature/xyz`, then reinstall | **Bench an in-progress feature** (recommended; keeps `main` clean of un-bench-validated commits) |
 | `make update COMMIT=abc1234` | Detached checkout on SHA `abc1234` | Bench a precise commit, branch-agnostic |
 
-**Recommended workflow for benching a new feature:**
+`make update` reinstalls (deps + build + global bin) only when the checked-out
+commit changed. If it prints "nothing to reinstall" but you need a guaranteed
+fresh global bin (e.g. switching clones, or the bin resolves elsewhere), force
+it with `make install` (see the two-clone gotcha at the end).
 
-1. Dev side (laptop): push the feature to a dedicated branch, **not main**.
+**Canonical workflow for benching an in-progress branch (the common case):**
+
+1. Dev side (laptop): commit on a branch and push it to the **private**
+   `origin` (`r-via/anatoly-enterprise`), **not main, never the OSS mirror**.
    ```bash
-   git checkout -b feature/my-epic
-   # ... commits ...
-   git push -u origin feature/my-epic
+   git push origin my-branch          # origin = r-via/anatoly-enterprise (private)
    ```
-2. VM side: `make update BRANCH=feature/my-epic`.
-3. Bench. If OK → merge the branch to main. If KO → fix on the branch and
-   re-bench.
+2. VM side, in the canonical clone:
+   ```bash
+   cd ~/project/anatoly-enterprise
+   make update BRANCH=my-branch
+   make install                       # if global bin must be (re)pointed here
+   readlink -f "$(which anatoly)"     # == ~/project/anatoly-enterprise/dist/index.js
+   ```
+3. Bench. If OK, merge the branch to the private `main`; if KO, fix on the
+   branch and re-bench.
 
-This avoids benching on `main` a version you are not yet sure of. Benching
-directly on main and then discovering a regression makes the rollback more
-costly than a simple branch switch.
+This avoids benching on `main` a version not yet validated: a regression found
+after merging main is more costly to roll back than a branch switch.
 
 ```bash
 # probe the current version on the VM
@@ -196,4 +257,21 @@ Scoring is fixture-specific — see the fixture's BENCH_PROCEDURE.md.
   bench has validated the version. If the VM is on a branch other than
   `main`, verify with `git rev-parse --abbrev-ref HEAD` before benching.
 - **`cannot resolve commit` on `make update`**: the branch was not pushed to
-  `origin`. `git push -u origin feature/xyz` on the dev side first.
+  the private `anatoly-enterprise` upstream. `git push origin <branch>`
+  (origin = `r-via/anatoly-enterprise`) on the dev side first. Pushing only to
+  the OSS `anatoly` mirror will not make the branch resolvable on the VM (and
+  the bench never uses the OSS mirror).
+- **Two clones / wrong global bin**: the VM has `~/project/anatoly-enterprise`
+  (canonical) and a legacy `~/project/anatoly`. The global `anatoly` is a
+  symlink to whichever clone last ran `install-global`. After `make update`,
+  always check `readlink -f "$(which anatoly)"` resolves to
+  `~/project/anatoly-enterprise/dist/index.js`. If not (or `make update` said
+  "nothing to reinstall"), run `make install` in the enterprise clone to
+  rebuild deps + dist and relink the bin. Benching with the bin pointed at the
+  stale clone silently measures the wrong commit.
+- **`refusing to run from your HOME directory`**: every `anatoly` invocation
+  (including `--version`) is HOME-guarded. Always `cd` into a project dir
+  first; in non-interactive SSH, beware `set -e` aborting on this.
+- **Private repo auth on the VM is `gh`, not SSH**: `git@github.com:...` fails
+  (`Permission denied (publickey)`, no SSH key on the VM). Use the HTTPS remote
+  with `gh auth setup-git` configured once.
