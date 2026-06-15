@@ -1,0 +1,67 @@
+{
+  "_meta": {
+    "schema": 1,
+    "prompt_hash": "sha256:per-axis-index",
+    "model_id": "anthropic/claude-sonnet-4-6",
+    "created_at": "2026-06-15T15:27:03.013Z",
+    "anatoly_version": "unknown"
+  },
+  "data": {
+    "version": 2,
+    "file": "src/routing.ts",
+    "is_generated": false,
+    "language": "typescript",
+    "parse_method": "ast",
+    "verdict": "NEEDS_REFACTOR",
+    "symbols": [
+      {
+        "name": "shortestPath",
+        "kind": "function",
+        "exported": true,
+        "line_start": 4,
+        "line_end": 36,
+        "correction": "NEEDS_FIX",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 85,
+        "detail": "[NEEDS_FIX] Path reconstruction omits `from` node when BFS terminates early: the `while (node !== undefined)` loop walks parent map but `from` has no parent entry, so the loop stops before prepending it.",
+        "findings": [
+          {
+            "axis": "correction",
+            "line_start": 21,
+            "line_end": 27,
+            "detail": "Loop `while (node !== undefined)` terminates when `parent.get(node)` returns `undefined` — which happens at `from`, the BFS root that was never inserted into `parent`. The root node is never prepended, so the returned path starts at the second node, not `from`. Fix: change the termination condition so the root is included, e.g. walk until `node === undefined` with a post-increment step that still pushes `from`, or seed `parent.set(from, undefined)` and check `parent.has(node)` instead."
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": 1,
+        "description": "Path reconstruction loop exits before prepending `from`. Either seed the parent map with `parent.set(from, undefined as any)` and guard with `parent.has(node)`, or change the termination from `node !== undefined` to `node !== from` and then push `from` after the loop. As-is, the returned array is missing its first element for all paths of length > 1.",
+        "severity": "medium",
+        "effort": "small",
+        "category": "quickwin",
+        "target_symbol": null,
+        "target_lines": "L21",
+        "source": "correction"
+      }
+    ],
+    "file_level": {
+      "unused_imports": [],
+      "circular_dependencies": [],
+      "general_notes": ""
+    },
+    "axis_meta": {
+      "correction": {
+        "model": "claude-sonnet-4-6",
+        "cost_usd": 0.0657015,
+        "duration_ms": 10469
+      }
+    },
+    "content_hash": "3f482e8d325db429cd902698ec46358348b3457233307d7bdff1c67a8b871c28"
+  }
+}

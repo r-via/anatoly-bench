@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "file": "src/priority.ts",
+  "hash": "23c9efa471094d8c0d50cae809a2f64e7f430acd1875785cb1a2e73f66c75f04",
+  "symbols": [
+    {
+      "name": "QueueEntry",
+      "kind": "type",
+      "exported": true,
+      "line_start": 3,
+      "line_end": 6
+    },
+    {
+      "name": "compareTrains",
+      "kind": "function",
+      "exported": true,
+      "line_start": 8,
+      "line_end": 12
+    }
+  ],
+  "imports": [
+    {
+      "source": "./types.js",
+      "type": "import",
+      "symbols": [
+        "TrainId"
+      ],
+      "typeOnly": true
+    }
+  ],
+  "imports_enriched": true,
+  "language": "typescript",
+  "parse_method": "ast",
+  "scanned_at": "2026-06-15T15:25:28.332Z"
+}

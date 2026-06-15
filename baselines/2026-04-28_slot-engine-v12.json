@@ -1,0 +1,236 @@
+{
+  "fixture": "slot-engine",
+  "global_f1": 0.678095238095238,
+  "scored_axes": [
+    "correction",
+    "utility",
+    "duplication",
+    "overengineering",
+    "best-practices"
+  ],
+  "per_axis": {
+    "correction": {
+      "tp": 4,
+      "fp": 4,
+      "fn": 3,
+      "precision": 0.5,
+      "recall": 0.5714285714285714,
+      "f1": 0.5333333333333333
+    },
+    "utility": {
+      "tp": 6,
+      "fp": 1,
+      "fn": 1,
+      "precision": 0.8571428571428571,
+      "recall": 0.8571428571428571,
+      "f1": 0.8571428571428571
+    },
+    "duplication": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1,
+      "recall": 0.5,
+      "f1": 0.6666666666666666
+    },
+    "overengineering": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1,
+      "recall": 0.5,
+      "f1": 0.6666666666666666
+    },
+    "best-practices": {
+      "tp": 5,
+      "fp": 5,
+      "fn": 0,
+      "precision": 0.5,
+      "recall": 1,
+      "f1": 0.6666666666666666
+    }
+  },
+  "misses": [
+    {
+      "id": "INV-WEIGHTS",
+      "axis": "correction",
+      "file": "src/reels.ts",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "wrong-reel-weight",
+      "invariant": "top-symbol weight in low single digits",
+      "description": "DIAMOND symbol weight is 30 on every reel (should be ~3). A decimal-place\ntypo makes the top-paying symbol about 10x too frequent.\n"
+    },
+    {
+      "id": "INV-WILD",
+      "axis": "correction",
+      "file": "src/wild.ts",
+      "symbol": "applyWildBonus",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "hard",
+      "nature": "wild-multiplier-stacking",
+      "invariant": "wild multiplier replaces, does not accumulate",
+      "description": "applyWildBonus multiplies payout by both (1 + wildCount) and 2**wildCount\nso wilds compound. Intended behavior is payout * 2**wildCount.\n"
+    },
+    {
+      "id": "INV-JACKPOT",
+      "axis": "correction",
+      "file": "src/jackpot.ts",
+      "symbol": "isJackpotHit",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "jackpot-threshold-too-low",
+      "invariant": "jackpot = 5 DIAMOND on middle row",
+      "description": "isJackpotHit returns true on 4-of-a-kind DIAMOND anywhere in the reel\nwindow. Intended behavior is 5 DIAMOND on the middle row only.\n"
+    },
+    {
+      "id": "DEAD-DEBUG-BRANCH",
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "symbol": "DEBUG_MODE",
+      "expected_verdict": "DEAD",
+      "difficulty": "medium",
+      "nature": "unreachable-branch",
+      "description": "An `if (DEBUG_MODE) { ... }` branch inside spin() is statically\nunreachable because DEBUG_MODE is a const false never reassigned.\n"
+    },
+    {
+      "id": "DUP-PAYOUT",
+      "axis": "duplication",
+      "members": [
+        {
+          "file": "src/legacy.ts",
+          "symbol": "computeLegacyPayout"
+        },
+        {
+          "file": "src/engine.ts",
+          "symbol": "computePayout"
+        },
+        {
+          "file": "src/engine.ts",
+          "symbol": "evaluateLine"
+        }
+      ],
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "medium",
+      "nature": "semantic-duplicate-function",
+      "description": "computeLegacyPayout in legacy.ts duplicates the per-line payout\ncomputation of computePayout / evaluateLine in engine.ts.\n"
+    },
+    {
+      "id": "DUP-WILD",
+      "axis": "duplication",
+      "members": [
+        {
+          "file": "src/engine.ts",
+          "symbol": "evaluateLine"
+        },
+        {
+          "file": "src/wild.ts",
+          "symbol": "applyWildBonus"
+        }
+      ],
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "hard",
+      "nature": "inline-duplicate-of-helper",
+      "description": "evaluateLine in engine.ts reimplements inline the wild multiplier\nformula that applyWildBonus in wild.ts already provides.\n"
+    },
+    {
+      "id": "OVER-FACTORY",
+      "axis": "overengineering",
+      "file": "src/factories.ts",
+      "symbols": [
+        "AbstractReelBuilderFactory",
+        "StandardReelBuilderFactory"
+      ],
+      "expected_verdict": "OVER",
+      "difficulty": "medium",
+      "nature": "abstract-factory-for-one-concrete",
+      "description": "AbstractReelBuilderFactory has a single concrete subclass\nStandardReelBuilderFactory used once. Could be a free function.\n"
+    },
+    {
+      "id": "OVER-STRATEGY",
+      "axis": "overengineering",
+      "file": "src/strategy.ts",
+      "symbols": [
+        "SpinStrategy",
+        "DefaultStrategy"
+      ],
+      "expected_verdict": "OVER",
+      "difficulty": "medium",
+      "nature": "strategy-pattern-single-used-strategy",
+      "description": "SpinStrategy abstraction exists for a single used strategy\n(DefaultStrategy); ConservativeStrategy is never instantiated.\n"
+    }
+  ],
+  "false_positives": [
+    {
+      "axis": "correction",
+      "file": "src/engine.ts",
+      "line": 110,
+      "verdict": "NEEDS_FIX",
+      "symbol": "computePayout",
+      "reason": "`Math.ceil` rounds payouts UP, transferring fractional coin remainders to the player. Casino/slot-machine domain convention requires `Math.floor` so the house retains remainders and the target RTP is preserved (inferred slot-machine domain from reel/payline/jackpot/WILD/SCATTER vocabulary throughout the file)."
+    },
+    {
+      "axis": "correction",
+      "file": "src/engine.ts",
+      "line": 120,
+      "verdict": "NEEDS_FIX",
+      "symbol": "spin",
+      "reason": "`rng` (L120) and `reelsModule` (L122) are resolved from the DI container but are never passed to `factory.buildReels()` or used anywhere in the function. The factory builds reels with its own internal RNG, completely bypassing the injected and presumably certified `weightedPick`. In a regulated gaming context this means the certified RNG path is silently dead code."
+    },
+    {
+      "axis": "correction",
+      "file": "src/rng.ts",
+      "line": 7,
+      "verdict": "NEEDS_FIX",
+      "symbol": "weightedPick",
+      "reason": "Uses `Math.random()`, which is not a cryptographically secure or certifiable RNG. The Internal Reference Documentation (.anatoly/docs/03-Guides/02-Advanced-Configuration.md, .anatoly/docs/04-API-Reference/02-Configuration-Schema.md) unambiguously identifies this as a regulated slot-machine application with an RTP target of 95%. Industry convention for certified gaming software requires a certifiable PRNG (e.g., a seeded, auditable CSPRNG); `Math.random()` is explicitly excluded from certified gaming submissions. Inferred domain: slot machine / regulated gaming."
+    },
+    {
+      "axis": "correction",
+      "file": "src/rng.ts",
+      "line": 13,
+      "verdict": "NEEDS_FIX",
+      "symbol": "weightedPick",
+      "reason": "When `items` is empty, the for-loop never executes and the fallback `return items[items.length - 1]` evaluates to `items[-1]`, which is `undefined`. The function then returns `undefined` as type `T`, silently violating its own return-type contract. A guard (`if (items.length === 0) throw new Error(...)`) is needed."
+    },
+    {
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "line": 12,
+      "verdict": "DEAD",
+      "symbol": "Bet",
+      "reason": "Auto-resolved: type cannot be over-engineered"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/reels.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/reels.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "Security"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/legacy.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/legacy.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "Security"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/strategy.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    }
+  ],
+  "unscored_findings": []
+}

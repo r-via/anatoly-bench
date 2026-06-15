@@ -1,0 +1,310 @@
+{
+  "version": 2,
+  "file": "src/paytable.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "ANCIENT_RTP",
+      "kind": "constant",
+      "exported": true,
+      "line_start": 3,
+      "line_end": 3,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "DEAD",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 95,
+      "detail": "[DEAD] Exported constant with 0 runtime importers and 0 type-only importers | [UNIQUE] Simple constant (0.95). No similar symbols found. | [OK] Value 0.95 consistent with documented RTP target. | [LEAN] Single numeric constant. Nothing to simplify. | [NONE] No test file exists. Constant used in RTP configuration with no tests verifying its value or usage. | [UNDOCUMENTED] No JSDoc. The name hints at RTP but does not explain what 'ANCIENT' qualifies, what game configuration uses this constant, or where it is applied.",
+      "findings": []
+    },
+    {
+      "name": "PAY_TABLE",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 5,
+      "line_end": 12,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "WEAK",
+      "documentation": "DOCUMENTED",
+      "confidence": 60,
+      "detail": "[USED] Internal constant used locally in getPayMultiplier at line 16 | [UNIQUE] Lookup table mapping symbols to payout multipliers. No similar data structures found. | [OK] All six symbol tuples match the documented [3-of-a-kind, 4-of-a-kind, 5-of-a-kind] multipliers exactly (.anatoly/docs/04-API-Reference/02-Configuration-Schema.md). | [LEAN] Plain Record keyed by symbol name, values are fixed-length tuples matching the documented [3-of-a-kind, 4-of-a-kind, 5-of-a-kind] schema. No unnecessary abstraction. | [NONE] No test file exists. Internal constant backing getPayMultiplier; all six symbol rows and their payout tiers are untested. | [UNDOCUMENTED] No JSDoc. The tuple structure [number, number, number] is opaque without documentation explaining the indices map to 3-, 4-, and 5-of-a-kind multipliers applied to lineBet.",
+      "findings": []
+    },
+    {
+      "name": "getPayMultiplier",
+      "kind": "function",
+      "exported": true,
+      "line_start": 14,
+      "line_end": 21,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 95,
+      "detail": "[USED] Exported function runtime-imported by src/engine.ts and src/legacy.ts | [UNIQUE] Retrieves payout multiplier from PAY_TABLE by symbol and count. No similar functions found. | [OK] Index mapping count→row index is correct (row[0]=3-oak, row[1]=4-oak, row[2]=5-oak); WILD/SCATTER absent from PAY_TABLE so !row guard correctly returns 0 per docs. | [LEAN] Direct index lookup with three explicit if-branches. Could use row[count-3] but the explicit form is readable and not overengineered. | [NONE] No test file exists. Called by src/engine.ts and src/legacy.ts — a critical payout path — with zero coverage of count=3/4/5 branches, unknown symbol fallback (returns 0), or boundary values like count=2. | [UNDOCUMENTED] No JSDoc. Missing: parameter semantics (valid count range is 3–5), return value meaning (multiplier applied to lineBet), and behavior for WILD/SCATTER or unknown symbols (returns 0).",
+      "findings": []
+    },
+    {
+      "name": "lineWins",
+      "kind": "function",
+      "exported": true,
+      "line_start": 23,
+      "line_end": 40,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "DEAD",
+      "duplication": "DUPLICATE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 90,
+      "detail": "[DEAD] Exported function with 0 runtime importers and 0 type-only importers | [DUPLICATE] Identical logic to checkLine: identifies winning paylines by matching consecutive symbols with WILD wildcard support. Only cosmetic differences: field names (symbol/count vs sym/run) and variable names (first vs lead). | [OK] WILD substitution resolves to first non-WILD pay symbol; SCATTER guard covers all-WILD and SCATTER-first cases; consecutive run count including WILDs is correct; count<3 path returns null. | [LEAN] WILD-resolution and left-to-right counting loop are both required by documented payline rules. Logic is proportional to the problem. | [NONE] No test file exists. Complex WILD-substitution and early-break logic across multiple branches (all-WILD, SCATTER lead, count<3, count>=3) is entirely untested. | [UNDOCUMENTED] No JSDoc. Missing: expected input format (ordered left-to-right reel symbols), WILD substitution logic (WILD resolves to first non-WILD symbol), SCATTER exclusion, minimum match count of 3, and null return semantics.",
+      "duplicate_target": {
+        "file": "src/engine.ts",
+        "symbol": "checkLine",
+        "similarity": "100% matching logic flow and semantics — both check for winning lines with WILD wildcards, differ only in return object field naming."
+      },
+      "findings": []
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Remove dead code: `ANCIENT_RTP` is exported but unused",
+      "severity": "high",
+      "effort": "trivial",
+      "category": "quickwin",
+      "source": "utility",
+      "target_symbol": "ANCIENT_RTP",
+      "target_lines": "L3-L3"
+    },
+    {
+      "id": 2,
+      "description": "Remove dead code: `lineWins` is exported but unused",
+      "severity": "high",
+      "effort": "trivial",
+      "category": "quickwin",
+      "source": "utility",
+      "target_symbol": "lineWins",
+      "target_lines": "L23-L40"
+    },
+    {
+      "id": 3,
+      "description": "Add JSDoc documentation for exported symbol:  `ANCIENT_RTP`, `getPayMultiplier`, `lineWins`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "ANCIENT_RTP, getPayMultiplier, lineWins",
+      "target_lines": "L3-L3, L14-L21, L23-L40"
+    },
+    {
+      "id": 4,
+      "description": "Deduplicate: `lineWins` duplicates `checkLine` in `src/engine.ts`",
+      "severity": "high",
+      "effort": "small",
+      "category": "refactor",
+      "source": "duplication",
+      "target_symbol": "lineWins",
+      "target_lines": "L23-L40"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 8/10 (1 FAIL, 5 WARN, 11 PASS)"
+  },
+  "best_practices": {
+    "score": 8,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "tsconfig not visible in this file; no violations detectable. All identifiers are explicitly typed."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No `any`",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No explicit or implicit `any`. PAY_TABLE uses `Record<string,…>` (not `any`) and all function signatures carry concrete types."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No type assertions (`as`). The `| null` union for `lineWins` is simple but appropriate — no tagged union needed at this level."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "PAY_TABLE is typed as `Record<string, [number, number, number]>`. The key should be constrained to the imported `Symbol` union (`Record<Symbol, …>`), eliminating spurious key lookups at compile time.",
+        "lines": "L5"
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "PAY_TABLE values are mutable tuples. Declaring the table `as const` or using `readonly [number, number, number]` prevents accidental mutation of payout data.",
+        "lines": "L5-L12"
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Project uses `interface` for complex shapes (e.g., `LineWin` in types.ts). The inline return type `{ symbol: Symbol; count: number }` is small enough to be acceptable, though a `Pick<LineWin, 'symbol' | 'count'>` would align better with project conventions."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "40 lines — well within the 300-line limit."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "WARN",
+        "severity": "HIGH",
+        "detail": "`symbols[0]` is accessed without a length guard. Without `noUncheckedIndexedAccess`, TypeScript infers `Symbol` rather than `Symbol | undefined`, masking the empty-array edge case. A guard `if (!symbols.length) return null` before the destructure would satisfy both safety and lint rules like `@typescript-eslint/no-unnecessary-condition`.",
+        "lines": "L24"
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "FAIL",
+        "severity": "MEDIUM",
+        "detail": "All three public exports (`ANCIENT_RTP`, `getPayMultiplier`, `lineWins`) lack JSDoc. In a regulated-gaming domain, `ANCIENT_RTP`'s purpose and provenance are especially important to document.",
+        "lines": "L3,L14,L22"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Uses `?.`, `??`, `import type`, and modern `for…of` with early break. No deprecated APIs."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Single `import type` from a sibling module. No side-effect imports, no circular dependency risk."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No async code. Synchronous pure functions with explicit return paths."
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No hardcoded secrets, no `eval`, no command injection. Slot-machine domain confirmed by symbol vocabulary (CHERRY, BELL, BAR, SEVEN) and internal docs. Payout multipliers are integers so no floating-point monetary arithmetic risk here; `ANCIENT_RTP` (0.95) is a pure constant not used for arithmetic within this file."
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "O(1) object lookup in `getPayMultiplier`; O(n) single-pass loop with early `break` in `lineWins`. No allocations in the hot path beyond the return object."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Both exported functions are pure (no I/O, no external state). Zero-dependency inputs make them trivially unit-testable."
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "PAY_TABLE is a good candidate for the `satisfies` operator: `const PAY_TABLE = { … } satisfies Record<Symbol, readonly [number, number, number]>`. This preserves literal-tuple types for index narrowing while enforcing the shape constraint.",
+        "lines": "L5-L12"
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "Slot-machine domain inferred from symbol names and .anatoly/docs/. (1) `ANCIENT_RTP` carries a semantically loaded prefix ('ANCIENT') with no documentation — in regulated gaming this is ambiguous and could imply a deprecated/legacy RTP value. (2) `lineWins` (plural) returns a singular `{ symbol, count } | null`, which is misleading; `evaluateLine` or `lineWin` would be clearer.",
+        "lines": "L3,L22"
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Constrain PAY_TABLE key to Symbol and use `satisfies` + `as const` for full type-safety and immutability",
+        "before": "const PAY_TABLE: Record<string, [number, number, number]> = {\n  CHERRY: [2, 5, 25],\n  // …\n};",
+        "after": "const PAY_TABLE = {\n  CHERRY:  [2,   5,   25],\n  LEMON:   [2,   5,   25],\n  BELL:    [5,   20,  100],\n  BAR:     [10,  40,  200],\n  SEVEN:   [25,  100, 500],\n  DIAMOND: [50,  250, 1000],\n} as const satisfies Record<Symbol, readonly [number, number, number]>;"
+      },
+      {
+        "description": "Add JSDoc to all public exports, documenting the RTP constant's origin and each function's contract",
+        "before": "export const ANCIENT_RTP = 0.95;\n\nexport function getPayMultiplier(symbol: Symbol, count: number): number {",
+        "after": "/** Base RTP target for the Ancient-theme game variant (95%). */\nexport const ANCIENT_RTP = 0.95;\n\n/**\n * Returns the payout multiplier for a given symbol and match count.\n * Returns 0 for WILD, SCATTER, or counts below 3.\n */\nexport function getPayMultiplier(symbol: Symbol, count: number): number {"
+      },
+      {
+        "description": "Guard against empty `symbols` array to satisfy `noUncheckedIndexedAccess` and clarify intent",
+        "before": "export function lineWins(symbols: Symbol[]): { symbol: Symbol; count: number } | null {\n  const first = symbols[0] === \"WILD\" ? symbols.find(s => s !== \"WILD\") ?? \"WILD\" : symbols[0];",
+        "after": "export function lineWins(symbols: Symbol[]): { symbol: Symbol; count: number } | null {\n  if (symbols.length === 0) return null;\n  const first = symbols[0] === \"WILD\" ? symbols.find(s => s !== \"WILD\") ?? \"WILD\" : symbols[0];"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "claude-haiku-4-5-20251001",
+      "cost_usd": 0.0057388000000000005,
+      "duration_ms": 5289
+    },
+    "duplication": {
+      "model": "claude-haiku-4-5-20251001",
+      "cost_usd": 0.0170921,
+      "duration_ms": 19738
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.22019799999999998,
+      "duration_ms": 99598
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.03637475,
+      "duration_ms": 12029
+    },
+    "tests": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.019509,
+      "duration_ms": 9103
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.29228825,
+      "duration_ms": 158054
+    },
+    "documentation": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.045470000000000003,
+      "duration_ms": 16553
+    }
+  }
+}

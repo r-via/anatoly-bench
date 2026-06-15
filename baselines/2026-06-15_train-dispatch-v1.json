@@ -1,0 +1,82 @@
+{
+  "fixture": "train-dispatch",
+  "meta": {
+    "runId": "2026-06-15_071706",
+    "anatolyVersion": "0.9.6",
+    "anatolyCommit": "94406c2-dirty",
+    "projectBranch": "main",
+    "projectCommit": "e3d332c",
+    "durationMs": 201068,
+    "costUsd": 1.2408976999999999,
+    "totalInputTokens": 30,
+    "totalOutputTokens": 26106,
+    "axisStats": {
+      "correction": {
+        "calls": 10,
+        "durationMs": 421898,
+        "costUsd": 0.9492739499999998,
+        "inputTokens": 30,
+        "outputTokens": 26106,
+        "cacheReadTokens": 30034,
+        "cacheCreationTokens": 146289
+      }
+    },
+    "refinementStats": {
+      "calls": 0,
+      "durationMs": 21,
+      "costUsd": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "cacheReadTokens": 0,
+      "cacheCreationTokens": 0
+    }
+  },
+  "global_f1": 0.7272727272727272,
+  "scored_axes": [
+    "correction"
+  ],
+  "per_axis": {
+    "correction": {
+      "tp": 4,
+      "fp": 1,
+      "fn": 2,
+      "precision": 0.8,
+      "recall": 0.6666666666666666,
+      "f1": 0.7272727272727272
+    }
+  },
+  "misses": [
+    {
+      "id": "INV-DWELL",
+      "axis": "correction",
+      "file": "src/timetable.ts",
+      "symbol": "DWELL_TICKS",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "trivial",
+      "nature": "numeric-target-contradicts-documented-dwell",
+      "invariant": "station dwell equals the documented 2 ticks",
+      "description": "DWELL_TICKS is 6 while the README and product contract document a 2-tick\nstation dwell. Trains that make intermediate stops accumulate excess\ndwell and arrive late. Simplest invariant: a documented numeric target\nthe code contradicts, with lateness as the behavioural consequence.\n"
+    },
+    {
+      "id": "INV-DEADLOCK",
+      "axis": "correction",
+      "file": "src/interlocking.ts",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "hard",
+      "nature": "liveness-circular-wait-on-single-track",
+      "invariant": "section reservations acquired in a fixed global order (no circular wait)",
+      "description": "The single-track section reservation acquires bS1/bS2 in route-traversal\norder: eastbound (T5_EXP) reserves bS1 then bS2, westbound (T6_LOC)\nreserves bS2 then bS1. Approaching together, each holds one block and\nwaits for the other forever — a deadlock. Both are stranded and never\narrive; the run halts at MAX_TICKS. Intended: acquire both blocks\natomically or always in a fixed global order.\n"
+    }
+  ],
+  "false_positives": [
+    {
+      "axis": "correction",
+      "file": "src/timetable.ts",
+      "line": 51,
+      "verdict": "NEEDS_FIX",
+      "symbol": "TIMETABLE",
+      "reason": "T6_LOC route [\"bE\",\"bS2\",\"bS1\",\"bM2\"] moves bS2→bS1, opposite to every other train that uses those blocks (bS1→bS2). T5_EXP (L44–50) departs at the same tick (6) going bM2→bS1→bS2→bD. Under exclusive block occupancy, both trains enter the bS1/bS2 corridor simultaneously from opposite ends: T5 holds bS1 waiting for bS2, T6 holds bS2 waiting for bS1 — a deadlock. Even if the simulation breaks the deadlock, it permits an unsafe head-on crossing the interlocking cannot resolve (canEnterBlock checks only elapsed time, not direction)."
+    }
+  ],
+  "unscored_findings": []
+}

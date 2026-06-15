@@ -1,0 +1,30 @@
+Code:    SDK_ERROR
+Message: Claude Code SDK query failed: Claude Code process exited with code 1
+Hint:    Claude Code SDK query failed — check that claude CLI is available and responsive
+
+--- stack trace ---
+AnatolyError: Claude Code SDK query failed: Claude Code process exited with code 1
+    at AnthropicTransport._execute (file:///home/rviau/project/anatoly/dist/index.js:2923:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async _runSingleTurnQueryInner (file:///home/rviau/project/anatoly/dist/index.js:3116:19)
+    at async runSingleTurnQuery (file:///home/rviau/project/anatoly/dist/index.js:3077:20)
+    at async OverengineeringEvaluator.evaluate (file:///home/rviau/project/anatoly/dist/index.js:9744:120)
+    at async file:///home/rviau/project/anatoly/dist/index.js:15704:26
+    at async Promise.allSettled (index 3)
+    at async file:///home/rviau/project/anatoly/dist/index.js:15701:28
+    at async retryWithBackoff (file:///home/rviau/project/anatoly/dist/index.js:1216:14)
+    at async file:///home/rviau/project/anatoly/dist/index.js:24596:26
+
+--- detail ---
+## System (init)
+
+**Model:** claude-sonnet-4-6
+**Mode:** axis evaluator (single-turn, no tools)
+
+## Assistant
+
+API Error: 529 {"type":"error","error":{"type":"overloaded_error","message":"Overloaded"},"request_id":"req_011CamcnN3o7gzRB3yzZAw6D"}
+
+## Result (success)
+
+**Cost:** $0.0000 | **Duration:** 212.5s

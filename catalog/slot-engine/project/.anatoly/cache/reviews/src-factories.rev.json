@@ -1,0 +1,254 @@
+{
+  "version": 2,
+  "file": "src/factories.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "AbstractReelBuilderFactory",
+      "kind": "class",
+      "exported": true,
+      "line_start": 4,
+      "line_end": 6,
+      "correction": "OK",
+      "overengineering": "OVER",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 80,
+      "detail": "[USED] Transitively used by StandardReelBuilderFactory | [UNIQUE] No RAG data available | [OK] Abstract contract only; no implementation logic to evaluate. | [OVER] Abstract class with exactly one concrete subclass and 0 importers (neither runtime nor type-only). ADR-002 (.anatoly/docs/02-Architecture/04-Design-Decisions.md) documents the intent — test doubles, replay, certification — but that benefit only materialises if engine.ts (or tests) depend on the abstract type. With 0 importers the abstract base is dead scaffolding: nothing can be swapped in without also changing the call site. ADR-002 itself flags the negative consequence ('adds one layer of indirection for what is currently a trivial loop'). | [NONE] No test file exists. Abstract class with no runtime behavior beyond interface contract, but the contract itself is untested. | [UNDOCUMENTED] No JSDoc comment. The abstract contract (purpose of the factory, what `reelCount`/`rowCount` mean, expected return structure) is not described. Name alone does not capture the extensibility rationale or the unused `rowCount` caveat.",
+      "findings": []
+    },
+    {
+      "name": "StandardReelBuilderFactory",
+      "kind": "class",
+      "exported": true,
+      "line_start": 8,
+      "line_end": 16,
+      "correction": "OK",
+      "overengineering": "ACCEPTABLE",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 85,
+      "detail": "[USED] Runtime-imported by 1 file: src/engine.ts | [UNIQUE] No RAG data available | [OK] Loop correctly iterates 0..reelCount-1 calling spinReel(i); unused _rowCount is intentional per ADR-002 (reel height fixed at 3 inside spinReel). | [ACCEPTABLE] A simple loop delegating to spinReel(i); the class wrapper is slightly heavier than a plain function, but ADR-002 explicitly justifies making grid construction replaceable in engine.ts without modification. One live importer confirms it is actively used. The unused _rowCount parameter is a known consequence acknowledged in the ADR. | [NONE] No test file exists. Used by src/engine.ts, making it a critical production path. buildReels loop logic and spinReel integration are entirely untested. | [UNDOCUMENTED] No JSDoc on the class or its `buildReels` override. Key omissions: why `_rowCount` is ignored (reel height is implicitly fixed by `spinReel`), what the returned `Symbol[][]` shape represents, and that this is the RNG-backed production implementation.",
+      "findings": []
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Simplify: `AbstractReelBuilderFactory` is over-engineered",
+      "severity": "medium",
+      "effort": "small",
+      "category": "hygiene",
+      "source": "overengineering",
+      "target_symbol": "AbstractReelBuilderFactory",
+      "target_lines": "L4-L6"
+    },
+    {
+      "id": 2,
+      "description": "Add JSDoc documentation for exported symbol: `AbstractReelBuilderFactory`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "AbstractReelBuilderFactory",
+      "target_lines": "L4-L6"
+    },
+    {
+      "id": 3,
+      "description": "Add JSDoc documentation for exported symbol: `StandardReelBuilderFactory`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "StandardReelBuilderFactory",
+      "target_lines": "L8-L16"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 9/10 (0 FAIL, 2 WARN, 15 PASS)"
+  },
+  "best_practices": {
+    "score": 9,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No implicit-any, no type-unsafe patterns in code. tsconfig not visible but the file is compatible with strict mode."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No `any`",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No explicit or implicit `any`. All types are concrete (`Symbol[][]`, `number`)."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No union types used; not applicable to this factory file."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No utility-type opportunities missed; the signatures are direct and correct."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "Abstract method and override both return mutable `Symbol[][]`. Callers receive a grid they can mutate. Prefer `ReadonlyArray<ReadonlyArray<Symbol>>` to signal the grid is consumed, not modified.",
+        "lines": "L5-L14"
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Class-based hierarchy is the consistent convention for factories; no interface/type mixing."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "16 lines — well under the 300-line threshold."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "Unused parameter correctly prefixed with `_rowCount`. No other lint violations visible."
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "Both exported classes (`AbstractReelBuilderFactory`, `StandardReelBuilderFactory`) lack JSDoc. The rationale and contract exist in `.anatoly/docs/02-Architecture/04-Design-Decisions.md` but are not surfaced at the call site.",
+        "lines": "L4-L16"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "`import type` used correctly for the type-only `Symbol` import. No deprecated APIs."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Two imports: type-only first, then value import. Both are internal siblings in `src/`. No circular dependency risk and no side-effect imports."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No async operations. `spinReel` is synchronous. No promise handling needed."
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No hardcoded secrets, no `eval`, no command injection. Domain: regulated slot machine. RNG certification concerns belong to `reels.ts`/`rng.ts` (where `spinReel` is defined), not to this factory layer which only delegates construction."
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Loop is O(reelCount) — trivially bounded (five reels per ADR-002). No N+1 or unnecessary allocations."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Abstract factory is the canonical DI pattern for swapping the grid source. ADR-002 explicitly lists test-double factories as a design goal."
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No missed `satisfies`, const type params, or `using` opportunities. The class hierarchy and `import type` are idiomatic modern TypeScript."
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Abstract factory is the correct pattern for this utility layer. `_rowCount` is documented in ADR-002 as a known unused parameter (reel height is fixed at 3 by `spinReel`). No React, no HTTP, no event handling concerns apply."
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Return readonly grid to prevent callers from mutating the constructed reel state",
+        "before": "abstract buildReels(reelCount: number, rowCount: number): Symbol[][];",
+        "after": "abstract buildReels(reelCount: number, rowCount: number): ReadonlyArray<ReadonlyArray<Symbol>>;"
+      },
+      {
+        "description": "Add JSDoc to both exported classes so the factory contract is visible at the call site without consulting the ADR",
+        "before": "export abstract class AbstractReelBuilderFactory {\n  abstract buildReels(reelCount: number, rowCount: number): Symbol[][];\n}",
+        "after": "/**\n * Contract for reel-grid construction. Extend to provide deterministic,\n * seeded, or replay grids without modifying engine or payline logic.\n */\nexport abstract class AbstractReelBuilderFactory {\n  /** Constructs a reelCount × rowCount grid of symbols. */\n  abstract buildReels(reelCount: number, rowCount: number): ReadonlyArray<ReadonlyArray<Symbol>>;\n}"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "duplication": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.036223000000000005,
+      "duration_ms": 9811
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.05636225,
+      "duration_ms": 29566
+    },
+    "tests": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.014197,
+      "duration_ms": 4579
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.12552575,
+      "duration_ms": 71399
+    },
+    "documentation": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.025320000000000002,
+      "duration_ms": 7478
+    }
+  }
+}

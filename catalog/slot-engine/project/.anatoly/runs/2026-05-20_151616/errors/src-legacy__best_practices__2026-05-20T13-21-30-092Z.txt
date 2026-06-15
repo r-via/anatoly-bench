@@ -1,0 +1,34 @@
+Code:    SDK_ERROR
+Message: Claude Code SDK query failed: Claude Code returned an error result: API Error: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()
+Hint:    Claude Code SDK query failed — check that claude CLI is available and responsive
+
+--- stack trace ---
+AnatolyError: Claude Code SDK query failed: Claude Code returned an error result: API Error: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()
+    at AnthropicTransport._execute (file:///home/rviau/project/anatoly-enterprise/dist/main.js:7247:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async _runSingleTurnQueryInner (file:///home/rviau/project/anatoly-enterprise/dist/main.js:7484:19)
+    at async exec (file:///home/rviau/project/anatoly-enterprise/dist/main.js:7426:22)
+    at async runUnit (file:///home/rviau/project/anatoly-enterprise/dist/main.js:7321:18)
+    at async BestPracticesEvaluator.evaluate (file:///home/rviau/project/anatoly-enterprise/dist/main.js:9019:124)
+    at async file:///home/rviau/project/anatoly-enterprise/dist/main.js:20399:26
+    at async Promise.allSettled (index 5)
+    at async file:///home/rviau/project/anatoly-enterprise/dist/main.js:20395:28
+    at async retryWithBackoff (file:///home/rviau/project/anatoly-enterprise/dist/main.js:2408:14)
+
+--- detail ---
+## System (init)
+
+**Model:** claude-sonnet-4-6
+**Mode:** axis evaluator (single-turn, no tools)
+
+## Assistant
+
+
+
+## Assistant
+
+API Error: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()
+
+## Result (success)
+
+**Cost:** $0.0000 | **Duration:** 142.6s

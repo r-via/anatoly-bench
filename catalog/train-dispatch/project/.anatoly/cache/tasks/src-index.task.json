@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "file": "src/index.ts",
+  "hash": "d62091329e8b6ffac9e0fe16932d23adcda77ff7b3756da5f63e281ea24c77c4",
+  "symbols": [],
+  "imports": [
+    {
+      "source": "./dispatcher.js",
+      "type": "import",
+      "symbols": [
+        "runSchedule",
+        "SimulationReport"
+      ],
+      "typeOnly": false
+    },
+    {
+      "source": "./types.js",
+      "type": "import",
+      "symbols": [
+        "TrainId",
+        "BlockId",
+        "PriorityClass",
+        "TrainArrival",
+        "OccupancyRecord"
+      ],
+      "typeOnly": true
+    }
+  ],
+  "imports_enriched": true,
+  "language": "typescript",
+  "parse_method": "ast",
+  "scanned_at": "2026-06-15T15:25:28.332Z"
+}

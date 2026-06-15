@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "started_at": "2026-06-15T15:25:28.332Z",
+  "files": {
+    "src/dispatcher.ts": {
+      "file": "src/dispatcher.ts",
+      "hash": "8ebabab0273308c2fbddec27b07992653c5d83e9cb7b807465182dcd1bb90749",
+      "status": "IN_PROGRESS",
+      "updated_at": "2026-06-15T15:35:27.259Z"
+    },
+    "src/format.ts": {
+      "file": "src/format.ts",
+      "hash": "be02a3016952975650b00b7c13720a08f5fbf238800609fda31de37e303f1dfc",
+      "status": "CACHED",
+      "updated_at": "2026-06-15T15:35:27.259Z",
+      "axes": [
+        "correction"
+      ]
+    },
+    "src/index.ts": {
+      "file": "src/index.ts",
+      "hash": "d62091329e8b6ffac9e0fe16932d23adcda77ff7b3756da5f63e281ea24c77c4",
+      "status": "CACHED",
+      "updated_at": "2026-06-15T15:35:27.259Z",
+      "axes": [
+        "correction"
+      ]
+    },
+    "src/interlocking.ts": {
+      "file": "src/interlocking.ts",
+      "hash": "c273663c84296eb7b574e0373aa918a8b70cc1bba1640a8584859ca9f20f8875",
+      "status": "CACHED",
+      "updated_at": "2026-06-15T15:35:27.259Z",
+      "axes": [
+        "correction"
+      ]
+    },
+    "src/kpi.ts": {
+      "file": "src/kpi.ts",
+      "hash": "d90b1b58470ca1da54239431b85089d45331a3cc4c1e4e95b1335c09df4183bf",
+      "status": "CACHED",
+      "updated_at": "2026-06-15T15:35:27.259Z",
+      "axes": [
+        "correction"
+      ]
+    },
+    "src/network.ts": {
+      "file": "src/network.ts",
+      "hash": "362044c838f0a44f790a39957f9dec48d851748a1ccd87cef58d2f87be07ae2d",
+      "status": "IN_PROGRESS",
+      "updated_at": "2026-06-15T15:35:27.259Z"
+    },
+    "src/priority.ts": {
+      "file": "src/priority.ts",
+      "hash": "23c9efa471094d8c0d50cae809a2f64e7f430acd1875785cb1a2e73f66c75f04",
+      "status": "CACHED",
+      "updated_at": "2026-06-15T15:35:27.259Z",
+      "axes": [
+        "correction"
+      ]
+    },
+    "src/routing.ts": {
+      "file": "src/routing.ts",
+      "hash": "3f482e8d325db429cd902698ec46358348b3457233307d7bdff1c67a8b871c28",
+      "status": "CACHED",
+      "updated_at": "2026-06-15T15:35:27.259Z",
+      "axes": [
+        "correction"
+      ]
+    },
+    "src/signals.ts": {
+      "file": "src/signals.ts",
+      "hash": "06ad071868005c1ef4518c0e7fd14f9c39546e990f452d32d8163ba10ba9aec2",
+      "status": "CACHED",
+      "updated_at": "2026-06-15T15:35:27.259Z",
+      "axes": [
+        "correction"
+      ]
+    },
+    "src/telemetry.ts": {
+      "file": "src/telemetry.ts",
+      "hash": "974754e1ad4e4aed58073834551331bfd667ba7959ae5b8d0ab405cb2eaca57f",
+      "status": "CACHED",
+      "updated_at": "2026-06-15T15:35:27.259Z",
+      "axes": [
+        "correction"
+      ]
+    },
+    "src/timetable.ts": {
+      "file": "src/timetable.ts",
+      "hash": "e55d74451527f99a1650daab4fd2db3bdc5b4e6ab86bab04903ff3b81b6487cb",
+      "status": "CACHED",
+      "updated_at": "2026-06-15T15:35:27.259Z",
+      "axes": [
+        "correction"
+      ]
+    },
+    "src/types.ts": {
+      "file": "src/types.ts",
+      "hash": "dfe196a54073e9ed5e230fce179ac3ad0ffd0dfe38ba35d019f92a985bef3d0b",
+      "status": "CACHED",
+      "updated_at": "2026-06-15T15:35:27.259Z",
+      "axes": [
+        "correction"
+      ]
+    }
+  }
+}

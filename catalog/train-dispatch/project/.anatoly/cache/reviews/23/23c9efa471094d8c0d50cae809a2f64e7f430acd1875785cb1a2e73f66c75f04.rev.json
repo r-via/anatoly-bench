@@ -1,0 +1,83 @@
+{
+  "_meta": {
+    "schema": 1,
+    "prompt_hash": "sha256:per-axis-index",
+    "model_id": "anthropic/claude-sonnet-4-6",
+    "created_at": "2026-06-15T15:27:40.230Z",
+    "anatoly_version": "unknown"
+  },
+  "data": {
+    "version": 2,
+    "file": "src/priority.ts",
+    "is_generated": false,
+    "language": "typescript",
+    "parse_method": "ast",
+    "verdict": "NEEDS_REFACTOR",
+    "symbols": [
+      {
+        "name": "QueueEntry",
+        "kind": "type",
+        "exported": true,
+        "line_start": 3,
+        "line_end": 6,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 95,
+        "detail": "[OK] Well-formed interface; both fields are structurally sound.",
+        "findings": []
+      },
+      {
+        "name": "compareTrains",
+        "kind": "function",
+        "exported": true,
+        "line_start": 8,
+        "line_end": 12,
+        "correction": "NEEDS_FIX",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 78,
+        "detail": "[NEEDS_FIX] insertionOrder is declared in QueueEntry and is never consulted in the comparator; when two entries tie on trainId (possible if trainId encodes a shared priority class, as the README implies with \"priority class\"), the comparator returns 0 and queue ordering becomes non-deterministic instead of FIFO.",
+        "findings": [
+          {
+            "axis": "correction",
+            "line_start": 11,
+            "line_end": 11,
+            "detail": "The tie-break branch (return 0) ignores insertionOrder. A stable FIFO dispatch among equal-priority trains requires a secondary sort: if (a.trainId === b.trainId) return a.insertionOrder - b.insertionOrder."
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": 1,
+        "description": "Add FIFO tie-breaking: when a.trainId === b.trainId, return a.insertionOrder - b.insertionOrder so trains of equal priority are dispatched in arrival order.",
+        "severity": "medium",
+        "effort": "small",
+        "category": "quickwin",
+        "target_symbol": null,
+        "target_lines": "L11",
+        "source": "correction"
+      }
+    ],
+    "file_level": {
+      "unused_imports": [],
+      "circular_dependencies": [],
+      "general_notes": ""
+    },
+    "axis_meta": {
+      "correction": {
+        "model": "claude-sonnet-4-6",
+        "cost_usd": 0.10354274999999999,
+        "duration_ms": 47209
+      }
+    },
+    "content_hash": "23c9efa471094d8c0d50cae809a2f64e7f430acd1875785cb1a2e73f66c75f04"
+  }
+}

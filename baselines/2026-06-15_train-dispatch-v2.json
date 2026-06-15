@@ -1,0 +1,358 @@
+{
+  "fixture": "train-dispatch",
+  "meta": {
+    "runId": "2026-06-15_072744",
+    "anatolyVersion": "0.9.6",
+    "anatolyCommit": "94406c2-dirty",
+    "projectBranch": "main",
+    "projectCommit": "efb52c2",
+    "durationMs": 206971,
+    "costUsd": 1.0640682,
+    "totalInputTokens": 60,
+    "totalOutputTokens": 54407,
+    "axisStats": {
+      "correction": {
+        "calls": 10,
+        "durationMs": 637776,
+        "costUsd": 0.7229757,
+        "inputTokens": 30,
+        "outputTokens": 41917,
+        "cacheReadTokens": 164719,
+        "cacheCreationTokens": 11924
+      },
+      "documentation": {
+        "calls": 10,
+        "durationMs": 204573,
+        "costUsd": 0.3410925,
+        "inputTokens": 30,
+        "outputTokens": 12490,
+        "cacheReadTokens": 107775,
+        "cacheCreationTokens": 32352
+      }
+    },
+    "refinementStats": {
+      "calls": 0,
+      "durationMs": 15,
+      "costUsd": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "cacheReadTokens": 0,
+      "cacheCreationTokens": 0
+    }
+  },
+  "global_f1": 0.5,
+  "scored_axes": [
+    "correction"
+  ],
+  "per_axis": {
+    "correction": {
+      "tp": 3,
+      "fp": 3,
+      "fn": 3,
+      "precision": 0.5,
+      "recall": 0.5,
+      "f1": 0.5
+    }
+  },
+  "misses": [
+    {
+      "id": "INV-DWELL",
+      "axis": "correction",
+      "file": "src/timetable.ts",
+      "symbol": "DWELL_TICKS",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "trivial",
+      "nature": "numeric-target-contradicts-documented-dwell",
+      "invariant": "station dwell equals the documented 2 ticks",
+      "description": "DWELL_TICKS is 6 while the README and product contract document a 2-tick\nstation dwell. Trains that make intermediate stops accumulate excess\ndwell and arrive late. Simplest invariant: a documented numeric target\nthe code contradicts, with lateness as the behavioural consequence.\n"
+    },
+    {
+      "id": "INV-HEADWAY",
+      "axis": "correction",
+      "file": "src/signals.ts",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "temporal-separation-invariant-underenforced-headway",
+      "invariant": "successive entries into a block are >= MIN_HEADWAY ticks apart",
+      "description": "The headway gate under-enforces MIN_HEADWAY (uses > where >= is needed,\nor the wrong constant), so a following train (T4_LOC behind T3_FRT on\nbM2) enters the block fewer than MIN_HEADWAY ticks after the train ahead.\nReduced separation is observable in the occupancy trace.\n"
+    },
+    {
+      "id": "INV-DEADLOCK",
+      "axis": "correction",
+      "file": "src/interlocking.ts",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "hard",
+      "nature": "liveness-circular-wait-on-single-track",
+      "invariant": "section reservations acquired in a fixed global order (no circular wait)",
+      "description": "The single-track section reservation acquires bS1/bS2 in route-traversal\norder: eastbound (T5_EXP) reserves bS1 then bS2, westbound (T6_LOC)\nreserves bS2 then bS1. Approaching together, each holds one block and\nwaits for the other forever — a deadlock. Both are stranded and never\narrive; the run halts at MAX_TICKS. Intended: acquire both blocks\natomically or always in a fixed global order.\n"
+    }
+  ],
+  "false_positives": [
+    {
+      "axis": "correction",
+      "file": "src/timetable.ts",
+      "line": 47,
+      "verdict": "NEEDS_FIX",
+      "symbol": "TIMETABLE",
+      "reason": "T5_EXP traverses bM2→bS1→bS2→bD while T6_LOC traverses bE→bS2→bS1→bM2 — opposite directions through shared blocks bM2, bS1, bS2 — both departing at tick 6. canEnterBlock checks only elapsed time since last entry, not direction, so the dispatcher will allow both trains to enter the contested blocks and they will collide head-on."
+    },
+    {
+      "axis": "correction",
+      "file": "src/timetable.ts",
+      "line": 62,
+      "verdict": "NEEDS_FIX",
+      "symbol": "TIMETABLE",
+      "reason": "T7_LOC depart:1 follows T1_EXP depart:0 from the same first block bA; gap = 1 tick < MIN_HEADWAY = 3. canEnterBlock will deny T7 entry to bA until tick 3, so the actual departure is 2 ticks late; with a 6-block route the cascading delay makes scheduledArrival:31 unachievable."
+    },
+    {
+      "axis": "correction",
+      "file": "src/timetable.ts",
+      "line": 41,
+      "verdict": "NEEDS_FIX",
+      "symbol": "TIMETABLE",
+      "reason": "T4_LOC depart:4 follows T3_FRT depart:2 from the same first block bA; gap = 2 ticks < MIN_HEADWAY = 3. canEnterBlock will deny T4 entry until tick 5, shifting the entire journey by 1 tick and invalidating scheduledArrival:20."
+    }
+  ],
+  "unscored_findings": [
+    {
+      "axis": "documentation",
+      "file": "src/network.ts",
+      "line": 3,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "STATIONS",
+      "reason": "No JSDoc. The list of valid station identifiers with no explanation of what stations represent or how the set was chosen."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/network.ts",
+      "line": 6,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "BLOCKS",
+      "reason": "No JSDoc. No explanation of what this enumeration of block IDs represents, how it relates to BLOCK_INFO, or whether ordering matters."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/network.ts",
+      "line": 10,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "SINGLE_TRACK_BLOCKS",
+      "reason": "No JSDoc. Critical interlocking constraint used by the dispatcher; the meaning of 'single track' and the enforcement rules are entirely absent."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/network.ts",
+      "line": 12,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "BlockInfo",
+      "reason": "Interface has no JSDoc. 'from'/'to' are untyped strings referencing node names rather than typed IDs. 'traversalTime' has no unit annotation; README says ticks but that is not captured here."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/network.ts",
+      "line": 21,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "BLOCK_INFO",
+      "reason": "No JSDoc. No explanation of the network topology it encodes, what JCT/WESTLOOP/EASTLOOP nodes are, or why 'from'/'to' sometimes reference non-BlockId strings."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/network.ts",
+      "line": 32,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "getTraversalTime",
+      "reason": "No JSDoc. The parameter is named '_block' indicating it is intentionally ignored (function always returns T=4), but this contract is never documented — callers cannot know the parameter is unused."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/network.ts",
+      "line": 36,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "getBlockInfo",
+      "reason": "No JSDoc. Missing documentation on the parameter, the undefined return case, and the source array it searches."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/network.ts",
+      "line": 45,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "ADJACENCY",
+      "reason": "No JSDoc. No explanation that this encodes a directed graph, that bidirectional single-track edges (bS1↔bS2, bM2↔bS1) are intentional, or how consumers should use it vs. getNextBlocks."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/network.ts",
+      "line": 57,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "getNextBlocks",
+      "reason": "No JSDoc. Missing documentation on return value (empty array vs. null for dead-ends), directionality semantics, and the backing data structure."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/interlocking.ts",
+      "line": 6,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "resetInterlocking",
+      "reason": "Exported public API. No JSDoc. Name implies clearing state, but there is no description of which state is cleared or when callers should invoke this (e.g., between simulation runs)."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/interlocking.ts",
+      "line": 11,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "isBlockFree",
+      "reason": "Exported public API. No JSDoc. The `block` parameter is entirely unused — occupancy is checked against `currentBlock`, not `block`. This counterintuitive signature critically needs documentation to explain the intended semantics."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/interlocking.ts",
+      "line": 16,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "occupyBlock",
+      "reason": "Exported public API. No JSDoc. No description of when to call this relative to isBlockFree, or whether it overwrites an existing holder."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/interlocking.ts",
+      "line": 20,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "releaseBlock",
+      "reason": "Exported public API. No JSDoc. The `_train` parameter is suppressed and unused; this is a non-obvious design choice (any caller can release any block) that warrants explanation."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/interlocking.ts",
+      "line": 24,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "reserveSectionBlock",
+      "reason": "Exported public API. No JSDoc. Hardcodes block IDs bS1/bS2, silently passes all other blocks as reserved=true. This implicit allow-all behavior and the magic IDs need documentation."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/interlocking.ts",
+      "line": 34,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "releaseSingleTrack",
+      "reason": "Exported public API. No JSDoc. Releases all single-track reservations held by a given train, but hardcodes bS1/bS2 with no explanation of what constitutes the single-track section."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/timetable.ts",
+      "line": 3,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "DWELL_TICKS",
+      "reason": "No JSDoc. Name implies tick-unit dwell time but does not specify what 'dwell' means (station stop? signal hold?) or how consumers should interpret the value."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/timetable.ts",
+      "line": 4,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "MIN_HEADWAY",
+      "reason": "No JSDoc. Unit (ticks) and enforcement scope (per block, per route?) are undocumented; semantics must be inferred from canEnterBlock consumer."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/timetable.ts",
+      "line": 5,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "ON_TIME_SLACK",
+      "reason": "No JSDoc. Does not state unit (ticks), direction (added to scheduledArrival), or whether it applies symmetrically or only as a late-arrival grace window."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/timetable.ts",
+      "line": 7,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "TrainSpec",
+      "reason": "No block-level JSDoc. Most fields are readable, but 'depart' is abbreviated and its unit (tick number) is non-obvious; 'route' ordering semantics (first = origin, last = destination) are undocumented."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/timetable.ts",
+      "line": 15,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "TIMETABLE",
+      "reason": "No JSDoc. Purpose (static scenario fixture vs. production schedule), coordinate system for tick values, and extension guidelines are all absent."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/signals.ts",
+      "line": 6,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "resetSignals",
+      "reason": "Exported public API with no JSDoc. Missing: purpose (clear interlocking state between simulation runs), when callers must invoke it, and side-effect scope."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/signals.ts",
+      "line": 10,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "canEnterBlock",
+      "reason": "Exported public API with no JSDoc. Missing: description of the headway check, why MIN_HEADWAY - 1 is used (off-by-one relative to the 3-tick rule in README), the purpose of the unused _train parameter, and return value semantics."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/signals.ts",
+      "line": 17,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "recordEntry",
+      "reason": "Exported public API with no JSDoc. Missing: purpose (update interlocking state so canEnterBlock can enforce headway on subsequent calls), and that callers must invoke this after every committed block entry."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/format.ts",
+      "line": 4,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "formatTimetable",
+      "reason": "No JSDoc comment. Missing description of output format (pipe-delimited table), what columns are rendered, and return value semantics."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/format.ts",
+      "line": 16,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "formatReport",
+      "reason": "No JSDoc comment. Missing description of the parameter, what fields are rendered, arrival status logic (stranded vs on-time), and return value format."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/dispatcher.ts",
+      "line": 28,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "runSchedule",
+      "reason": "No JSDoc on the sole exported public function. README covers its behavior externally, but the function itself has no inline TSDoc describing its return type, side effects (mutates signal/interlocking state via resets), determinism guarantee, or the early-exit condition."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/telemetry.ts",
+      "line": 3,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "MovementRecorder",
+      "reason": "No JSDoc on the class or its two methods. The class purpose (recording train movements for telemetry/simulation reporting), the semantics of `arrivals` and `occupancy` arrays, the meaning of `tick`, and the nullable `actualArrival` (implying a missed arrival) are all non-obvious and undocumented."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/routing.ts",
+      "line": 4,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "shortestPath",
+      "reason": "No JSDoc comment. Missing description of BFS algorithm used, parameter semantics (what constitutes a valid BlockId), return value (ordered path inclusive of endpoints, or null when unreachable), and the dependency on ADJACENCY as the graph source."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/kpi.ts",
+      "line": 4,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "computeOnTimeRate",
+      "reason": "No JSDoc comment. Missing: purpose description, @param for arrivals, @returns explanation, and the edge-case behavior (returns 1 when timetable is empty)."
+    },
+    {
+      "axis": "documentation",
+      "file": "src/priority.ts",
+      "line": 8,
+      "verdict": "UNDOCUMENTED",
+      "symbol": "compareTrains",
+      "reason": "No JSDoc. The comparator applies reversed trainId ordering (higher ID wins) and silently ignores `insertionOrder`, both non-obvious design choices that require explanation. Used as the sort key in the dispatcher's ready queue, so its contract is externally significant."
+    }
+  ]
+}

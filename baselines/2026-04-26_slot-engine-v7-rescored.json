@@ -1,0 +1,235 @@
+{
+  "fixture": "slot-engine",
+  "global_f1": 0.6685314685314684,
+  "scored_axes": [
+    "correction",
+    "utility",
+    "duplication",
+    "overengineering",
+    "best-practices"
+  ],
+  "per_axis": {
+    "correction": {
+      "tp": 4,
+      "fp": 2,
+      "fn": 3,
+      "precision": 0.6666666666666666,
+      "recall": 0.5714285714285714,
+      "f1": 0.6153846153846153
+    },
+    "utility": {
+      "tp": 4,
+      "fp": 1,
+      "fn": 3,
+      "precision": 0.8,
+      "recall": 0.5714285714285714,
+      "f1": 0.6666666666666666
+    },
+    "duplication": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1,
+      "recall": 0.5,
+      "f1": 0.6666666666666666
+    },
+    "overengineering": {
+      "tp": 3,
+      "fp": 2,
+      "fn": 1,
+      "precision": 0.6,
+      "recall": 0.75,
+      "f1": 0.6666666666666665
+    },
+    "best-practices": {
+      "tp": 4,
+      "fp": 2,
+      "fn": 1,
+      "precision": 0.6666666666666666,
+      "recall": 0.8,
+      "f1": 0.7272727272727272
+    }
+  },
+  "misses": [
+    {
+      "id": "INV-WILD",
+      "axis": "correction",
+      "file": "src/wild.ts",
+      "symbol": "applyWildBonus",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "hard",
+      "nature": "wild-multiplier-stacking",
+      "invariant": "wild multiplier replaces, does not accumulate",
+      "description": "applyWildBonus multiplies payout by both (1 + wildCount) and 2**wildCount\nso wilds compound. Intended behavior is payout * 2**wildCount.\n"
+    },
+    {
+      "id": "INV-JACKPOT",
+      "axis": "correction",
+      "file": "src/jackpot.ts",
+      "symbol": "isJackpotHit",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "jackpot-threshold-too-low",
+      "invariant": "jackpot = 5 DIAMOND on middle row",
+      "description": "isJackpotHit returns true on 4-of-a-kind DIAMOND anywhere in the reel\nwindow. Intended behavior is 5 DIAMOND on the middle row only.\n"
+    },
+    {
+      "id": "INV-ROUND",
+      "axis": "correction",
+      "file": "src/engine.ts",
+      "symbol": "computePayout",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "trivial",
+      "nature": "ceil-instead-of-floor",
+      "invariant": "fractional coin payouts round DOWN (house keeps remainder)",
+      "description": "computePayout uses Math.ceil to convert fractional coin amounts to\ninteger coins. Player gains up to ~1 coin per spin on rounding alone.\n"
+    },
+    {
+      "id": "DEAD-DEBUG-BRANCH",
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "symbol": "DEBUG_MODE",
+      "expected_verdict": "DEAD",
+      "difficulty": "medium",
+      "nature": "unreachable-branch",
+      "description": "An `if (DEBUG_MODE) { ... }` branch inside spin() is statically\nunreachable because DEBUG_MODE is a const false never reassigned.\n"
+    },
+    {
+      "id": "DEAD-TYPE",
+      "axis": "utility",
+      "file": "src/types.ts",
+      "symbol": "LegacySpinResult",
+      "expected_verdict": "DEAD",
+      "difficulty": "trivial",
+      "nature": "dead-type-export",
+      "description": "Type alias LegacySpinResult is exported but never referenced."
+    },
+    {
+      "id": "DEAD-WILD-HELPER",
+      "axis": "utility",
+      "file": "src/wild.ts",
+      "symbol": "applyWildBonus",
+      "expected_verdict": "DEAD",
+      "difficulty": "trivial",
+      "nature": "dead-helper-superseded-by-inline",
+      "description": "applyWildBonus is exported from wild.ts but never imported. The wild\nmultiplier formula is inlined in engine.ts::evaluateLine instead of\ncalling the helper, so wild.ts is effectively dead code. This is the\nutility-axis manifestation of the same defect as DUP-WILD; Anatoly\nmay flag either or both.\n"
+    },
+    {
+      "id": "DUP-PAYOUT",
+      "axis": "duplication",
+      "members": [
+        {
+          "file": "src/legacy.ts",
+          "symbol": "computeLegacyPayout"
+        },
+        {
+          "file": "src/engine.ts",
+          "symbol": "computePayout"
+        },
+        {
+          "file": "src/engine.ts",
+          "symbol": "evaluateLine"
+        }
+      ],
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "medium",
+      "nature": "semantic-duplicate-function",
+      "description": "computeLegacyPayout in legacy.ts duplicates the per-line payout\ncomputation of computePayout / evaluateLine in engine.ts.\n"
+    },
+    {
+      "id": "DUP-WILD",
+      "axis": "duplication",
+      "members": [
+        {
+          "file": "src/engine.ts",
+          "symbol": "evaluateLine"
+        },
+        {
+          "file": "src/wild.ts",
+          "symbol": "applyWildBonus"
+        }
+      ],
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "hard",
+      "nature": "inline-duplicate-of-helper",
+      "description": "evaluateLine in engine.ts reimplements inline the wild multiplier\nformula that applyWildBonus in wild.ts already provides.\n"
+    },
+    {
+      "id": "OVER-STRATEGY",
+      "axis": "overengineering",
+      "file": "src/strategy.ts",
+      "symbols": [
+        "SpinStrategy",
+        "DefaultStrategy"
+      ],
+      "expected_verdict": "OVER",
+      "difficulty": "medium",
+      "nature": "strategy-pattern-single-used-strategy",
+      "description": "SpinStrategy abstraction exists for a single used strategy\n(DefaultStrategy); ConservativeStrategy is never instantiated.\n"
+    },
+    {
+      "id": "BP-RNG",
+      "axis": "best-practices",
+      "file": "src/rng.ts",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "insecure-rng-for-gaming",
+      "description": "Math.random() is used as entropy source for financial/gaming RNG.\nNot suitable for regulated gaming. A JSDoc claim to the contrary\nmakes the violation worse.\n"
+    }
+  ],
+  "false_positives": [
+    {
+      "axis": "correction",
+      "file": "src/engine.ts",
+      "line": 17,
+      "verdict": "NEEDS_FIX",
+      "symbol": "EngineContainer",
+      "reason": "resolve<T>() returns this.registry.get(key) as T without any existence check. When key is missing, registry.get returns undefined, which is silently cast to T. Callers receive undefined typed as a function reference, causing a runtime TypeError when invoked. No guard or throw is present."
+    },
+    {
+      "axis": "correction",
+      "file": "src/factories.ts",
+      "line": 8,
+      "verdict": "NEEDS_FIX",
+      "symbol": "StandardReelBuilderFactory",
+      "reason": "rowCount parameter is silently ignored (prefixed with _ indicating intentional omission). spinReel(i) is called with only a reel index, meaning the number of rows per reel is never applied. If spinReel does not internally know the desired rowCount, the returned Symbol[] may have an incorrect length, producing grids that do not match the declared row dimension. This is a logic error if rowCount is meaningful to the caller."
+    },
+    {
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "line": 12,
+      "verdict": "DEAD",
+      "symbol": "Bet",
+      "reason": "Auto-resolved: type cannot be over-engineered"
+    },
+    {
+      "axis": "overengineering",
+      "file": "src/engine.ts",
+      "line": 113,
+      "verdict": "OVER",
+      "symbol": "spin",
+      "reason": "Instantiates StandardReelBuilderFactory, DefaultStrategy, and SpinEventEmitter on every call despite each having a single implementation. The factory pattern for reel building, the strategy pattern for payout adjustment, and the event emitter (with an empty no-op listener registered and immediately emitted) all add indirection without benefit. The container is resolved but the resolved values (rng, reelsModule) are unused — the factory and direct imports do the actual work. The wildMultiplier recalculation also duplicates logic already performed inside evaluateLine. (deliberated: confirmed — Confirmed: The computePayout function called by spin (engine.ts:138) applies HOUSE_EDGE backwards at engine.ts:105. The comment at lines 98-99 states 'Applies the house edge to maintain a target RTP of approximately 95%' and HOUSE_EDGE=0.05 (line 14), but the code does `total * (1 + HOUSE_EDGE)` = 1.05x, INCREASING payouts by 5% instead of decreasing. Correct formula is `(1 - HOUSE_EDGE)` = 0.95x. This is corroborated by paytable.ts:3 exporting `ANCIENT_RTP = 0.95`. Additionally, engine.ts:108 adds `bet * 0.01` unconditionally (even on losing spins), combined with Math.ceil at line 110, guaranteeing a minimum payout of 1 on every spin. Both are behavioral/financial defects in the core spin logic. Confidence raised from 55 to 92 based on concrete code evidence.)"
+    },
+    {
+      "axis": "overengineering",
+      "file": "src/reels.ts",
+      "line": 22,
+      "verdict": "OVER",
+      "symbol": "REEL_WEIGHTS",
+      "reason": "All five reels receive identical weight arrays via repeated weightsToArray(DEFAULT_WEIGHTS). This creates premature generalization infrastructure for per-reel weighting that is never used. A single shared array (or even DEFAULT_WEIGHTS directly) would suffice until differentiated reel weights are actually required."
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/paytable.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/legacy.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    }
+  ],
+  "unscored_findings": []
+}

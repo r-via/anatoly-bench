@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "schema": 1,
+    "prompt_hash": "sha256:per-axis-index",
+    "model_id": "anthropic/claude-sonnet-4-6",
+    "created_at": "2026-06-15T15:27:03.016Z",
+    "anatoly_version": "unknown"
+  },
+  "data": {
+    "version": 2,
+    "file": "src/types.ts",
+    "is_generated": true,
+    "skip_reason": "type-only",
+    "language": "typescript",
+    "parse_method": "ast",
+    "verdict": "CLEAN",
+    "symbols": [
+      {
+        "name": "TrainId",
+        "kind": "type",
+        "exported": true,
+        "line_start": 1,
+        "line_end": 1,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "USED",
+        "duplication": "UNIQUE",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 100,
+        "detail": "Type-only imported by 6 files: src/index.ts, src/interlocking.ts, src/priority.ts, src/signals.ts, src/telemetry.ts, src/timetable.ts"
+      },
+      {
+        "name": "BlockId",
+        "kind": "type",
+        "exported": true,
+        "line_start": 2,
+        "line_end": 2,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "USED",
+        "duplication": "UNIQUE",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 100,
+        "detail": "Type-only imported by 8 files: src/dispatcher.ts, src/index.ts, src/interlocking.ts, src/network.ts, src/routing.ts, src/signals.ts, src/telemetry.ts, src/timetable.ts"
+      },
+      {
+        "name": "PriorityClass",
+        "kind": "type",
+        "exported": true,
+        "line_start": 3,
+        "line_end": 3,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "USED",
+        "duplication": "UNIQUE",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 100,
+        "detail": "Type-only imported by 2 files: src/index.ts, src/timetable.ts"
+      },
+      {
+        "name": "TrainArrival",
+        "kind": "type",
+        "exported": true,
+        "line_start": 5,
+        "line_end": 9,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "USED",
+        "duplication": "UNIQUE",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 100,
+        "detail": "Type-only imported by 3 files: src/index.ts, src/kpi.ts, src/telemetry.ts"
+      },
+      {
+        "name": "OccupancyRecord",
+        "kind": "type",
+        "exported": true,
+        "line_start": 11,
+        "line_end": 15,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "USED",
+        "duplication": "UNIQUE",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 100,
+        "detail": "Type-only imported by 2 files: src/index.ts, src/telemetry.ts"
+      },
+      {
+        "name": "SimulationReport",
+        "kind": "type",
+        "exported": true,
+        "line_start": 17,
+        "line_end": 22,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "USED",
+        "duplication": "UNIQUE",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 100,
+        "detail": "Type-only imported by 2 files: src/dispatcher.ts, src/format.ts"
+      }
+    ],
+    "actions": [],
+    "file_level": {
+      "unused_imports": [],
+      "circular_dependencies": [],
+      "general_notes": ""
+    },
+    "content_hash": "dfe196a54073e9ed5e230fce179ac3ad0ffd0dfe38ba35d019f92a985bef3d0b"
+  }
+}

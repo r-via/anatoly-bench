@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "schema": 1,
+    "prompt_hash": "sha256:per-axis-index",
+    "model_id": "anthropic/claude-sonnet-4-6",
+    "created_at": "2026-06-15T15:27:01.818Z",
+    "anatoly_version": "unknown"
+  },
+  "data": {
+    "version": 2,
+    "file": "src/telemetry.ts",
+    "is_generated": false,
+    "language": "typescript",
+    "parse_method": "ast",
+    "verdict": "CLEAN",
+    "symbols": [
+      {
+        "name": "MovementRecorder",
+        "kind": "class",
+        "exported": true,
+        "line_start": 3,
+        "line_end": 14,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 95,
+        "detail": "[OK] No correctness issues; straightforward append-only recorder with no logic to misfire.",
+        "findings": []
+      }
+    ],
+    "actions": [],
+    "file_level": {
+      "unused_imports": [],
+      "circular_dependencies": [],
+      "general_notes": ""
+    },
+    "axis_meta": {
+      "correction": {
+        "model": "claude-sonnet-4-6",
+        "cost_usd": 0.013247849999999999,
+        "duration_ms": 2676
+      }
+    },
+    "content_hash": "974754e1ad4e4aed58073834551331bfd667ba7959ae5b8d0ab405cb2eaca57f"
+  }
+}

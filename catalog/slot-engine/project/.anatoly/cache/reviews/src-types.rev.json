@@ -1,0 +1,92 @@
+{
+  "version": 2,
+  "file": "src/types.ts",
+  "is_generated": true,
+  "skip_reason": "type-only",
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "Symbol",
+      "kind": "type",
+      "exported": true,
+      "line_start": 1,
+      "line_end": 9,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 100,
+      "detail": "Type-only imported by 7 files: src/engine.ts, src/factories.ts, src/freespin.ts, src/jackpot.ts, src/legacy.ts, src/paytable.ts, src/reels.ts"
+    },
+    {
+      "name": "LineWin",
+      "kind": "type",
+      "exported": true,
+      "line_start": 11,
+      "line_end": 16,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 100,
+      "detail": "Type-only imported by 1 file: src/engine.ts"
+    },
+    {
+      "name": "FreeSpinState",
+      "kind": "type",
+      "exported": true,
+      "line_start": 18,
+      "line_end": 22,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 100,
+      "detail": "Type-only imported by 2 files: src/engine.ts, src/freespin.ts"
+    },
+    {
+      "name": "LegacySpinResult",
+      "kind": "type",
+      "exported": true,
+      "line_start": 24,
+      "line_end": 28,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "DEAD",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 100,
+      "detail": "Exported but imported by 0 files"
+    },
+    {
+      "name": "SpinResult",
+      "kind": "type",
+      "exported": true,
+      "line_start": 30,
+      "line_end": 38,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "-",
+      "documentation": "-",
+      "confidence": 100,
+      "detail": "Type-only imported by 2 files: src/engine.ts, src/strategy.ts"
+    }
+  ],
+  "actions": [],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": ""
+  }
+}

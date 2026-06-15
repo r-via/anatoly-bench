@@ -1,0 +1,42 @@
+{
+  "README.md": {
+    "sha": "95c4db11edabc3f35762df3058ad3723e4a35f3783977b7e806370f390d3e473",
+    "sections": [
+      {
+        "heading": "Introduction",
+        "embedText": "A small deterministic train dispatcher for a fixed rail network. Pure\nscheduling logic: no UI, no persistence, no networking, no clock. One call\nruns the whole timetable to completion and returns the movement trace.",
+        "content": "A small deterministic train dispatcher for a fixed rail network. Pure\nscheduling logic: no UI, no persistence, no networking, no clock. One call\nruns the whole timetable to completion and returns the movement trace."
+      },
+      {
+        "heading": "Usage",
+        "embedText": "runSchedule() advances a discrete-event simulation over integer ticks. At\neach tick it decides, for every train that is ready to move, whether it may\nenter the next block on its route, then commits the moves. It is fully\ndeterministic: the same network and timetable always produce the same trace.\nThere is no random number generator anywhere in the engine.",
+        "content": "```ts\nimport { runSchedule } from \"train-dispatch\";\n\nconst report = runSchedule(); // runs the bundled network + timetable\nconsole.log(report.reportedOnTimeRate);\n```\n\n`runSchedule()` advances a discrete-event simulation over integer ticks. At\neach tick it decides, for every train that is ready to move, whether it may\nenter the next block on its route, then commits the moves. It is fully\ndeterministic: the same network and timetable always produce the same trace.\nThere is no random number generator anywhere in the engine."
+      },
+      {
+        "heading": "Operating guarantees",
+        "embedText": "The dispatcher is built around four guarantees. They are the product\ncontract: the timetable is feasible, and a correct dispatcher honours all of\nthem on every run.",
+        "content": "The dispatcher is built around four guarantees. They are the product\ncontract: the timetable is feasible, and a correct dispatcher honours all of\nthem on every run."
+      },
+      {
+        "heading": "Operating guarantees (cont.)",
+        "embedText": "- **Punctuality.** Every train arrives within ON_TIME_SLACK ticks of its\n  scheduled arrival. The target on-time rate is **100%**: the published\n  timetable has enough slack that no train ever needs to be late.\n- **Exclusivity.** A track block holds at most one train at any tick. The\n  interlocking never grants a block that is already occupied.\n- **Liveness.** Every dispatched train eventually reaches its destination.\n  The single-track sections between passing loops are reserved so that two\n  trains approaching from opposite ends can never each hold what the other\n  needs.\n- **Conservation.** Every dispatched train arrives exactly once. A train is\n  removed from the ready queue when, and only when, it is dispatched onto its\n  route.",
+        "content": "- **Punctuality.** Every train arrives within `ON_TIME_SLACK` ticks of its\n  scheduled arrival. The target on-time rate is **100%**: the published\n  timetable has enough slack that no train ever needs to be late.\n- **Exclusivity.** A track block holds at most one train at any tick. The\n  interlocking never grants a block that is already occupied.\n- **Liveness.** Every dispatched train eventually reaches its destination.\n  The single-track sections between passing loops are reserved so that two\n  trains approaching from opposite ends can never each hold what the other\n  needs.\n- **Conservation.** Every dispatched train arrives exactly once. A train is\n  removed from the ready queue when, and only when, it is dispatched onto its\n  route."
+      },
+      {
+        "heading": "Network",
+        "embedText": "The bundled network is a fixed five-station layout (ALPHA, BRAVO,\nCHARLIE, DELTA, ECHO) with a junction where the BRAVO branch merges\nonto the mainline, a double-track mainline segment, and a single-track\nsection guarded by passing loops. Trains carry a priority class; at a\ncontended junction the highest-priority ready train is dispatched first.",
+        "content": "The bundled network is a fixed five-station layout (`ALPHA`, `BRAVO`,\n`CHARLIE`, `DELTA`, `ECHO`) with a junction where the `BRAVO` branch merges\nonto the mainline, a double-track mainline segment, and a single-track\nsection guarded by passing loops. Trains carry a priority class; at a\ncontended junction the highest-priority ready train is dispatched first."
+      },
+      {
+        "heading": "Timing",
+        "embedText": "Block traversal and station dwell are measured in ticks. A station dwell is\n**2 ticks**. The minimum headway between two trains entering the same block\nis **3 ticks**. These constants and the per-block traversal times are fixed\nin the timetable module.",
+        "content": "Block traversal and station dwell are measured in ticks. A station dwell is\n**2 ticks**. The minimum headway between two trains entering the same block\nis **3 ticks**. These constants and the per-block traversal times are fixed\nin the timetable module."
+      },
+      {
+        "heading": "License",
+        "embedText": "AGPL-3.0-only.\n\n[![Checked by Anatoly](https://img.shields.io/badge/checked%20by-Anatoly-blue)](https://github.com/r-via/anatoly)",
+        "content": "AGPL-3.0-only.\n\n<!-- checked-by-anatoly -->\n[![Checked by Anatoly](https://img.shields.io/badge/checked%20by-Anatoly-blue)](https://github.com/r-via/anatoly)\n<!-- /checked-by-anatoly -->"
+      }
+    ]
+  }
+}

@@ -1,0 +1,252 @@
+{
+  "version": 2,
+  "file": "src/legacy.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "computeLegacyPayout",
+      "kind": "function",
+      "exported": true,
+      "line_start": 4,
+      "line_end": 24,
+      "correction": "NEEDS_FIX",
+      "overengineering": "LEAN",
+      "utility": "DEAD",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 90,
+      "detail": "[DEAD] Exported but imported by 0 files | [UNIQUE] No similar functions found in codebase | [NEEDS_FIX] Wild escalation formula omitted: wins containing WILD substitutions return under-calculated payouts. | [LEAN] Straightforward payout computation: resolve leading WILD, count consecutive matches, apply multiplier. No unnecessary abstractions. Note: omits the wild multiplier bonus formula (docs/03-Guides/02-Advanced-Configuration.md) — this is a legacy path, so the simpler formula is intentional. | [NONE] No test file exists. Function has multiple branches (WILD substitution, SCATTER guard, match counting, minimum match threshold) with no coverage. | [UNDOCUMENTED] No JSDoc/TSDoc comment. Missing description of WILD substitution logic, the left-to-right consecutive match requirement, the 3-match minimum, the lineBet derivation (bet/10), and the meaning of the return value (coins awarded).",
+      "findings": [
+        {
+          "axis": "correction",
+          "line_start": 22,
+          "line_end": 22,
+          "detail": "The function counts WILD symbols toward matchCount (lines 11–14) but never accumulates wildCount separately, so the documented escalation `basePayout × (1 + wildCount) × 2^wildCount` is never applied. Example: WILD+CHERRY+CHERRY (wildCount=1, 3-of-kind CHERRY) should yield `2 × lineBet × 2 × 2 = 8×lineBet`; the current code returns `2×lineBet`. Violates `.anatoly/docs/03-Guides/02-Advanced-Configuration.md` (Wild Multiplier Formula) and `.anatoly/docs/04-API-Reference/03-Types-and-Interfaces.md` (LineWin.payout definition)."
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Track wildCount during the match loop and multiply the final result by (1 + wildCount) × 2^wildCount before returning, matching the documented escalation formula for WILD-inclusive wins.",
+      "severity": "medium",
+      "effort": "small",
+      "category": "quickwin",
+      "target_symbol": null,
+      "target_lines": "L22",
+      "source": "correction"
+    },
+    {
+      "id": 2,
+      "description": "Remove dead code: `computeLegacyPayout` is exported but unused",
+      "severity": "high",
+      "effort": "trivial",
+      "category": "quickwin",
+      "source": "utility",
+      "target_symbol": "computeLegacyPayout",
+      "target_lines": "L4-L24"
+    },
+    {
+      "id": 3,
+      "description": "Add JSDoc documentation for exported symbol: `computeLegacyPayout`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "computeLegacyPayout",
+      "target_lines": "L4-L24"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 4.5/10 (1 FAIL, 3 WARN, 13 PASS)"
+  },
+  "best_practices": {
+    "score": 4.5,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No strict-mode violations visible in the file. tsconfig is external and not evaluated here."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No `any`",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "All types are explicit: Symbol[], number. No any usage."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Symbol is an imported string-literal union. String-equality guards are idiomatic and no type assertions are used."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Single-function file with primitive parameters — no utility-type opportunities exist."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "lineSymbols is never mutated; the parameter type should be readonly Symbol[] to express that invariant.",
+        "lines": "L4"
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No local type definitions; project convention is followed through imported Symbol."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "24 lines, well under the 300-line threshold."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No obvious lint violations: consistent braces, no unused variables, no magic-number issues beyond the domain-noted 10."
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "computeLegacyPayout is a public export with no JSDoc. At minimum @param and @returns annotations are expected.",
+        "lines": "L4"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Uses Array.prototype.find, nullish coalescing, standard for-loop. No deprecated APIs."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Type import precedes value import. Both are relative project-internal imports. No side-effect or circular imports visible."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "Pure synchronous function. No promises, no I/O."
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "FAIL",
+        "severity": "HIGH",
+        "detail": "Slot-machine domain inferred from reel/symbol/payout vocabulary and confirmed by .anatoly/docs/02-Architecture/02-Core-Concepts.md and .anatoly/docs/04-API-Reference/03-Types-and-Interfaces.md. bet / 10 uses floating-point division to compute lineBet. In regulated gambling systems payout arithmetic must be exact integer or decimal; IEEE-754 float division (e.g. 1 / 10 = 0.1000000000000000055511...) is not certifiable and can cause cumulative RTP drift. Use integer coin arithmetic throughout and defer formatting to presentation layer.",
+        "lines": "L21"
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Single O(n) pass over a short fixed-length array (max 5 reels). No redundant work."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Pure deterministic function with no side effects. Fully injectable via arguments."
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No opportunity requiring satisfies, const type params, or using. Existing syntax is appropriate."
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "Per .anatoly/docs/03-Guides/02-Advanced-Configuration.md and .anatoly/docs/04-API-Reference/03-Types-and-Interfaces.md, wins containing WILDs must apply effectivePayout = basePayout × (1 + wildCount) × 2^wildCount. This function counts WILDs toward matchCount but never escalates for wild presence, producing lower payouts than the documented engine spec. Intentional for 'legacy' semantics but should be explicitly commented.",
+        "lines": "L13-L22"
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Use readonly on the input parameter to reflect its immutability contract",
+        "before": "export function computeLegacyPayout(lineSymbols: Symbol[], bet: number): number {",
+        "after": "export function computeLegacyPayout(lineSymbols: readonly Symbol[], bet: number): number {"
+      },
+      {
+        "description": "Replace floating-point division with integer coin arithmetic to avoid precision drift in regulated payout calculations",
+        "before": "const lineBet = bet / 10;\nreturn multiplier * lineBet;",
+        "after": "// bet is in coins; lineBet is scaled by 10 (10 lines). Keep all arithmetic in integer coins.\nconst lineBetCoins = Math.trunc(bet / 10);\nreturn multiplier * lineBetCoins;"
+      },
+      {
+        "description": "Add JSDoc to the public export",
+        "before": "export function computeLegacyPayout(lineSymbols: Symbol[], bet: number): number {",
+        "after": "/**\n * Legacy payout calculation (pre-wild-escalation engine).\n * @param lineSymbols - Ordered symbols on the evaluated payline (left to right).\n * @param bet - Total bet in coins across all 10 lines.\n * @returns Coins awarded for this line, or 0 for no qualifying match.\n */\nexport function computeLegacyPayout(lineSymbols: readonly Symbol[], bet: number): number {"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "duplication": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.134523,
+      "duration_ms": 71449
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.024649749999999998,
+      "duration_ms": 4967
+    },
+    "tests": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.011126,
+      "duration_ms": 4388
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.15295075,
+      "duration_ms": 77219
+    },
+    "documentation": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.024445,
+      "duration_ms": 5021
+    }
+  }
+}

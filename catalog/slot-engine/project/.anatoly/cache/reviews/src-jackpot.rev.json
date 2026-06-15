@@ -1,0 +1,212 @@
+{
+  "version": 2,
+  "file": "src/jackpot.ts",
+  "is_generated": false,
+  "language": "typescript",
+  "parse_method": "ast",
+  "verdict": "NEEDS_REFACTOR",
+  "symbols": [
+    {
+      "name": "isJackpotHit",
+      "kind": "function",
+      "exported": true,
+      "line_start": 3,
+      "line_end": 11,
+      "correction": "OK",
+      "overengineering": "LEAN",
+      "utility": "USED",
+      "duplication": "UNIQUE",
+      "tests": "NONE",
+      "documentation": "UNDOCUMENTED",
+      "confidence": 90,
+      "detail": "[USED] Runtime-imported by 1 file: src/engine.ts | [UNIQUE] No similar functions found in codebase | [OK] Logic matches all three documentation sources: count DIAMOND symbols across entire grid, return true when count >= 4. | [LEAN] Flat double-loop count against a single threshold. Exactly matches the documented 5×3 DIAMOND≥4 rule; no abstraction or generalization needed. | [NONE] No test file exists. Critical game logic (jackpot trigger at ≥4 diamonds) has zero coverage — no happy path, boundary (exactly 4 vs 3 diamonds), or edge cases (empty reels, all diamonds) tested. | [UNDOCUMENTED] No JSDoc/TSDoc comment. Missing description of purpose, parameter shape (reels grid dimensions), return semantics, and the ≥4 DIAMOND threshold rule.",
+      "findings": []
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "description": "Add JSDoc documentation for exported symbol: `isJackpotHit`",
+      "severity": "medium",
+      "effort": "trivial",
+      "category": "hygiene",
+      "source": "documentation",
+      "target_symbol": "isJackpotHit",
+      "target_lines": "L3-L11"
+    }
+  ],
+  "file_level": {
+    "unused_imports": [],
+    "circular_dependencies": [],
+    "general_notes": "Best practices score: 9.5/10 (0 FAIL, 1 WARN, 16 PASS)"
+  },
+  "best_practices": {
+    "score": 9.5,
+    "rules": [
+      {
+        "rule_id": 1,
+        "rule_name": "Strict mode",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "File is fully strict-compatible — explicit return type, typed parameters, no implicit any. Cannot verify tsconfig from file alone, but nothing in the code circumvents strict checks."
+      },
+      {
+        "rule_id": 2,
+        "rule_name": "No `any`",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "No explicit or implicit `any`. All types flow from the imported `Symbol` type."
+      },
+      {
+        "rule_id": 3,
+        "rule_name": "Discriminated unions",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "String literal comparison `sym === \"DIAMOND\"` correctly narrows the `Symbol` union. No unsafe type assertions."
+      },
+      {
+        "rule_id": 4,
+        "rule_name": "Utility types",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No complex object transformations; utility types (Pick/Omit/etc.) are not applicable to this function signature."
+      },
+      {
+        "rule_id": 5,
+        "rule_name": "Immutability",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "`ReadonlyArray<ReadonlyArray<Symbol>>` correctly marks both the outer reel array and each inner symbol array as immutable."
+      },
+      {
+        "rule_id": 6,
+        "rule_name": "Interface vs Type",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No new type/interface declarations in this file; only consumes the imported `Symbol` type."
+      },
+      {
+        "rule_id": 7,
+        "rule_name": "File size",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "11 lines — well within the 300-line limit."
+      },
+      {
+        "rule_id": 8,
+        "rule_name": "ESLint compliance",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "No obvious lint violations. `let` for a mutable counter is appropriate; `for...of` loops are idiomatic."
+      },
+      {
+        "rule_id": 9,
+        "rule_name": "JSDoc on public exports",
+        "status": "WARN",
+        "severity": "MEDIUM",
+        "detail": "`isJackpotHit` is a public export with no JSDoc comment. The docs describe its contract well, but the function itself carries no inline documentation.",
+        "lines": "L3"
+      },
+      {
+        "rule_id": 10,
+        "rule_name": "Modern 2026 practices",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "`import type`, `ReadonlyArray`, and `for...of` are all idiomatic modern TypeScript. No deprecated APIs."
+      },
+      {
+        "rule_id": 11,
+        "rule_name": "Import organization",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Single `import type` from a local module. No side-effect imports, no circular dependency risk, placement in `src/` matches project structure."
+      },
+      {
+        "rule_id": 12,
+        "rule_name": "Async/Promises/Error handling",
+        "status": "PASS",
+        "severity": "HIGH",
+        "detail": "Pure synchronous function; no promises, no async I/O, no error handling needed."
+      },
+      {
+        "rule_id": 13,
+        "rule_name": "Security",
+        "status": "PASS",
+        "severity": "CRITICAL",
+        "detail": "Slot-machine domain confirmed by `.anatoly/docs/`. `isJackpotHit` is deterministic — it counts symbols in already-resolved reels, introduces no RNG of its own, and contains no `Math.random()`, hardcoded secrets, `eval`, or command injection. RNG certification concerns belong in `src/rng.ts`, not here."
+      },
+      {
+        "rule_id": 14,
+        "rule_name": "Performance",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Iterates a fixed 5×3 grid (max 15 cells). An early-exit once `diamondCount >= 4` is theoretically possible but the iteration budget is negligible and the current clarity is preferable."
+      },
+      {
+        "rule_id": 15,
+        "rule_name": "Testability",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Pure function with no side effects and no external dependencies. Trivially unit-testable by passing reel arrays."
+      },
+      {
+        "rule_id": 16,
+        "rule_name": "TypeScript 5.5+ features",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "No gaps: `satisfies`, `const` type params, and `using` have no natural application in this single-function utility. Existing code is already optimal."
+      },
+      {
+        "rule_id": 17,
+        "rule_name": "Context-adapted rules",
+        "status": "PASS",
+        "severity": "MEDIUM",
+        "detail": "Gambling domain confirmed. Jackpot detection is transparent and deterministic — a regulated-gaming audit requirement. No RNG, no floating-point money arithmetic, and no mutable shared state."
+      }
+    ],
+    "suggestions": [
+      {
+        "description": "Add JSDoc to document the jackpot threshold and the semantics of the return value for API consumers.",
+        "before": "export function isJackpotHit(reels: ReadonlyArray<ReadonlyArray<Symbol>>): boolean {",
+        "after": "/**\n * Returns `true` when four or more DIAMOND symbols appear anywhere\n * across the 5×3 reel grid in a single spin.\n *\n * @param reels - Column-major reel grid (outer = reels, inner = rows).\n * @returns `true` if jackpot is triggered; caller is responsible for applying the prize.\n */\nexport function isJackpotHit(reels: ReadonlyArray<ReadonlyArray<Symbol>>): boolean {"
+      }
+    ]
+  },
+  "axis_meta": {
+    "utility": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "duplication": {
+      "model": "unknown",
+      "cost_usd": 0,
+      "duration_ms": 0
+    },
+    "correction": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.021104249999999998,
+      "duration_ms": 2984
+    },
+    "overengineering": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.020681,
+      "duration_ms": 4367
+    },
+    "tests": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.011665499999999999,
+      "duration_ms": 4708
+    },
+    "best_practices": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.09720700000000002,
+      "duration_ms": 48878
+    },
+    "documentation": {
+      "model": "claude-sonnet-4-6",
+      "cost_usd": 0.02160125,
+      "duration_ms": 4724
+    }
+  }
+}

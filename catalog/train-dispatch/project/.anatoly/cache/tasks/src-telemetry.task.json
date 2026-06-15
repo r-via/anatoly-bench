@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "file": "src/telemetry.ts",
+  "hash": "974754e1ad4e4aed58073834551331bfd667ba7959ae5b8d0ab405cb2eaca57f",
+  "symbols": [
+    {
+      "name": "MovementRecorder",
+      "kind": "class",
+      "exported": true,
+      "line_start": 3,
+      "line_end": 14
+    }
+  ],
+  "imports": [
+    {
+      "source": "./types.js",
+      "type": "import",
+      "symbols": [
+        "TrainId",
+        "BlockId",
+        "TrainArrival",
+        "OccupancyRecord"
+      ],
+      "typeOnly": true
+    }
+  ],
+  "imports_enriched": true,
+  "language": "typescript",
+  "parse_method": "ast",
+  "scanned_at": "2026-06-15T15:25:28.332Z"
+}

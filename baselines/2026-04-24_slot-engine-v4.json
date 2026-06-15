@@ -1,0 +1,263 @@
+{
+  "fixture": "slot-engine",
+  "global_f1": 0.46761904761904755,
+  "scored_axes": [
+    "correction",
+    "utility",
+    "duplication",
+    "overengineering",
+    "best-practices"
+  ],
+  "per_axis": {
+    "correction": {
+      "tp": 4,
+      "fp": 3,
+      "fn": 3,
+      "precision": 0.5714285714285714,
+      "recall": 0.5714285714285714,
+      "f1": 0.5714285714285714
+    },
+    "utility": {
+      "tp": 3,
+      "fp": 2,
+      "fn": 2,
+      "precision": 0.6,
+      "recall": 0.6,
+      "f1": 0.6
+    },
+    "duplication": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 4,
+      "precision": 1,
+      "recall": 0,
+      "f1": 0
+    },
+    "overengineering": {
+      "tp": 3,
+      "fp": 2,
+      "fn": 1,
+      "precision": 0.6,
+      "recall": 0.75,
+      "f1": 0.6666666666666665
+    },
+    "best-practices": {
+      "tp": 3,
+      "fp": 4,
+      "fn": 2,
+      "precision": 0.42857142857142855,
+      "recall": 0.6,
+      "f1": 0.5
+    }
+  },
+  "misses": [
+    {
+      "id": "INV-WILD",
+      "axis": "correction",
+      "file": "src/wild.ts",
+      "symbol": "applyWildBonus",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "hard",
+      "nature": "wild-multiplier-stacking",
+      "invariant": "wild multiplier replaces, does not accumulate",
+      "description": "applyWildBonus multiplies payout by both (1 + wildCount) and 2**wildCount\nso wilds compound. Intended behavior is payout * 2**wildCount.\n"
+    },
+    {
+      "id": "INV-JACKPOT",
+      "axis": "correction",
+      "file": "src/jackpot.ts",
+      "symbol": "isJackpotHit",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "jackpot-threshold-too-low",
+      "invariant": "jackpot = 5 DIAMOND on middle row",
+      "description": "isJackpotHit returns true on 4-of-a-kind DIAMOND anywhere in the reel\nwindow. Intended behavior is 5 DIAMOND on the middle row only.\n"
+    },
+    {
+      "id": "INV-ROUND",
+      "axis": "correction",
+      "file": "src/engine.ts",
+      "symbol": "computePayout",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "trivial",
+      "nature": "ceil-instead-of-floor",
+      "invariant": "fractional coin payouts round DOWN (house keeps remainder)",
+      "description": "computePayout uses Math.ceil to convert fractional coin amounts to\ninteger coins. Player gains up to ~1 coin per spin on rounding alone.\n"
+    },
+    {
+      "id": "DEAD-DEBUG-BRANCH",
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "symbol": "DEBUG_MODE",
+      "expected_verdict": "DEAD",
+      "difficulty": "medium",
+      "nature": "unreachable-branch",
+      "description": "An `if (DEBUG_MODE) { ... }` branch inside spin() is statically\nunreachable because DEBUG_MODE is a const false never reassigned.\n"
+    },
+    {
+      "id": "DEAD-TYPE",
+      "axis": "utility",
+      "file": "src/types.ts",
+      "symbol": "LegacySpinResult",
+      "expected_verdict": "DEAD",
+      "difficulty": "trivial",
+      "nature": "dead-type-export",
+      "description": "Type alias LegacySpinResult is exported but never referenced."
+    },
+    {
+      "id": "DUP-RNG",
+      "axis": "duplication",
+      "file": "src/rng.ts",
+      "symbol": "weightedPick",
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "medium",
+      "nature": "semantic-duplicate-function",
+      "description": "weightedPick in rng.ts and pickFromWeighted in reels.ts implement the\nsame weighted random pick with renamed variables.\n"
+    },
+    {
+      "id": "DUP-PAYOUT",
+      "axis": "duplication",
+      "file": "src/legacy.ts",
+      "symbol": "computeLegacyPayout",
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "medium",
+      "nature": "semantic-duplicate-function",
+      "description": "computeLegacyPayout in legacy.ts duplicates the per-line payout\ncomputation of computePayout in engine.ts.\n"
+    },
+    {
+      "id": "DUP-WILD",
+      "axis": "duplication",
+      "file": "src/engine.ts",
+      "symbol": "evaluateLine",
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "hard",
+      "nature": "inline-duplicate-of-helper",
+      "description": "evaluateLine in engine.ts reimplements inline the wild multiplier\nformula that applyWildBonus in wild.ts already provides.\n"
+    },
+    {
+      "id": "DUP-LINE-WIN",
+      "axis": "duplication",
+      "file": "src/paytable.ts",
+      "symbol": "lineWins",
+      "expected_verdict": "DUPLICATE",
+      "difficulty": "medium",
+      "nature": "semantic-duplicate-predicate",
+      "description": "lineWins in paytable.ts and checkLine in engine.ts are two\nimplementations of the \"is this a winning line\" predicate.\n"
+    },
+    {
+      "id": "OVER-STRATEGY",
+      "axis": "overengineering",
+      "file": "src/strategy.ts",
+      "symbols": [
+        "SpinStrategy",
+        "DefaultStrategy"
+      ],
+      "expected_verdict": "OVER",
+      "difficulty": "medium",
+      "nature": "strategy-pattern-single-used-strategy",
+      "description": "SpinStrategy abstraction exists for a single used strategy\n(DefaultStrategy); ConservativeStrategy is never instantiated.\n"
+    },
+    {
+      "id": "BP-RNG",
+      "axis": "best-practices",
+      "file": "src/rng.ts",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "medium",
+      "nature": "insecure-rng-for-gaming",
+      "description": "Math.random() is used as entropy source for financial/gaming RNG.\nNot suitable for regulated gaming. A JSDoc claim to the contrary\nmakes the violation worse.\n"
+    },
+    {
+      "id": "BP-STRING-THROW",
+      "axis": "best-practices",
+      "file": "src/engine.ts",
+      "symbol": "spin",
+      "expected_verdict": "NEEDS_FIX",
+      "difficulty": "trivial",
+      "nature": "string-thrown-not-error",
+      "description": "spin() throws a raw string literal instead of an Error subclass when\nvalidating the bet.\n"
+    }
+  ],
+  "false_positives": [
+    {
+      "axis": "correction",
+      "file": "src/engine.ts",
+      "line": 17,
+      "verdict": "NEEDS_FIX",
+      "symbol": "EngineContainer",
+      "reason": "resolve<T> calls Map.get(key) which returns undefined when the key is absent, then silently casts undefined as T. Callers receive undefined typed as a concrete type, leading to undetected runtime errors. No guard or throw is present for missing keys."
+    },
+    {
+      "axis": "correction",
+      "file": "src/reels.ts",
+      "line": 56,
+      "verdict": "NEEDS_FIX",
+      "symbol": "getReelWeights",
+      "reason": "No bounds check on reelIndex. When reelIndex is outside 0–4, REEL_WEIGHTS[reelIndex] is undefined, but the declared return type is number[]. Callers that rely on the return value being a valid array will encounter downstream runtime errors (e.g. calling .reduce or .length on undefined)."
+    },
+    {
+      "axis": "correction",
+      "file": "src/factories.ts",
+      "line": 8,
+      "verdict": "NEEDS_FIX",
+      "symbol": "StandardReelBuilderFactory",
+      "reason": "The `_rowCount` parameter is silently ignored when calling `spinReel(i)`. The abstract contract declares `buildReels(reelCount, rowCount)` implying `rowCount` should influence reel construction. If `spinReel` does not internally account for `rowCount`, the returned `Symbol[][]` may have rows inconsistent with the caller's expectation, leading to incorrect grid dimensions at runtime."
+    },
+    {
+      "axis": "utility",
+      "file": "src/engine.ts",
+      "line": 12,
+      "verdict": "DEAD",
+      "symbol": "Bet",
+      "reason": "Exported type alias with zero runtime and zero type-only importers. No files depend on this type."
+    },
+    {
+      "axis": "utility",
+      "file": "src/paytable.ts",
+      "line": 23,
+      "verdict": "DEAD",
+      "symbol": "lineWins",
+      "reason": "Auto-resolved: no RAG candidate above 0.68 threshold"
+    },
+    {
+      "axis": "overengineering",
+      "file": "src/engine.ts",
+      "line": 113,
+      "verdict": "OVER",
+      "symbol": "spin",
+      "reason": "Accumulates at least four unnecessary layers: (1) resolves rng/paytable/reelsModule from the container but reelsModule is never used; (2) instantiates StandardReelBuilderFactory for a single 5×3 call that could be a direct import; (3) instantiates DefaultStrategy whose only job is adjustPayout, adding Strategy-pattern indirection for a single concrete implementation; (4) creates a SpinEventEmitter, registers a no-op listener, and immediately emits SPIN_DONE — the event has no external subscribers and is effectively a no-op. WildMultiplier is also computed redundantly here after already being computed per-line inside evaluateLine. (deliberated: confirmed — Confirmed NEEDS_FIX with substantially increased confidence. Multiple verifiable correctness bugs: (1) CRITICAL financial logic error at engine.ts:105 — computePayout multiplies by (1 + HOUSE_EDGE) = 1.05, INCREASING payouts by 5% instead of reducing them. The docstring at engine.ts:97-100 states intent is 95% RTP, and paytable.ts:3 exports ANCIENT_RTP = 0.95, confirming the multiplication should be (1 - HOUSE_EDGE) = 0.95. (2) engine.ts:108 adds bet * 0.01 to every spin, guaranteeing non-zero payouts even on losses, further inflating RTP above target. (3) engine.ts:120-122 resolves rng and reelsModule from the container but never uses them — actual reel generation is via factory.buildReels() which calls spinReel() directly (factories.ts:12), completely bypassing the container. (4) engine.ts:175-176 creates a local SpinEventEmitter, registers an empty handler, emits once, then discards — pure dead code. (5) engine.ts:113,101 types bet as 'any' despite runtime number validation at engine.ts:114. (6) engine.ts:115 throws a raw string instead of an Error object, losing stack trace information.)"
+    },
+    {
+      "axis": "overengineering",
+      "file": "src/reels.ts",
+      "line": 22,
+      "verdict": "OVER",
+      "symbol": "REEL_WEIGHTS",
+      "reason": "All five reels call weightsToArray(DEFAULT_WEIGHTS) producing identical arrays. Since there is no per-reel differentiation, this could simply be a single weights array shared by all reels (or derived at call time). The per-reel structure is premature generalization that adds indirection without current benefit."
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/reels.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/paytable.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/factories.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    },
+    {
+      "axis": "best-practices",
+      "file": "src/legacy.ts",
+      "verdict": "NEEDS_FIX",
+      "reason": "JSDoc on public exports"
+    }
+  ],
+  "unscored_findings": []
+}

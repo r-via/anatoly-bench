@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "file": "src/signals.ts",
+  "hash": "06ad071868005c1ef4518c0e7fd14f9c39546e990f452d32d8163ba10ba9aec2",
+  "symbols": [
+    {
+      "name": "lastEntryTick",
+      "kind": "variable",
+      "exported": false,
+      "line_start": 4,
+      "line_end": 4
+    },
+    {
+      "name": "resetSignals",
+      "kind": "function",
+      "exported": true,
+      "line_start": 6,
+      "line_end": 8
+    },
+    {
+      "name": "canEnterBlock",
+      "kind": "function",
+      "exported": true,
+      "line_start": 10,
+      "line_end": 15
+    },
+    {
+      "name": "recordEntry",
+      "kind": "function",
+      "exported": true,
+      "line_start": 17,
+      "line_end": 19
+    }
+  ],
+  "imports": [
+    {
+      "source": "./types.js",
+      "type": "import",
+      "symbols": [
+        "BlockId",
+        "TrainId"
+      ],
+      "typeOnly": true
+    },
+    {
+      "source": "./timetable.js",
+      "type": "import",
+      "symbols": [
+        "MIN_HEADWAY"
+      ]
+    }
+  ],
+  "imports_enriched": true,
+  "language": "typescript",
+  "parse_method": "ast",
+  "scanned_at": "2026-06-15T15:25:28.332Z"
+}

@@ -1,0 +1,259 @@
+{
+  "entries": {
+    "39e36098d142cf0e": {
+      "bodyHash": "918d31cd188aeb65",
+      "summary": {
+        "summary": "Finds the shortest path between two blocks using breadth-first search. Returns an array of block IDs representing the path from source to destination, or null if no path exists.",
+        "docSummary": "The shortestPath function computes the shortest path between two blocks in a graph. It uses breadth-first search to find the minimal sequence of blocks connecting the source to the destination, making it suitable for routing and reachability analysis.",
+        "keyConcepts": [
+          "graph-traversal",
+          "breadth-first-search",
+          "shortest-path",
+          "pathfinding",
+          "block-routing"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "e089ec23e8096b0c": {
+      "bodyHash": "d9209a5ac409ed0b",
+      "summary": {
+        "summary": "Clears the last entry tick cache to reset signal state for all blocks",
+        "docSummary": "Resets all signal tracking state. Call it to initialize or clear the entry history for block signals.",
+        "keyConcepts": [
+          "state-reset",
+          "signal-tracking",
+          "cache-management"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "2d96786a25e58573": {
+      "bodyHash": "3fb7c4ca0e2c5f28",
+      "summary": {
+        "summary": "Determines whether a train can enter a block based on minimum headway enforcement between consecutive entries",
+        "docSummary": "Validates whether a train is allowed to enter a block, enforcing the minimum headway constraint between consecutive entries.",
+        "keyConcepts": [
+          "headway-validation",
+          "block-access-control",
+          "timing-constraint",
+          "railway-signal"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "a8d77fa144256b3d": {
+      "bodyHash": "0259f728ff22954e",
+      "summary": {
+        "summary": "Records the tick timestamp when a train enters a block for subsequent headway constraint checking",
+        "docSummary": "Logs the entry time of a train into a block. Used by the signal system to enforce minimum headway between consecutive trains.",
+        "keyConcepts": [
+          "entry-logging",
+          "headway-tracking",
+          "state-persistence"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "418dea98cfe639df": {
+      "bodyHash": "17410baffcd151a4",
+      "summary": {
+        "summary": "Executes a train dispatcher simulation over discrete time ticks, managing train dispatching from a timetable, block occupancy, interlocking constraints, and dwell times. Returns a simulation report documenting all train movements and state changes.",
+        "docSummary": "The runSchedule function simulates railway operations by processing a timetable and executing train movements across a block-based network. It manages block occupancy, interlocking and signal constraints, dispatches trains according to departure times, handles station dwell periods, and records all movements via a MovementRecorder. Use this as the main entry point to run a complete railway simulat",
+        "keyConcepts": [
+          "train-dispatching",
+          "block-occupancy-management",
+          "interlocking-signals",
+          "timetable-execution",
+          "simulation-loop",
+          "dwell-time-handling",
+          "movement-recording"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "855df051ecc0b857": {
+      "bodyHash": "f8051d1fb3565800",
+      "summary": {
+        "summary": "Resets the interlocking system by clearing all block holdings and section reservations, restoring it to an initial state.",
+        "docSummary": "Clears all block occupancy and single-track reservations, restoring the interlocking system to an initial state. Call this to reset the system between sessions or for testing.",
+        "keyConcepts": [
+          "state-reset",
+          "interlocking",
+          "block-management"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "9e84be604b1cc132": {
+      "bodyHash": "f3d5cd80a647d18d",
+      "summary": {
+        "summary": "Checks whether a block is available for occupation, returning true if unoccupied or already held by the requesting train.",
+        "docSummary": "Determines if a block can be occupied by a train. Returns true if the block is unoccupied or already reserved by the requesting train, enabling safe block allocation decisions.",
+        "keyConcepts": [
+          "block-allocation",
+          "occupancy-check",
+          "interlocking"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "05c1970f7d753b71": {
+      "bodyHash": "f9e57f1446c3fe19",
+      "summary": {
+        "summary": "Registers a block as occupied by a train for interlocking control and conflict prevention.",
+        "docSummary": "Marks a block as occupied by a train. Called when a train enters a block to track occupancy and prevent simultaneous access.",
+        "keyConcepts": [
+          "block-allocation",
+          "occupancy-tracking",
+          "interlocking"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "405ce2f3ca24d490": {
+      "bodyHash": "8df8c6edc94131cb",
+      "summary": {
+        "summary": "Releases a block from train occupation, freeing it for use by other trains.",
+        "docSummary": "Removes a block from occupancy tracking. Called when a train exits a block to restore availability for other trains.",
+        "keyConcepts": [
+          "block-allocation",
+          "occupancy-tracking",
+          "interlocking"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "e2e6dd221f0aaaad": {
+      "bodyHash": "b2cbb22e81e527ef",
+      "summary": {
+        "summary": "Reserves exclusive access to single-track section blocks (bS1, bS2) for a train, preventing conflicts on critical sections. Returns false if another train holds the reservation.",
+        "docSummary": "Reserves single-track sections (bS1, bS2) for exclusive train use. Returns true if the reservation succeeds or the block is non-critical; returns false if another train already holds the section.",
+        "keyConcepts": [
+          "single-track-reservation",
+          "section-management",
+          "conflict-avoidance",
+          "interlocking"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "393e059a674a6502": {
+      "bodyHash": "e80fada077c3bfa7",
+      "summary": {
+        "summary": "Releases all single-track section reservations held by a train, freeing critical sections for other trains.",
+        "docSummary": "Clears all single-track section reservations for a specific train. Call when a train exits single-track sections to restore availability.",
+        "keyConcepts": [
+          "single-track-reservation",
+          "section-management",
+          "cleanup",
+          "interlocking"
+        ],
+        "behavioralProfile": "sideEffectful"
+      }
+    },
+    "b3621099ad8ae626": {
+      "bodyHash": "232584b7ce2578ee",
+      "summary": {
+        "summary": "Formats a train timetable into a column-aligned string representation with headers, train IDs, classes, routes, and departure times.",
+        "docSummary": "Generates a human-readable timetable displaying train schedules with ID, class, route, and departure information in aligned columns for easy reference.",
+        "keyConcepts": [
+          "formatting",
+          "table-generation",
+          "display-output",
+          "string-construction",
+          "train-scheduling"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "e279023cec0297d4": {
+      "bodyHash": "1092bd6219614633",
+      "summary": {
+        "summary": "Transforms a simulation report into a formatted text summary displaying metrics, on-time rate, and per-train arrival status.",
+        "docSummary": "Generates a formatted text report from simulation results, displaying completion ticks, on-time rate, and arrival status for each train, indicating whether it arrived on schedule or was stranded.",
+        "keyConcepts": [
+          "formatting",
+          "report-generation",
+          "display-output",
+          "simulation-metrics",
+          "status-tracking"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "8f473c4a3cfc06df": {
+      "bodyHash": "88546a1f135929a6",
+      "summary": {
+        "summary": "Comparator function for sorting queue entries by train ID in reverse (descending) order for priority-based queue operations.",
+        "docSummary": "Comparator function for use with Array.sort() to order QueueEntry objects by train ID in descending order. Prioritizes entries with higher train IDs. Intended for queue ordering in priority-based systems.",
+        "keyConcepts": [
+          "comparator-function",
+          "descending-sort",
+          "train-ordering",
+          "queue-prioritization",
+          "numeric-comparison"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "e7c357c3eb2d706c": {
+      "bodyHash": "4f2ef09c14451fb6",
+      "summary": {
+        "summary": "Computes the proportion of scheduled trains with at least one on-time arrival (within scheduledArrival + ON_TIME_SLACK tolerance), used as a service quality KPI.",
+        "docSummary": "Key performance indicator that measures train service punctuality by calculating what percentage of scheduled trains achieved on-time arrival status. A train is considered on-time if it has at least one arrival record within the scheduled time plus ON_TIME_SLACK tolerance.",
+        "keyConcepts": [
+          "performance-metrics",
+          "kpi-measurement",
+          "train-arrivals",
+          "punctuality-tracking",
+          "data-aggregation",
+          "time-tolerance"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "3503ac370ced3f1e": {
+      "bodyHash": "4b2d7db5194b99c8",
+      "summary": {
+        "summary": "Returns a constant traversal time value regardless of input block. Always returns T, ignoring the block parameter.",
+        "docSummary": "Retrieves the traversal time for a block. Currently returns a fixed constant value independent of the specific block.",
+        "keyConcepts": [
+          "constant-time",
+          "traversal-time",
+          "graph-traversal",
+          "network-timing"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "9e30c00042072b39": {
+      "bodyHash": "230bc22950fbf34d",
+      "summary": {
+        "summary": "Searches the BLOCK_INFO array for a block matching the given ID, returning the block information or undefined if not found.",
+        "docSummary": "Retrieves metadata for a specific block by its ID. Returns the matching BlockInfo record or undefined if the block ID does not exist in the network.",
+        "keyConcepts": [
+          "block-lookup",
+          "network-metadata",
+          "data-retrieval",
+          "graph-node"
+        ],
+        "behavioralProfile": "pure"
+      }
+    },
+    "f6ba95532899817b": {
+      "bodyHash": "64d4c8f3dc56a49f",
+      "summary": {
+        "summary": "Returns an array of block IDs directly adjacent to the given block by filtering the ADJACENCY list and extracting target blocks.",
+        "docSummary": "Retrieves all blocks directly adjacent to a given block in the network graph. Returns an array of block IDs that can be reached in a single traversal step.",
+        "keyConcepts": [
+          "graph-traversal",
+          "adjacency-list",
+          "next-nodes",
+          "graph-navigation"
+        ],
+        "behavioralProfile": "pure"
+      }
+    }
+  }
+}

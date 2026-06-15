@@ -1,0 +1,125 @@
+{
+  "version": 2,
+  "files": {
+    "src/index.ts": {
+      "hash": "d62091329e8b6ffac9e0fe16932d23adcda77ff7b3756da5f63e281ea24c77c4",
+      "status": "DONE",
+      "axes": {
+        "correction": {
+          "prompt_hash": "sha256:3e564f2e346aa17a83028f83b8bfec408d0854744a08d96515ab3cd801b3e035",
+          "model_id": "anthropic/claude-sonnet-4-6",
+          "updated_at": "2026-06-15T15:26:51.095Z"
+        }
+      },
+      "updated_at": "2026-06-15T15:26:51.095Z"
+    },
+    "src/format.ts": {
+      "hash": "be02a3016952975650b00b7c13720a08f5fbf238800609fda31de37e303f1dfc",
+      "status": "DONE",
+      "axes": {
+        "correction": {
+          "prompt_hash": "sha256:3e564f2e346aa17a83028f83b8bfec408d0854744a08d96515ab3cd801b3e035",
+          "model_id": "anthropic/claude-sonnet-4-6",
+          "updated_at": "2026-06-15T15:26:58.244Z"
+        }
+      },
+      "updated_at": "2026-06-15T15:26:58.244Z"
+    },
+    "src/telemetry.ts": {
+      "hash": "974754e1ad4e4aed58073834551331bfd667ba7959ae5b8d0ab405cb2eaca57f",
+      "status": "DONE",
+      "axes": {
+        "correction": {
+          "prompt_hash": "sha256:3e564f2e346aa17a83028f83b8bfec408d0854744a08d96515ab3cd801b3e035",
+          "model_id": "anthropic/claude-sonnet-4-6",
+          "updated_at": "2026-06-15T15:27:01.818Z"
+        }
+      },
+      "updated_at": "2026-06-15T15:27:01.818Z"
+    },
+    "src/routing.ts": {
+      "hash": "3f482e8d325db429cd902698ec46358348b3457233307d7bdff1c67a8b871c28",
+      "status": "DONE",
+      "axes": {
+        "correction": {
+          "prompt_hash": "sha256:3e564f2e346aa17a83028f83b8bfec408d0854744a08d96515ab3cd801b3e035",
+          "model_id": "anthropic/claude-sonnet-4-6",
+          "updated_at": "2026-06-15T15:27:03.014Z"
+        }
+      },
+      "updated_at": "2026-06-15T15:27:03.014Z"
+    },
+    "src/types.ts": {
+      "hash": "dfe196a54073e9ed5e230fce179ac3ad0ffd0dfe38ba35d019f92a985bef3d0b",
+      "status": "DONE",
+      "axes": {
+        "correction": {
+          "prompt_hash": "sha256:3e564f2e346aa17a83028f83b8bfec408d0854744a08d96515ab3cd801b3e035",
+          "model_id": "anthropic/claude-sonnet-4-6",
+          "updated_at": "2026-06-15T15:27:03.018Z"
+        }
+      },
+      "updated_at": "2026-06-15T15:27:03.018Z"
+    },
+    "src/interlocking.ts": {
+      "hash": "c273663c84296eb7b574e0373aa918a8b70cc1bba1640a8584859ca9f20f8875",
+      "status": "DONE",
+      "axes": {
+        "correction": {
+          "prompt_hash": "sha256:3e564f2e346aa17a83028f83b8bfec408d0854744a08d96515ab3cd801b3e035",
+          "model_id": "anthropic/claude-sonnet-4-6",
+          "updated_at": "2026-06-15T15:27:31.609Z"
+        }
+      },
+      "updated_at": "2026-06-15T15:27:31.609Z"
+    },
+    "src/kpi.ts": {
+      "hash": "d90b1b58470ca1da54239431b85089d45331a3cc4c1e4e95b1335c09df4183bf",
+      "status": "DONE",
+      "axes": {
+        "correction": {
+          "prompt_hash": "sha256:3e564f2e346aa17a83028f83b8bfec408d0854744a08d96515ab3cd801b3e035",
+          "model_id": "anthropic/claude-sonnet-4-6",
+          "updated_at": "2026-06-15T15:27:35.142Z"
+        }
+      },
+      "updated_at": "2026-06-15T15:27:35.142Z"
+    },
+    "src/priority.ts": {
+      "hash": "23c9efa471094d8c0d50cae809a2f64e7f430acd1875785cb1a2e73f66c75f04",
+      "status": "DONE",
+      "axes": {
+        "correction": {
+          "prompt_hash": "sha256:3e564f2e346aa17a83028f83b8bfec408d0854744a08d96515ab3cd801b3e035",
+          "model_id": "anthropic/claude-sonnet-4-6",
+          "updated_at": "2026-06-15T15:27:40.231Z"
+        }
+      },
+      "updated_at": "2026-06-15T15:27:40.231Z"
+    },
+    "src/signals.ts": {
+      "hash": "06ad071868005c1ef4518c0e7fd14f9c39546e990f452d32d8163ba10ba9aec2",
+      "status": "DONE",
+      "axes": {
+        "correction": {
+          "prompt_hash": "sha256:3e564f2e346aa17a83028f83b8bfec408d0854744a08d96515ab3cd801b3e035",
+          "model_id": "anthropic/claude-sonnet-4-6",
+          "updated_at": "2026-06-15T15:27:48.580Z"
+        }
+      },
+      "updated_at": "2026-06-15T15:27:48.580Z"
+    },
+    "src/timetable.ts": {
+      "hash": "e55d74451527f99a1650daab4fd2db3bdc5b4e6ab86bab04903ff3b81b6487cb",
+      "status": "DONE",
+      "axes": {
+        "correction": {
+          "prompt_hash": "sha256:3e564f2e346aa17a83028f83b8bfec408d0854744a08d96515ab3cd801b3e035",
+          "model_id": "anthropic/claude-sonnet-4-6",
+          "updated_at": "2026-06-15T15:28:26.579Z"
+        }
+      },
+      "updated_at": "2026-06-15T15:28:26.579Z"
+    }
+  }
+}

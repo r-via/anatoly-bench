@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "schema": 1,
+    "prompt_hash": "sha256:per-axis-index",
+    "model_id": "anthropic/claude-sonnet-4-6",
+    "created_at": "2026-06-15T15:28:26.578Z",
+    "anatoly_version": "unknown"
+  },
+  "data": {
+    "version": 2,
+    "file": "src/timetable.ts",
+    "is_generated": false,
+    "language": "typescript",
+    "parse_method": "ast",
+    "verdict": "CLEAN",
+    "symbols": [
+      {
+        "name": "DWELL_TICKS",
+        "kind": "constant",
+        "exported": true,
+        "line_start": 3,
+        "line_end": 3,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 90,
+        "detail": "[OK] Simple numeric constant; no stated contract contradicts the value.",
+        "findings": []
+      },
+      {
+        "name": "MIN_HEADWAY",
+        "kind": "constant",
+        "exported": true,
+        "line_start": 4,
+        "line_end": 4,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 90,
+        "detail": "[OK] Simple numeric constant; no stated contract contradicts the value.",
+        "findings": []
+      },
+      {
+        "name": "ON_TIME_SLACK",
+        "kind": "constant",
+        "exported": true,
+        "line_start": 5,
+        "line_end": 5,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 90,
+        "detail": "[OK] Simple numeric constant; no stated contract contradicts the value.",
+        "findings": []
+      },
+      {
+        "name": "TrainSpec",
+        "kind": "type",
+        "exported": true,
+        "line_start": 7,
+        "line_end": 13,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 95,
+        "detail": "[OK] Interface is structurally sound; all fields are typed correctly and consumed consistently by callers.",
+        "findings": []
+      },
+      {
+        "name": "TIMETABLE",
+        "kind": "constant",
+        "exported": true,
+        "line_start": 15,
+        "line_end": 72,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 82,
+        "detail": "[OK] All entries conform to TrainSpec. Conflict scenarios (T1/T2 simultaneous depart at tick 0 merging onto bM1; T5_EXP and T6_LOC traversing bS1/bS2 in opposite directions; T3_FRT depart-to-bA headway gap of 2 < MIN_HEADWAY=3) appear to be intentional stress-test fixtures for the dispatcher's signal and interlocking logic rather than data errors — the dispatcher simulation is documented to resolve exactly these conflicts. No numeric value is inconsistent with the TrainSpec contract or contradicts a documented invariant visible in this context.",
+        "findings": []
+      }
+    ],
+    "actions": [],
+    "file_level": {
+      "unused_imports": [],
+      "circular_dependencies": [],
+      "general_notes": ""
+    },
+    "axis_meta": {
+      "correction": {
+        "model": "claude-sonnet-4-6",
+        "cost_usd": 0.10132785,
+        "duration_ms": 83802
+      }
+    },
+    "content_hash": "e55d74451527f99a1650daab4fd2db3bdc5b4e6ab86bab04903ff3b81b6487cb"
+  }
+}

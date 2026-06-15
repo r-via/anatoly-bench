@@ -1,0 +1,128 @@
+{
+  "_meta": {
+    "schema": 1,
+    "prompt_hash": "sha256:per-axis-index",
+    "model_id": "anthropic/claude-sonnet-4-6",
+    "created_at": "2026-06-15T15:27:48.579Z",
+    "anatoly_version": "unknown"
+  },
+  "data": {
+    "version": 2,
+    "file": "src/signals.ts",
+    "is_generated": false,
+    "language": "typescript",
+    "parse_method": "ast",
+    "verdict": "NEEDS_REFACTOR",
+    "symbols": [
+      {
+        "name": "lastEntryTick",
+        "kind": "variable",
+        "exported": false,
+        "line_start": 4,
+        "line_end": 4,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 95,
+        "detail": "[OK] Module-level Map initialized correctly; scoped to module, cleared via resetSignals.",
+        "findings": []
+      },
+      {
+        "name": "resetSignals",
+        "kind": "function",
+        "exported": true,
+        "line_start": 6,
+        "line_end": 8,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 95,
+        "detail": "[OK] Correctly clears the shared map; no logic issues.",
+        "findings": []
+      },
+      {
+        "name": "canEnterBlock",
+        "kind": "function",
+        "exported": true,
+        "line_start": 10,
+        "line_end": 15,
+        "correction": "NEEDS_FIX",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 95,
+        "detail": "[NEEDS_FIX] Off-by-one: headway enforcement uses MIN_HEADWAY - 1 instead of MIN_HEADWAY, allowing entry one tick too early.",
+        "findings": [
+          {
+            "axis": "correction",
+            "line_start": 14,
+            "line_end": 14,
+            "detail": "`elapsed >= MIN_HEADWAY - 1` accepts elapsed == MIN_HEADWAY-1, meaning a second train can enter after only (MIN_HEADWAY-1) ticks have passed. The constant is named MIN_HEADWAY and the threshold should be `elapsed >= MIN_HEADWAY`. With MIN_HEADWAY=3 (per README), the code enforces a 2-tick gap rather than the required 3-tick gap."
+          }
+        ]
+      },
+      {
+        "name": "recordEntry",
+        "kind": "function",
+        "exported": true,
+        "line_start": 17,
+        "line_end": 19,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 95,
+        "detail": "[OK] Correctly records the entry tick for a block; no logic issues.",
+        "findings": []
+      }
+    ],
+    "actions": [
+      {
+        "id": 1,
+        "description": "Change `elapsed >= MIN_HEADWAY - 1` to `elapsed >= MIN_HEADWAY` in canEnterBlock (line 14) to correctly enforce the minimum headway.",
+        "severity": "medium",
+        "effort": "small",
+        "category": "quickwin",
+        "target_symbol": null,
+        "target_lines": "L14",
+        "source": "correction"
+      }
+    ],
+    "file_level": {
+      "unused_imports": [],
+      "circular_dependencies": [],
+      "general_notes": ""
+    },
+    "axis_meta": {
+      "correction": {
+        "model": "claude-sonnet-4-6",
+        "cost_usd": 0.117864,
+        "duration_ms": 55165
+      }
+    },
+    "doc_divergences": [
+      {
+        "kind": "doc_divergence",
+        "severity": "warn",
+        "file": "src/signals.ts",
+        "line": 14,
+        "symbol": "canEnterBlock",
+        "reference_excerpt": "The minimum headway between two trains entering the same block is 3 ticks.",
+        "reference_source": "README.md#Timing",
+        "observed_behavior": "Condition `elapsed >= MIN_HEADWAY - 1` permits a second train to enter after MIN_HEADWAY-1 (2) ticks, one tick short of the documented 3-tick minimum.",
+        "axis_origin": "correction"
+      }
+    ],
+    "content_hash": "06ad071868005c1ef4518c0e7fd14f9c39546e990f452d32d8163ba10ba9aec2"
+  }
+}

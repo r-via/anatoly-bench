@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "file": "src/format.ts",
+  "hash": "be02a3016952975650b00b7c13720a08f5fbf238800609fda31de37e303f1dfc",
+  "symbols": [
+    {
+      "name": "formatTimetable",
+      "kind": "function",
+      "exported": true,
+      "line_start": 4,
+      "line_end": 14
+    },
+    {
+      "name": "formatReport",
+      "kind": "function",
+      "exported": true,
+      "line_start": 16,
+      "line_end": 31
+    }
+  ],
+  "imports": [
+    {
+      "source": "./types.js",
+      "type": "import",
+      "symbols": [
+        "SimulationReport"
+      ],
+      "typeOnly": true
+    },
+    {
+      "source": "./timetable.js",
+      "type": "import",
+      "symbols": [
+        "TIMETABLE"
+      ]
+    }
+  ],
+  "imports_enriched": true,
+  "language": "typescript",
+  "parse_method": "ast",
+  "scanned_at": "2026-06-15T15:25:28.332Z"
+}
