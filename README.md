@@ -92,6 +92,20 @@ Best run to date: **v52b at 79.5%** (2026-06-11). The code surface and ground-tr
 
 Full per-axis curves, change-log of Anatoly fixes, per-axis execution profile, and remaining misses → [docs/02-slot-engine-results.md](./docs/02-slot-engine-results.md). Per-run baselines → [`baselines/`](./baselines/). Roadmap → [ROADMAP.md](./ROADMAP.md).
 
+## Current results: `train-dispatch` fixture
+
+```mermaid
+xychart-beta
+    title "train-dispatch global F1 (%) per run (= correction axis)"
+    x-axis [v1, v2, v3, v4]
+    y-axis "F1 (%)" 0 --> 100
+    line [72.7, 50.0, 66.7, 72.7]
+```
+
+Best run to date: **v1 / v4 at 72.7%** (2026-06-15). `train-dispatch` is the behavioural-invariant companion to `slot-engine`: 6 cataloged defects on a **single scored axis** (correction), so global F1 equals the correction-axis F1 and one caught-or-missed defect moves it by ~10 to 12 points. The fixture is new (all four runs from 2026-06-15) and the code surface was still converging from v1 to v3; v4 runs on the frozen final state (`60bdb75`) and isolates the Anatoly-side RAG declaration-indexing fix. Two defects are missed on every run: INV-DWELL (detected but classified as a doc-divergence rather than a correction defect) and INV-DEADLOCK (requires multi-train execution-trace reasoning).
+
+Per-run narrative, the declaration-indexing fix, and remaining misses → [docs/05-train-dispatch-results.md](./docs/05-train-dispatch-results.md). Per-run baselines → [`baselines/`](./baselines/).
+
 ## License
 
 AGPL-3.0-only.
