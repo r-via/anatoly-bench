@@ -69,11 +69,13 @@ evaluation:
     overengineering: false
     tests: false
     best_practices: false
-    # Story 54.1: the documentation axis cannot use the boolean short form; it
-    # requires the full object with reference + internal blocks even when
-    # disabled. enabled:false keeps it out of the run.
+    # v2: documentation axis ENABLED to test the code-vs-documented-value
+    # contradiction path (INV-DWELL: DWELL_TICKS=6 in code vs README "2 ticks").
+    # reference compares source against README.md. internal.mode stays "off":
+    # there is no internal docs/ tree and it avoids the doc-conflict detection
+    # SDK first-call stall. inline_comments off (source is comment-free).
     documentation:
-      enabled: false
+      enabled: true
       reference:
         paths:
           - README.md
