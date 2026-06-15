@@ -69,13 +69,18 @@ evaluation:
     overengineering: false
     tests: false
     best_practices: false
-    # v2: documentation axis ENABLED to test the code-vs-documented-value
-    # contradiction path (INV-DWELL: DWELL_TICKS=6 in code vs README "2 ticks").
-    # reference compares source against README.md. internal.mode stays "off":
-    # there is no internal docs/ tree and it avoids the doc-conflict detection
-    # SDK first-call stall. inline_comments off (source is comment-free).
+    # Story 54.1: the documentation axis cannot use the boolean short form; it
+    # requires the full object with reference + internal blocks even when
+    # disabled. enabled:false keeps it out of the run.
+    #
+    # v2 experiment (baseline 2026-06-15_train-dispatch-v2) confirmed enabling
+    # this axis does NOT surface INV-DWELL as a value contradiction: the axis is
+    # a JSDoc-presence checker (flags DWELL_TICKS as UNDOCUMENTED, never compares
+    # 6 vs README's "2 ticks"), and the cross-axis noise dropped correction F1
+    # from 72.7% to 50.0% (lost INV-HEADWAY TP, gained 3 timetable FPs). Kept
+    # disabled: this is a single-axis correction fixture.
     documentation:
-      enabled: true
+      enabled: false
       reference:
         paths:
           - README.md
