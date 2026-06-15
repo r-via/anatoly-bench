@@ -69,4 +69,15 @@ evaluation:
     overengineering: false
     tests: false
     best_practices: false
-    documentation: false
+    # Story 54.1: the documentation axis cannot use the boolean short form; it
+    # requires the full object with reference + internal blocks even when
+    # disabled. enabled:false keeps it out of the run.
+    documentation:
+      enabled: false
+      reference:
+        paths:
+          - README.md
+        inline_comments:
+          enabled: false
+      internal:
+        mode: "off"
