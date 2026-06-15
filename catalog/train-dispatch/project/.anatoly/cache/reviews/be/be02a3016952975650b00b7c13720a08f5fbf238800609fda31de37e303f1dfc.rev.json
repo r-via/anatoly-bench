@@ -1,0 +1,65 @@
+{
+  "_meta": {
+    "schema": 1,
+    "prompt_hash": "sha256:per-axis-index",
+    "model_id": "anthropic/claude-sonnet-4-6",
+    "created_at": "2026-06-15T15:26:58.243Z",
+    "anatoly_version": "unknown"
+  },
+  "data": {
+    "version": 2,
+    "file": "src/format.ts",
+    "is_generated": false,
+    "language": "typescript",
+    "parse_method": "ast",
+    "verdict": "CLEAN",
+    "symbols": [
+      {
+        "name": "formatTimetable",
+        "kind": "function",
+        "exported": true,
+        "line_start": 4,
+        "line_end": 14,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 92,
+        "detail": "[OK] No correctness defects; formatting logic is straightforward string padding and joining.",
+        "findings": []
+      },
+      {
+        "name": "formatReport",
+        "kind": "function",
+        "exported": true,
+        "line_start": 16,
+        "line_end": 31,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 92,
+        "detail": "[OK] No correctness defects; null check on actualArrival is correct and all report fields are accessed safely.",
+        "findings": []
+      }
+    ],
+    "actions": [],
+    "file_level": {
+      "unused_imports": [],
+      "circular_dependencies": [],
+      "general_notes": ""
+    },
+    "axis_meta": {
+      "correction": {
+        "model": "claude-sonnet-4-6",
+        "cost_usd": 0.0637815,
+        "duration_ms": 5146
+      }
+    },
+    "content_hash": "be02a3016952975650b00b7c13720a08f5fbf238800609fda31de37e303f1dfc"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "file": "src/network.ts",
+  "hash": "362044c838f0a44f790a39957f9dec48d851748a1ccd87cef58d2f87be07ae2d",
+  "symbols": [
+    {
+      "name": "STATIONS",
+      "kind": "constant",
+      "exported": true,
+      "line_start": 3,
+      "line_end": 3
+    },
+    {
+      "name": "StationId",
+      "kind": "type",
+      "exported": true,
+      "line_start": 4,
+      "line_end": 4
+    },
+    {
+      "name": "BLOCKS",
+      "kind": "constant",
+      "exported": true,
+      "line_start": 6,
+      "line_end": 8
+    },
+    {
+      "name": "SINGLE_TRACK_BLOCKS",
+      "kind": "constant",
+      "exported": true,
+      "line_start": 10,
+      "line_end": 10
+    },
+    {
+      "name": "BlockInfo",
+      "kind": "type",
+      "exported": true,
+      "line_start": 12,
+      "line_end": 17
+    },
+    {
+      "name": "T",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 19,
+      "line_end": 19
+    },
+    {
+      "name": "BLOCK_INFO",
+      "kind": "constant",
+      "exported": true,
+      "line_start": 21,
+      "line_end": 30
+    },
+    {
+      "name": "getTraversalTime",
+      "kind": "function",
+      "exported": true,
+      "line_start": 32,
+      "line_end": 34
+    },
+    {
+      "name": "getBlockInfo",
+      "kind": "function",
+      "exported": true,
+      "line_start": 36,
+      "line_end": 38
+    },
+    {
+      "name": "AdjacencyEntry",
+      "kind": "type",
+      "exported": true,
+      "line_start": 40,
+      "line_end": 43
+    },
+    {
+      "name": "ADJACENCY",
+      "kind": "constant",
+      "exported": true,
+      "line_start": 45,
+      "line_end": 55
+    },
+    {
+      "name": "getNextBlocks",
+      "kind": "function",
+      "exported": true,
+      "line_start": 57,
+      "line_end": 59
+    }
+  ],
+  "imports": [
+    {
+      "source": "./types.js",
+      "type": "import",
+      "symbols": [
+        "BlockId"
+      ],
+      "typeOnly": true
+    }
+  ],
+  "imports_enriched": true,
+  "language": "typescript",
+  "parse_method": "ast",
+  "scanned_at": "2026-06-15T15:25:28.332Z"
+}

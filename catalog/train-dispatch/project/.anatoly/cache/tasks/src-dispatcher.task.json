@@ -1,0 +1,125 @@
+{
+  "version": 1,
+  "file": "src/dispatcher.ts",
+  "hash": "8ebabab0273308c2fbddec27b07992653c5d83e9cb7b807465182dcd1bb90749",
+  "symbols": [
+    {
+      "name": "MAX_TICKS",
+      "kind": "constant",
+      "exported": false,
+      "line_start": 18,
+      "line_end": 18
+    },
+    {
+      "name": "ActiveTrain",
+      "kind": "type",
+      "exported": false,
+      "line_start": 20,
+      "line_end": 26
+    },
+    {
+      "name": "runSchedule",
+      "kind": "function",
+      "exported": true,
+      "line_start": 28,
+      "line_end": 148
+    }
+  ],
+  "imports": [
+    {
+      "source": "./types.js",
+      "type": "import",
+      "symbols": [
+        "BlockId",
+        "SimulationReport"
+      ],
+      "typeOnly": true
+    },
+    {
+      "source": "./types.js",
+      "type": "import",
+      "symbols": [
+        "SimulationReport"
+      ],
+      "typeOnly": true
+    },
+    {
+      "source": "./timetable.js",
+      "type": "import",
+      "symbols": [
+        "TIMETABLE",
+        "DWELL_TICKS"
+      ]
+    },
+    {
+      "source": "./timetable.js",
+      "type": "import",
+      "symbols": [
+        "TrainSpec"
+      ],
+      "typeOnly": true
+    },
+    {
+      "source": "./network.js",
+      "type": "import",
+      "symbols": [
+        "getTraversalTime",
+        "SINGLE_TRACK_BLOCKS"
+      ]
+    },
+    {
+      "source": "./priority.js",
+      "type": "import",
+      "symbols": [
+        "compareTrains"
+      ]
+    },
+    {
+      "source": "./priority.js",
+      "type": "import",
+      "symbols": [
+        "QueueEntry"
+      ],
+      "typeOnly": true
+    },
+    {
+      "source": "./signals.js",
+      "type": "import",
+      "symbols": [
+        "canEnterBlock",
+        "recordEntry",
+        "resetSignals"
+      ]
+    },
+    {
+      "source": "./interlocking.js",
+      "type": "import",
+      "symbols": [
+        "isBlockFree",
+        "occupyBlock",
+        "releaseBlock",
+        "reserveSectionBlock",
+        "releaseSingleTrack",
+        "resetInterlocking"
+      ]
+    },
+    {
+      "source": "./telemetry.js",
+      "type": "import",
+      "symbols": [
+        "MovementRecorder"
+      ]
+    },
+    {
+      "source": "./kpi.js",
+      "type": "import",
+      "symbols": [
+        "computeOnTimeRate"
+      ]
+    }
+  ],
+  "imports_enriched": true,
+  "language": "typescript",
+  "parse_method": "ast",
+  "scanned_at": "2026-06-15T15:25:28.332Z"
+}

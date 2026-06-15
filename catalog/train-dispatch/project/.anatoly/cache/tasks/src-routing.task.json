@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "file": "src/routing.ts",
+  "hash": "3f482e8d325db429cd902698ec46358348b3457233307d7bdff1c67a8b871c28",
+  "symbols": [
+    {
+      "name": "shortestPath",
+      "kind": "function",
+      "exported": true,
+      "line_start": 4,
+      "line_end": 36
+    }
+  ],
+  "imports": [
+    {
+      "source": "./types.js",
+      "type": "import",
+      "symbols": [
+        "BlockId"
+      ],
+      "typeOnly": true
+    },
+    {
+      "source": "./network.js",
+      "type": "import",
+      "symbols": [
+        "ADJACENCY"
+      ]
+    }
+  ],
+  "imports_enriched": true,
+  "language": "typescript",
+  "parse_method": "ast",
+  "scanned_at": "2026-06-15T15:25:28.332Z"
+}

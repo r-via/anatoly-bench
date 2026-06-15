@@ -1,0 +1,16 @@
+{
+  "name": "task-vault",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "In-memory task store with a small public barrel API.",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "license": "AGPL-3.0-only",
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.2"
+  }
+}

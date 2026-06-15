@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "schema": 1,
+    "prompt_hash": "sha256:per-axis-index",
+    "model_id": "anthropic/claude-sonnet-4-6",
+    "created_at": "2026-06-15T15:26:51.094Z",
+    "anatoly_version": "unknown"
+  },
+  "data": {
+    "version": 2,
+    "file": "src/index.ts",
+    "is_generated": true,
+    "skip_reason": "barrel-export",
+    "language": "typescript",
+    "parse_method": "ast",
+    "verdict": "CLEAN",
+    "symbols": [],
+    "actions": [],
+    "file_level": {
+      "unused_imports": [],
+      "circular_dependencies": [],
+      "general_notes": ""
+    },
+    "content_hash": "d62091329e8b6ffac9e0fe16932d23adcda77ff7b3756da5f63e281ea24c77c4"
+  }
+}

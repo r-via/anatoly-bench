@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "file": "src/kpi.ts",
+  "hash": "d90b1b58470ca1da54239431b85089d45331a3cc4c1e4e95b1335c09df4183bf",
+  "symbols": [
+    {
+      "name": "computeOnTimeRate",
+      "kind": "function",
+      "exported": true,
+      "line_start": 4,
+      "line_end": 19
+    }
+  ],
+  "imports": [
+    {
+      "source": "./types.js",
+      "type": "import",
+      "symbols": [
+        "TrainArrival"
+      ],
+      "typeOnly": true
+    },
+    {
+      "source": "./timetable.js",
+      "type": "import",
+      "symbols": [
+        "ON_TIME_SLACK",
+        "TIMETABLE"
+      ]
+    }
+  ],
+  "imports_enriched": true,
+  "language": "typescript",
+  "parse_method": "ast",
+  "scanned_at": "2026-06-15T15:25:28.332Z"
+}

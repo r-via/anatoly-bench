@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "schema": 1,
+    "prompt_hash": "sha256:per-axis-index",
+    "model_id": "anthropic/claude-sonnet-4-6",
+    "created_at": "2026-06-15T15:27:35.141Z",
+    "anatoly_version": "unknown"
+  },
+  "data": {
+    "version": 2,
+    "file": "src/kpi.ts",
+    "is_generated": false,
+    "language": "typescript",
+    "parse_method": "ast",
+    "verdict": "CLEAN",
+    "symbols": [
+      {
+        "name": "computeOnTimeRate",
+        "kind": "function",
+        "exported": true,
+        "line_start": 4,
+        "line_end": 19,
+        "correction": "OK",
+        "overengineering": "-",
+        "utility": "-",
+        "duplication": "-",
+        "tests": "-",
+        "documentation": "-",
+        "confidence": 82,
+        "detail": "[OK] No runtime errors or definite logic bugs. `some` treats a train as on-time if any arrival record is on-time; whether this is correct vs. requiring all records to be on-time depends on the `TrainArrival` type (not shown) — in a single-terminus model it is fine, in a multi-stop model it would under-count late trains. Empty-records case (`records.some(...)` → false) correctly marks unserviced trains as not on-time. Zero-timetable guard returns 1 defensibly.",
+        "findings": []
+      }
+    ],
+    "actions": [],
+    "file_level": {
+      "unused_imports": [],
+      "circular_dependencies": [],
+      "general_notes": ""
+    },
+    "axis_meta": {
+      "correction": {
+        "model": "claude-sonnet-4-6",
+        "cost_usd": 0.099714,
+        "duration_ms": 42293
+      }
+    },
+    "content_hash": "d90b1b58470ca1da54239431b85089d45331a3cc4c1e4e95b1335c09df4183bf"
+  }
+}
