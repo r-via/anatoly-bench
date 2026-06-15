@@ -102,9 +102,23 @@ evaluation:
     duplication: true
     correction: true
     overengineering: true
-    tests: true
+    # tests + documentation excluded: the fixture ships no test suite and no
+    # JSDoc, so they are not in scored_axes (SPEC.md) and running them only
+    # wastes review time/cost. The invariants phase reads source comments
+    # directly, so disabling the documentation axis does not affect it.
+    tests: false
     best_practices: true
-    documentation: true
+    # documentation disabled (no JSDoc in fixture, not scored). The v3 schema
+    # still requires reference/internal blocks even when enabled:false.
+    documentation:
+      enabled: false
+      reference:
+        paths:
+          - README.md
+        inline_comments:
+          enabled: false
+      internal:
+        mode: "off"
 # Per-axis override example — replaces routing.generation.quality for that axis:
 #   correction:
 #     enabled: true
