@@ -83,12 +83,14 @@ A perfect audit scores `1.0`. In practice, the target is movement over time — 
 ```mermaid
 xychart-beta
     title "slot-engine — global F1 (%) per run"
-    x-axis [v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35, v36, v37, v37b, v38, v39, v40, v41, v42, v43, v44, v45, v46, v47, v47b, v48, v49, v50, v50b, v51, v52, v52b, v53, v54]
+    x-axis [v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35, v36, v37, v37b, v38, v39, v40, v41, v42, v43, v44, v45, v46, v47, v47b, v48, v49, v50, v50b, v51, v52, v52b, v53, v54, v56, v57, v58, v59, v60, v61, v62, v63, v64, v65, v66, v67]
     y-axis "F1 (%)" 0 --> 100
-    line [40.7, 43.2, 46.8, 43.5, 56.8, 65.5, 62.7, 61.0, 65.0, 57.8, 67.8, 63.8, 72.9, 64.2, 69.9, 65.5, 71.4, 69.7, 67.0, 66.2, 69.4, 68.8, 68.7, 67.8, 58.3, 56.2, 67.3, 71.5, 57.9, 62.1, 71.6, 57.5, 71.5, 70.4, 74.3, 65.8, 70.2, 72.2, 67.9, 67.6, 68.0, 76.5, 72.3, 62.8, 74.6, 75.5, 70.1, 75.5, 62.8, 70.9, 69.7, 75.8, 78.3, 73.2, 79.5, 76.3, 73.5]
+    line [40.7, 43.2, 46.8, 43.5, 56.8, 65.5, 62.7, 61.0, 65.0, 57.8, 67.8, 63.8, 72.9, 64.2, 69.9, 65.5, 71.4, 69.7, 67.0, 66.2, 69.4, 68.8, 68.7, 67.8, 58.3, 56.2, 67.3, 71.5, 57.9, 62.1, 71.6, 57.5, 71.5, 70.4, 74.3, 65.8, 70.2, 72.2, 67.9, 67.6, 68.0, 76.5, 72.3, 62.8, 74.6, 75.5, 70.1, 75.5, 62.8, 70.9, 69.7, 75.8, 78.3, 73.2, 79.5, 76.3, 73.5, 76.8, 61.4, 73.2, 70.9, 69.5, 66.0, 69.9, 66.9, 72.9, 69.9, 75.1, 68.6]
 ```
 
-Best run to date: **v52b at 79.5%** (2026-06-11). The code surface and ground-truth catalog have been fixed since v16 (`project` @ `7dc4cc6`), so every v16→v54 delta is pure Anatoly behaviour (prompt/model/runtime changes plus run-to-run LLM variance — `v36`–`v41` are A/B prompt+model experiments, `*b` suffixes are sister reruns). Treat any single-run move under ~9pp as inside the noise floor.
+Best run to date: **v52b at 79.5%** (2026-06-11). The code surface and ground-truth catalog have been fixed since v16 (`project` @ `7dc4cc6`), so every v16→v67 delta is pure Anatoly behaviour (prompt/model/runtime changes plus run-to-run LLM variance — `v36`–`v41` are A/B prompt+model experiments, `*b` suffixes are sister reruns). Treat any single-run move under ~9pp as inside the noise floor.
+
+**v56 to v67 (2026-10-25) are the Claude 5.5 migration series.** Anatoly 0.11.0 switches its default models from the 4.6 generation (Sonnet 4.6 / Haiku 4.5 / Opus 4.6) to the 5.5 generation (Sonnet 5.5 / Haiku 5.5 / Opus 5.5); the fixtures in this repo now pin the 5.5 models too. v56, v59, v64 and v67 are 4.6 controls, the other eight run the 5.5 models; v57 shows the 5.5 generation at the Claude Code CLI's default `medium` effort (61.4%), v58 the same at `high`, and v62 to v67 carry the prompt recalibration that followed. **The reference baseline for future runs is v65 / v66** (5.5 models, recalibrated prompts, 69.9% and 75.1%): on par with the four 4.6 controls of the day (72.3% mean) at about 40% of the cost and half the wall time.
 
 Full per-axis curves, change-log of Anatoly fixes, per-axis execution profile, and remaining misses → [docs/02-slot-engine-results.md](./docs/02-slot-engine-results.md). Per-run baselines → [`baselines/`](./baselines/). Roadmap → [ROADMAP.md](./ROADMAP.md).
 
