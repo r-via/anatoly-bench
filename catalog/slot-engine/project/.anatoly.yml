@@ -41,9 +41,9 @@ providers:
     auth: oauth
     concurrency: 24
     models:
-      - claude-sonnet-4-6
-      - claude-haiku-4-5-20251001
-      - claude-opus-4-6
+      - claude-sonnet-5-5
+      - claude-haiku-5-5
+      - claude-opus-5-5
   local-advanced:
     transport: openai_compatible
     auth: none
@@ -87,10 +87,10 @@ providers:
 # ---- routing ---------------------------------------------------------------
 routing:
   generation:
-    quality: anthropic/claude-sonnet-4-6
-    fast: anthropic/claude-haiku-4-5-20251001
-    deliberation: anthropic/claude-opus-4-6
-    summarization: anthropic/claude-haiku-4-5-20251001
+    quality: anthropic/claude-sonnet-5-5
+    fast: anthropic/claude-haiku-5-5
+    deliberation: anthropic/claude-opus-5-5
+    summarization: anthropic/claude-haiku-5-5
   embeddings:
     code: local-advanced/nomic-embed-code-gguf
     text: local-advanced/qwen3-embedding-8b-gguf
@@ -122,11 +122,11 @@ evaluation:
 # Per-axis override example — replaces routing.generation.quality for that axis:
 #   correction:
 #     enabled: true
-#     model: anthropic/claude-opus-4-6
+#     model: anthropic/claude-opus-5-5
 # Documentation extras (docs_path / module_mapping):
 #   documentation:
 #     enabled: true
-#     model: anthropic/claude-sonnet-4-6
+#     model: anthropic/claude-sonnet-5-5
 #     docs_path: docs
 #     module_mapping:
 #       'docs/api/auth.md':
